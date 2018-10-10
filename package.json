@@ -1,0 +1,69 @@
+{
+	"name": "@appnest/lit-translate",
+	"version": "0.0.8",
+	"license": "MIT",
+	"author": "Appnest",
+	"description": "A lightweight internationalization (i18n) library for your lit-html based project",
+	"bugs": {
+		"url": "https://github.com/andreasbm/lit-util/issues"
+	},
+	"homepage": "https://github.com/andreasbm/lit-util#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/andreasbm/lit-util.git"
+	},
+	"keywords": [
+		"lit-html",
+		"lit-element",
+		"custom",
+		"elements",
+		"web",
+		"component",
+		"custom element",
+		"web component",
+		"util",
+		"decorators",
+		"directives",
+		"translate"
+	],
+	"main": "index.js",
+	"types": "index.d.ts",
+	"scripts": {
+		"b:demo:dev": "webpack --mode=development",
+		"b:demo:prod": "webpack --mode=production --optimize-minimize ",
+		"s": "node_modules/.bin/webpack-dev-server --open --hot --inline --config webpack.config.js --mode=development",
+		"start": "npm run s",
+		"ncu": "ncu -u -a && npm update && npm install",
+		"test": "karma start",
+		"b:lib": "node pre-build.js && tsc -p tsconfig.build.json",
+		"publish": "cd dist && npm publish --access=public && cd ..",
+		"git:add:commit:push": "git add . && git commit --no-edit --amend --no-verify && git push",
+		"bump:patch": "npm version patch && npm run git:add:commit:push",
+		"bump:minor": "npm version minor && npm run git:add:commit:push",
+		"bump:major": "npm version major && npm run git:add:commit:push",
+		"publish:patch": "npm run bump:patch && npm run b:lib && npm run publish",
+		"publish:minor": "npm run bump:minor && npm run b:lib && npm run publish",
+		"publish:major": "npm run bump:major && npm run b:lib && npm run publish"
+	},
+	"dependencies": {
+		"@polymer/lit-element": "^0.6.2",
+		"lit-html": "^0.12.0"
+	},
+	"devDependencies": {
+		"@appnest/web-config": "0.0.36",
+		"@types/chai": "^4.1.6",
+		"@types/mocha": "^5.2.5",
+		"chai": "^4.2.0",
+		"chromedriver": "^2.42.0",
+		"copy-webpack-plugin": "^4.5.3",
+		"karma": "^3.0.0",
+		"karma-babel-preprocessor": "^7.0.0",
+		"karma-chai": "^0.1.0",
+		"karma-chrome-launcher": "^2.2.0",
+		"karma-firefox-launcher": "^1.1.0",
+		"karma-mocha": "^1.3.0",
+		"karma-safari-launcher": "^1.0.0",
+		"karma-webpack": "^3.0.5",
+		"mocha": "^5.2.0"
+	}
+}

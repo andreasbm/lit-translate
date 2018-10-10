@@ -1,0 +1,13 @@
+{
+	"name": "lit-translate",
+	"short_name": "lit-translate",
+	"description": "Translate your lit-html based project",
+	"icons": [
+	],
+	"theme_color": "#000000",
+	"background_color": "#FFFFFF",
+	"display": "minimal-ui",
+	"start_url": "https://example.com",
+	"orientation": "portrait-primary",
+	"lang": "en"
+}
