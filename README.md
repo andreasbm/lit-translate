@@ -38,7 +38,7 @@ npm i @appnest/lit-translate
 
 ## 👌 Step 2 - Load the strings depending on the language
 
-Use the function `loadStrings` to load the strings .json file from a path.
+Use the `loadStrings` function to load the strings `.json` file from a path.
 
 ```javascript
 const path = `/assets/i18n/en.json`;
