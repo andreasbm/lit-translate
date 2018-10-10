@@ -5,12 +5,12 @@
 	"author": "Appnest",
 	"description": "A lightweight internationalization (i18n) library for your lit-html based project",
 	"bugs": {
-		"url": "https://github.com/andreasbm/lit-util/issues"
+		"url": "https://github.com/andreasbm/lit-translate/issues"
 	},
-	"homepage": "https://github.com/andreasbm/lit-util#readme",
+	"homepage": "https://github.com/andreasbm/lit-translate#readme",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/andreasbm/lit-util.git"
+		"url": "git+https://github.com/andreasbm/lit-translate.git"
 	},
 	"keywords": [
 		"lit-html",
