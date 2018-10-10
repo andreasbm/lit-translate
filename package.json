@@ -1,6 +1,6 @@
 {
 	"name": "@appnest/lit-translate",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"license": "MIT",
 	"author": "Appnest",
 	"description": "A lightweight internationalization (i18n) library for your lit-html based projects",
