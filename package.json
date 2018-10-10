@@ -1,9 +1,9 @@
 {
 	"name": "@appnest/lit-translate",
-	"version": "0.0.8",
+	"version": "0.0.1",
 	"license": "MIT",
 	"author": "Appnest",
-	"description": "A lightweight internationalization (i18n) library for your lit-html based project",
+	"description": "A lightweight internationalization (i18n) library for your lit-html based projects",
 	"bugs": {
 		"url": "https://github.com/andreasbm/lit-translate/issues"
 	},
