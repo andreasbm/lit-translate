@@ -1,79 +1,84 @@
 export type Values = object;
-export type Strings = {[key: string]: string | Strings};
+export type Translations = {[key: string]: string | Translations};
 export type CachedTranslation = {values: Values, translation: string};
+export type LanguageIdentifier = string;
+export type TranslationsLoader = (lang: LanguageIdentifier) => Promise<Translations>;
 
 export enum TranslateEventKind {
-	STRINGS_CHANGED = "stringsChanged"
+	LANG_CHANGED = "langChanged"
 }
 
-export type StringsChangedEvent = {
-	previousStrings: Strings | null,
-	strings: Strings
+export type LangChangedEvent = {
+	previousLang: LanguageIdentifier | null;
+	previousTranslations: Translations | null;
+	translations: Translations;
+	lang: LanguageIdentifier;
 };
 
-const stringsCache = new Map<string, Strings>();
-let currentStrings: Strings | null = null;
-let translationCache: {[key: string]: CachedTranslation} = {};
+// Cache mapping a language identifier to a translations object.
+const languageCache = new Map<LanguageIdentifier, Translations>();
+
+// Loads that loads translations for a given language
+let translationsLoader: TranslationsLoader | null = null;
+
+// Objects for the current language
+let currentTranslationCache: {[key: string]: CachedTranslation} = {};
+let currentTranslations: Translations | null = null;
+let currentLang: LanguageIdentifier | null = null;
 
 /**
- * Fetches the strings as JSON from a given path.
- * @param path
+ * Registers a loader that loads the translations for a given language.
+ * @param loader
  */
-export async function loadStrings (path: string): Promise<Strings> {
+export function registerLoader (loader: TranslationsLoader) {
+	translationsLoader = loader;
+}
 
-	// Check in the cache
-	if (stringsCache.has(path)) {
-		return getStringsFromCache(path);
+/**
+ * Removes the cache of translations for a language.
+ */
+export function removeCache (lang: LanguageIdentifier) {
+	languageCache.delete(lang);
+}
+
+/**
+ * Loads translations using either the values from the cache or the provided translations loader.
+ * @param lang
+ */
+export async function loadTranslations (lang: LanguageIdentifier): Promise<Translations> {
+	if (languageCache.has(lang)) {
+		return languageCache.get(lang);
 	}
 
-	// Fetch the strings and default to an empty object to avoid issues if the file does not exist.
-	return await fetch(path).then(async (res) => {
-		try {
-			return await res.json();
-		} catch (e) {
-			console.error(`The JSON at the path "${path}" appears to be malformed or does not exist.`, e);
-			return Promise.resolve({});
-		}
-	});
+	return await translationsLoader(lang);
 }
 
 /**
- * Associated strings with a key in the cache.
- * @param key
- * @param strings
+ * Sets a new current language and dispatches a global language changed event.
+ * @param lang
  */
-export function addStringsToCache (key: string, strings: Strings) {
-	stringsCache.set(key, strings);
-}
+export async function use (lang: LanguageIdentifier) {
 
-/**
- * Removes the strings associated with from the cache.
- * @param key
- */
-export function removeStringsFromCache (key: string) {
-	stringsCache.delete(key);
-}
+	// Load the translations and set the cache
+	const translations = await loadTranslations(lang);
+	languageCache.set(lang, translations);
+	currentTranslationCache = {};
 
-/**
- * Returns the strings associated with a given key.
- * @param key
- */
-export function getStringsFromCache (key: string) {
-	return stringsCache.get(key);
-}
+	// Store the previous objects for the event
+	const previousTranslations = currentTranslations;
+	const previousLang = currentLang;
 
-/**
- * Sets the strings for a new language.
- * @param strings
- */
-export function setStrings (strings: Strings) {
-	translationCache = {};
-	const previousStrings = currentStrings;
-	currentStrings = strings;
-	window.dispatchEvent(new CustomEvent<StringsChangedEvent>(TranslateEventKind.STRINGS_CHANGED, {
+	// Set the new objects
+	currentTranslations = translations;
+	currentLang = lang;
+
+	// Dispatch global language changed event
+	window.dispatchEvent(new CustomEvent<LangChangedEvent>(TranslateEventKind.LANG_CHANGED, {
 		detail: {
-			previousStrings,
-			strings
+			previousTranslations,
+			previousLang,
+			lang,
+			translations
 		}
 	}));
 }
@@ -83,7 +88,7 @@ export function setStrings (strings: Strings) {
  * @param text
  * @param values
  */
-export function interpolateValues (text: string, values: Values): string {
+export function interpolate (text: string, values: Values): string {
 	for (const [key, value] of Object.entries(values)) {
 		text = text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), value);
 	}
@@ -103,7 +108,7 @@ export function get (key: string,
                      emptyPlaceholder: ((key: string) => string) = ((key) => `[${key}]`)) {
 
 	// Check in the cache
-	const cached = translationCache[key];
+	const cached = currentTranslationCache[key];
 	if (cached != null && cached.values === values) {
 		return cached.translation;
 	}
@@ -112,7 +117,7 @@ export function get (key: string,
 	const parts = key.split(".");
 
 	// Find the translation by traversing through the strings matching the chain of keys
-	let translation: string | object = currentStrings || {};
+	let translation: string | object = currentTranslations || {};
 	while (parts.length > 0) {
 		translation = translation[parts.shift()];
 
@@ -125,9 +130,9 @@ export function get (key: string,
 
 	// Replace the placeholders
 	if (values != null) {
-		translation = interpolateValues(translation, values);
+		translation = interpolate(translation, values);
 	}
 
-	translationCache[key] = {values, translation};
+	currentTranslationCache[key] = {values, translation};
 	return translation;
 }

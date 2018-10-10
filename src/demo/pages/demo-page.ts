@@ -1,19 +1,12 @@
 import { customElement, eventOptions, html, LitElement, property } from "@polymer/lit-element";
 import { TemplateResult } from "lit-html";
-import { addStringsToCache, loadStrings, setStrings, translate } from "../../lib";
+import { LanguageIdentifier, registerLoader, translate, use } from "../../lib";
 
 const styles = require("./demo-page.scss").toString();
 
-/**
- * Sets the languag.e
- * @param language
- */
-async function setLanguage (language: string) {
-	const path = `/assets/i18n/${language}.json`;
-	const strings = await loadStrings(`/assets/i18n/${language}.json`);
-	addStringsToCache(path, strings);
-	await setStrings(strings);
-}
+// Registers loader and set default language
+registerLoader((lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()));
+use("en").then();
 
 /**
  * Demo page.
@@ -23,20 +16,10 @@ export class DemoPageComponent extends LitElement {
 
 	@property() lang = "en";
 
-	constructor () {
-		super();
-		setLanguage(this.lang).then();
-	}
-
 	@eventOptions({capture: true})
 	private onLanguageChanged (e: Event) {
 		this.lang = (<HTMLSelectElement>e.target).value;
-		setLanguage(this.lang).then();
-	}
-
-	disconnectedCallback () {
-		super.disconnectedCallback();
-		alert("asd");
+		use(this.lang).then();
 	}
 
 	protected render (): TemplateResult {

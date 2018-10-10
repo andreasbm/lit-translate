@@ -1,5 +1,5 @@
 import { customElement, html, LitElement, property } from "@polymer/lit-element";
-import { addStringsToCache, get, getStringsFromCache, removeStringsFromCache, setStrings, translate } from "../lib/index";
+import { get, LanguageIdentifier, registerLoader, removeCache, translate, use } from "../lib/index";
 import { daStrings, enStrings } from "./mock";
 
 const expect = chai.expect;
@@ -35,17 +35,26 @@ describe("translate", () => {
 
 	let $myComponent: MyComponent;
 
-	beforeEach(() => {
-		addStringsToCache("en", enStrings);
-		addStringsToCache("da", daStrings);
-		setStrings(getStringsFromCache("en"));
+	beforeEach(async () => {
+		registerLoader((lang: LanguageIdentifier) => {
+			switch (lang) {
+				case "en":
+					return Promise.resolve(enStrings);
+				case "da":
+					return Promise.resolve(daStrings);
+			}
+
+			throw new Error(`Language '${lang}' not valid.`);
+		});
+
+		await use("en");
 
 		$myComponent = document.createElement("my-component") as MyComponent;
 		document.body.appendChild($myComponent);
 	});
 	after(() => {
-		removeStringsFromCache("en");
-		removeStringsFromCache("da");
+		removeCache("en");
+		removeCache("da");
 
 		while (document.body.firstChild) {
 			(<HTMLElement>document.body.firstChild).remove();
@@ -62,7 +71,7 @@ describe("translate", () => {
 	});
 
 	it("[translate] - should update translations when new strings are set", async () => {
-		setStrings(daStrings);
+		await use("da");
 		$myComponent.things = get("cta.cats");
 
 		await $myComponent.updateComplete;
@@ -72,7 +81,7 @@ describe("translate", () => {
 		expect($myComponent.awesome).to.equal("Katte er for nice!");
 	});
 
-	it("[get] - should translate keys based on the current language", () => {
+	it("[get] - should translate keys based on the current language", async () => {
 
 		// English
 		expect(get("lang")).to.equal("en");
@@ -80,7 +89,7 @@ describe("translate", () => {
 		expect(get("header.subtitle")).to.equal("World");
 
 		// Danish
-		setStrings(getStringsFromCache("da"));
+		await use("da");
 		expect(get("lang")).to.equal("da");
 		expect(get("header.title")).to.equal("Hej");
 		expect(get("header.subtitle")).to.equal("Verden");
@@ -91,10 +100,10 @@ describe("translate", () => {
 		expect(get("this.does.not.exist", null, key => `{{ ${key} }}`)).to.equal("{{ this.does.not.exist }}");
 	});
 
-	it("[get] - should interpolate values correctly", () => {
+	it("[get] - should interpolate values correctly", async () => {
 		expect(get("cta.awesome", {things: get("cta.cats")})).to.equal("Cats are awesome!");
 
-		setStrings(getStringsFromCache("da"));
+		await use("da");
 		expect(get("cta.awesome", {things: get("cta.cats")})).to.equal("Katte er for nice!");
 	});
 });
