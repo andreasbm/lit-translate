@@ -1,5 +1,5 @@
 import { Directive, directive, NodePart } from "lit-html";
-import { get, TranslateEvent, Values } from "./translate";
+import { get, StringsChangedEvent, TranslateEventKind, Values } from "./translate";
 
 // Caches the parts and the translations.
 // In the ideal world this would be a weakmap, but it is not possible to loop over weakmaps.
@@ -17,7 +17,7 @@ export function isPartConnected (part: NodePart) {
  * Listens for changes in the language and updates all of the cached parts if necessary
  */
 function attachTranslateListener () {
-	window.addEventListener(TranslateEvent.STRINGS_CHANGED, () => {
+	window.addEventListener(TranslateEventKind.STRINGS_CHANGED, (e: CustomEvent<StringsChangedEvent>) => {
 		for (const [part, {key, values, listen}] of partCache.entries()) {
 			if (listen && isPartConnected(part)) {
 				handleTranslation(part, key, values);

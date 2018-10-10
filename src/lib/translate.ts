@@ -2,9 +2,14 @@ export type Values = object;
 export type Strings = {[key: string]: string | Strings};
 export type CachedTranslation = {values: Values, translation: string};
 
-export enum TranslateEvent {
+export enum TranslateEventKind {
 	STRINGS_CHANGED = "stringsChanged"
 }
+
+export type StringsChangedEvent = {
+	previousStrings: Strings | null,
+	strings: Strings
+};
 
 const stringsCache = new Map<string, Strings>();
 let currentStrings: Strings | null = null;
@@ -14,7 +19,7 @@ let translationCache: {[key: string]: CachedTranslation} = {};
  * Fetches the strings as JSON from a given path.
  * @param path
  */
-export async function getStrings (path: string): Promise<Strings> {
+export async function loadStrings (path: string): Promise<Strings> {
 
 	// Check in the cache
 	if (stringsCache.has(path)) {
@@ -33,38 +38,44 @@ export async function getStrings (path: string): Promise<Strings> {
 }
 
 /**
- * Adds strings to the cache for a path.
- * @param path
+ * Associated strings with a key in the cache.
+ * @param key
  * @param strings
  */
-export function addStringsToCache (path: string, strings: Strings) {
-	stringsCache.set(path, strings);
+export function addStringsToCache (key: string, strings: Strings) {
+	stringsCache.set(key, strings);
 }
 
 /**
- * Removes the strings with the given path from the cache.
- * @param path
+ * Removes the strings associated with from the cache.
+ * @param key
  */
-export function removeStringsFromCache (path: string) {
-	stringsCache.delete(path);
+export function removeStringsFromCache (key: string) {
+	stringsCache.delete(key);
 }
 
 /**
- * Returns the strings from a given path.
- * @param path
+ * Returns the strings associated with a given key.
+ * @param key
  */
-export function getStringsFromCache (path: string) {
-	return stringsCache.get(path);
+export function getStringsFromCache (key: string) {
+	return stringsCache.get(key);
 }
 
 /**
  * Sets the strings for a new language.
- * @param newStrings
+ * @param strings
  */
-export function setStrings (newStrings: Strings) {
+export function setStrings (strings: Strings) {
 	translationCache = {};
-	currentStrings = newStrings;
-	window.dispatchEvent(new CustomEvent(TranslateEvent.STRINGS_CHANGED, {detail: currentStrings}));
+	const previousStrings = currentStrings;
+	currentStrings = strings;
+	window.dispatchEvent(new CustomEvent<StringsChangedEvent>(TranslateEventKind.STRINGS_CHANGED, {
+		detail: {
+			previousStrings,
+			strings
+		}
+	}));
 }
 
 /**

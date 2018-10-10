@@ -4,7 +4,7 @@
 
 This is a lightweight internationalization (i18n) library for your lit-html based project (or any other project for that matter).
 
-*Overview*
+**Overview**
 
 * Approximately 800 bytes gzipped.
 * Contains a `lit-html` directive that automatically updates when the language updates.
@@ -38,11 +38,16 @@ npm i @appnest/lit-translate
 
 ## 👌 Step 2 - Load the strings depending on the language
 
-Use the function `getStrings` to load the strings at a given path. If you want to cache the strings for next time you are using the `getStrings` function, you might want to cache the result using the function `addStringsToCache` using the path as key.
+Use the function `loadStrings` to load the strings .json file from a path.
 
 ```javascript
 const path = `/assets/i18n/en.json`;
-const strings = await getStrings(path);
+const strings = await loadStrings(path);
+```
+
+Optionally if you want to cache the strings for next time you are using the `loadStrings` function, you might want to cache the result using the function `addStringsToCache` using the path as key.
+
+```javascript
 addStringsToCache(path, strings);
 ```
 

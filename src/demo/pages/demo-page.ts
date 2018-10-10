@@ -1,6 +1,6 @@
 import { customElement, eventOptions, html, LitElement, property } from "@polymer/lit-element";
 import { TemplateResult } from "lit-html";
-import { addStringsToCache, getStrings, setStrings, translate } from "../../lib";
+import { addStringsToCache, loadStrings, setStrings, translate } from "../../lib";
 
 const styles = require("./demo-page.scss").toString();
 
@@ -10,7 +10,7 @@ const styles = require("./demo-page.scss").toString();
  */
 async function setLanguage (language: string) {
 	const path = `/assets/i18n/${language}.json`;
-	const strings = await getStrings(`/assets/i18n/${language}.json`);
+	const strings = await loadStrings(`/assets/i18n/${language}.json`);
 	addStringsToCache(path, strings);
 	await setStrings(strings);
 }
