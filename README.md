@@ -1,4 +1,4 @@
-# @appnest/lit-util
+# @appnest/lit-translate
 
 ## 🤔 What is this?
 
@@ -12,9 +12,6 @@ This is a lightweight internationalization (i18n) library for your lit-html base
 * Works with JSON based language files.
 * Can interpolate values into the translations.
 * Caches the translations for maximum performance
-
-
-Size: ~800 bytes gzipped.
 
 ## 🎉 Install the dependency
 
