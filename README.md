@@ -27,15 +27,15 @@ To take advantage of the translation features you first need to have your transl
 ```json
 // en.json
 {
-	"lang": "en",
-	"header": {
-		"title": "Hello",
-		"subtitle": "World"
-	},
-	"cta": {
-		"awesome": "{{ things }} are awesome!",
-		"cats": "Cats"
-	}
+  "lang": "en",
+  "header": {
+    "title": "Hello",
+    "subtitle": "World"
+  },
+  "cta": {
+    "awesome": "{{ things }} are awesome!",
+    "cats": "Cats"
+  }
 }
 ```
 
@@ -45,7 +45,7 @@ Use the `registerTranslateConfig` function to register a loader that loads and p
 
 ```javascript
 registerTranslateConfig({
-	loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json())
+  loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json())
 });
 ```
 
@@ -83,13 +83,13 @@ If you are using `lit-html` you might want to use the `translate` directive. Thi
 
 ```javascript
 class MyComponent extends LitElement {
-	render () {
-		html`
-			<h1>${translate("header.title")}</h1>
-			<p>${translate("header.subtitle")}</p>
-			<span>${translate("cta.awesome", () => return {things: get("cta.cats") })}</span>
-		`;
-	}
+  render () {
+    html`
+      <h1>${translate("header.title")}</h1>
+      <p>${translate("header.subtitle")}</p>
+      <span>${translate("cta.awesome", () => return {things: get("cta.cats") })}</span>
+    `;
+  }
 }
 ```
 
