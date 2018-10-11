@@ -7,12 +7,12 @@ This is a lightweight internationalization (i18n) library for your lit-html base
 **Features**
 
 * Simple API that can return a translation for a given key using the dot notation (eg. `get("home.header.title")`)
-* Works with well with JSON based translation structure.
-* Can interpolate values into the translations.
-* Customizable (choose your own translations loader, how to interpolate values, empty placeholder etc).
-* Caches the translations for maximum performance.
-* Contains a `lit-html` directive that automatically updates when the language changes.
-* Approximately 800 bytes gzipped.
+* Works well with JSON based translation structures
+* Can interpolate values into the translations
+* Customizable (choose your own translations loader, how to interpolate values, empty placeholder etc)
+* Caches the translations for maximum performance
+* Contains a `lit-html` directive that automatically updates when the language changes
+* Approximately 800 bytes gzipped
 
 ## 🎉 Install the dependency
 
@@ -79,7 +79,7 @@ get("cta.awesome", { thing: get("cta.cats") )); // Cats are awesome!
 
 ## 👊 Step 6 - Use the `translate` directive together with `lit-html`
 
-If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from a callback due to how the part updates.
+If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from a callback due to how the parts are updated.
 
 ```javascript
 class MyComponent extends LitElement {
