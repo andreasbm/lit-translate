@@ -7,11 +7,11 @@ This is a lightweight internationalization (i18n) library for your lit-html base
 **Features**
 
 * Simple API that can return a translation for a given key using the dot notation (eg. `get("home.header.title")`)
-* Register a translations loader and choose how to parse and load the files yourself.
 * Works with well with JSON based translation structure.
 * Can interpolate values into the translations.
+* Customizable (choose your own translations loader, how to interpolate values, empty placeholder etc).
 * Caches the translations for maximum performance.
-* Contains a `lit-html` directive that automatically updates when the language updates.
+* Contains a `lit-html` directive that automatically updates when the language changes.
 * Approximately 800 bytes gzipped.
 
 ## 🎉 Install the dependency
@@ -39,17 +39,21 @@ To take advantage of the translation features you first need to have your transl
 }
 ```
 
-## 👌 Step 2 - Register a translations loader
+## 👌 Step 2 - Register a translate config
 
-Use the `registerLoader` function to register a loader that loads and parses the translations based on a language identifier.
+Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier.
 
 ```javascript
-registerLoader((lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()));
+registerTranslateConfig({
+	loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json())
+});
 ```
+
+It is possible to use this function to customize almost everything from the library.
 
 ## 🙌 Step 3 - Set the language
 
-Invoke the `use` function to use a language. This function will use the registered loader to load the translations and dispatch a global `langChanged` event. The translations are stored in an internal cache for the next time the `use` function is called with the same parameters.
+Invoke the `use` function to set a language. This function will use the registered loader to load the translations for the language and dispatch a global `langChanged` event. The translations are stored in a cache for the next time the `use` function is called with the same parameters.
 
 ```javascript
 await use("en");
@@ -67,15 +71,15 @@ get("header.subtitle"); // "World"
 
 ## ✌️ Step 5 - Interpolate values
 
-Using the `get` function it is possible to interpolate values. Simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the translations defined in `step 1`.
+Using the `get` function it is possible to interpolate values. As default, you can simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the translations defined in `step 1`.
 
 ```javascript
 get("cta.awesome", { thing: get("cta.cats") )); // Cats are awesome!
 ```
 
-## 👊 Step 6 - Use the `translate` directive
+## 👊 Step 6 - Use the `translate` directive together with `lit-html`
 
-If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched.
+If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from a callback due to how the part updates.
 
 ```javascript
 class MyComponent extends LitElement {
@@ -83,7 +87,7 @@ class MyComponent extends LitElement {
 		html`
 			<h1>${translate("header.title")}</h1>
 			<p>${translate("header.subtitle")}</p>
-			<span>${translate("cta.awesome", {things: get("cta.cats") })}</span>
+			<span>${translate("cta.awesome", () => return {things: get("cta.cats") })}</span>
 		`;
 	}
 }

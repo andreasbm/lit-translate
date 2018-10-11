@@ -1,4 +1,4 @@
-import { CachedTranslation, ITranslationConfig, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translations, Values, LanguageCache } from "./model";
+import { CachedTranslation, ITranslationConfig, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translations, Values } from "./model";
 
 /**
  * Default configuration object.
@@ -21,17 +21,8 @@ let currentConfig: ITranslationConfig = defaultTranslateConfig;
  * Registers a translation config.
  * @param config
  */
-export function registerTranslateConfig (config: Partial<ITranslationConfig>) {
-	currentConfig = {...defaultTranslateConfig, ...config};
-}
-
-/**
- * Removes the cache of translations for a language.
- * @param lang
- * @param config
- */
-export function removeCache (lang: LanguageIdentifier, config: ITranslationConfig = currentConfig) {
-	config.languageCache.delete(lang);
+export function registerTranslateConfig (config: Partial<ITranslationConfig>): ITranslationConfig {
+	return (currentConfig = {...currentConfig, ...config});
 }
 
 /**
@@ -39,7 +30,8 @@ export function removeCache (lang: LanguageIdentifier, config: ITranslationConfi
  * @param lang
  * @param config
  */
-export async function loadTranslations (lang: LanguageIdentifier, config: ITranslationConfig = currentConfig): Promise<Translations> {
+export async function loadTranslations (lang: LanguageIdentifier,
+                                        config: ITranslationConfig = currentConfig): Promise<Translations> {
 	if (config.languageCache.has(lang)) {
 		return config.languageCache.get(lang);
 	}
@@ -57,10 +49,12 @@ export function dispatchLangChanged (detail: LangChangedEvent) {
 
 /**
  * Listens for changes in the language.
+ * Returns a method for unsubscribing from the event.
  * @param callback
  * @param options
  */
-export function listenForLangChanged (callback: (e: LangChangedEvent) => void, options?: EventListenerOptions): (() => void) {
+export function listenForLangChanged (callback: (e: LangChangedEvent) => void,
+                                      options?: EventListenerOptions): (() => void) {
 	const handler = (e: CustomEvent<LangChangedEvent>) => callback(e.detail);
 	window.addEventListener(TranslateEventKind.LANG_CHANGED, handler, options);
 	return () => window.removeEventListener(TranslateEventKind.LANG_CHANGED, handler);
@@ -106,7 +100,9 @@ export function interpolate (text: string, values: Values): string {
  * @param values
  * @param config
  */
-export function fetchTranslation(key: string, values: Values | null, config: ITranslationConfig = currentConfig): string {
+export function fetchTranslation (key: string,
+                                  values: Values | null,
+                                  config: ITranslationConfig = currentConfig): string {
 
 	// Split the key in parts (example: hello.world)
 	const parts = key.split(".");

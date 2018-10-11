@@ -1,5 +1,5 @@
 import { customElement, html, LitElement, property } from "@polymer/lit-element";
-import { get, LanguageIdentifier, removeCache, translate, use, registerTranslateConfig } from "../lib/index";
+import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../lib/index";
 import { daStrings, enStrings } from "./mock";
 
 const expect = chai.expect;
@@ -54,9 +54,6 @@ describe("translate", () => {
 		document.body.appendChild($myComponent);
 	});
 	after(() => {
-		removeCache("en");
-		removeCache("da");
-
 		while (document.body.firstChild) {
 			(<HTMLElement>document.body.firstChild).remove();
 		}

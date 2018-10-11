@@ -6,15 +6,9 @@ const styles = require("./demo-page.scss").toString();
 
 // Registers loader and set default language
 registerTranslateConfig({
-	loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()),
-	interpolate: () => "OMG LOL"
+	loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json())
 });
 use("en").then();
-
-listenForLangChanged((e: LangChangedEvent) => {
-	console.log("LANG CHANGED!", e);
-});
-
 
 /**
  * Demo page.
@@ -39,7 +33,7 @@ export class DemoPageComponent extends LitElement {
 <h1>Translation</h1>
 <p>${translate("lang")}</p>
 <p>${translate("app.title")}</p>
-<p>${translate("app.subtitle", { thing: get("world" )})}</p>
+<p>${translate("app.subtitle", () => { return { thing: get("world" )}})}</p>
 <select value="${this.lang}" @change="${this.onLanguageChanged}">
 	<option value="en">en</option>
 	<option value="da">da</option>

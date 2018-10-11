@@ -1,6 +1,6 @@
 {
 	"lang": "da",
-	"world": "World",
+	"world": "Verden",
 	"app": {
 		"title": "Oversæt din app",
 		"subtitle": "Hej {{ thing }}"

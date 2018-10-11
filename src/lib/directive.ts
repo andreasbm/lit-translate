@@ -1,10 +1,10 @@
 import { Directive, directive, NodePart } from "lit-html";
-import { LangChangedEvent, TranslateEventKind, Values } from "./model";
+import { LangChangedEvent, TranslateEventKind, Values, ValuesCallback } from "./model";
 import { get } from "./translate";
 
 // Caches the parts and the translations.
 // In the ideal world this would be a weakmap, but it is not possible to loop over weakmaps.
-const partCache = new Map<NodePart, {key: string, values?: Values, listen: boolean}>();
+const partCache = new Map<NodePart, {key: string, values?: Values | ValuesCallback, listen: boolean}>();
 
 /**
  * Check whether the element is still connected / has been removed from the DOM.
@@ -36,7 +36,10 @@ attachTranslateListener();
  * @param key
  * @param values
  */
-function handleTranslation (part: NodePart, key: string, values?: Values) {
+function handleTranslation (part: NodePart, key: string, values?: Values | ValuesCallback) {
+
+	// Translate the key and interpolate the values
+	values = (values != null && typeof values === "function") ? (<ValuesCallback>values)() : values;
 	const translation = get(key, values);
 
 	// Only set the value if the cache has changed
@@ -56,7 +59,7 @@ function handleTranslation (part: NodePart, key: string, values?: Values) {
  * @param listen
  */
 export const translate =
-	(key: string, values?: Values, listen = true): Directive<NodePart> =>
+	(key: string, values?: Values | ValuesCallback, listen = true): Directive<NodePart> =>
 		directive((part: NodePart) => {
 			partCache.set(part, {key, values, listen});
 			handleTranslation(part, key, values);

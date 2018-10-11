@@ -4,6 +4,7 @@ export type CachedTranslation = {values: Values, translation: string};
 export type LanguageIdentifier = string;
 export type TranslationsLoader = (lang: LanguageIdentifier) => Promise<Translations>;
 export type LanguageCache = Map<LanguageIdentifier, Translations>;
+export type ValuesCallback = () => Values;
 
 export type InterpolateFunction = (text: string, values: Values) => string;
 export type EmptyPlaceholderFunction = (key: string) => string;
