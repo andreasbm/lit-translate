@@ -87,7 +87,7 @@ class MyComponent extends LitElement {
     html`
       <h1>${translate("header.title")}</h1>
       <p>${translate("header.subtitle")}</p>
-      <span>${translate("cta.awesome", () => return {things: get("cta.cats") })}</span>
+      <span>${translate("cta.awesome", () => { return { things: get("cta.cats") }})}</span>
     `;
   }
 }
