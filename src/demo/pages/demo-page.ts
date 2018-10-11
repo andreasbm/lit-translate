@@ -1,12 +1,20 @@
 import { customElement, eventOptions, html, LitElement, property } from "@polymer/lit-element";
 import { TemplateResult } from "lit-html";
-import { LanguageIdentifier, registerLoader, translate, use } from "../../lib";
+import { LanguageIdentifier, translate, use, registerTranslateConfig, get, listenForLangChanged, LangChangedEvent } from "../../lib";
 
 const styles = require("./demo-page.scss").toString();
 
 // Registers loader and set default language
-registerLoader((lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()));
+registerTranslateConfig({
+	loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()),
+	interpolate: () => "OMG LOL"
+});
 use("en").then();
+
+listenForLangChanged((e: LangChangedEvent) => {
+	console.log("LANG CHANGED!", e);
+});
+
 
 /**
  * Demo page.
@@ -29,8 +37,9 @@ export class DemoPageComponent extends LitElement {
 </style>
 
 <h1>Translation</h1>
-<p>${translate("app.lang")}</p>
+<p>${translate("lang")}</p>
 <p>${translate("app.title")}</p>
+<p>${translate("app.subtitle", { thing: get("world" )})}</p>
 <select value="${this.lang}" @change="${this.onLanguageChanged}">
 	<option value="en">en</option>
 	<option value="da">da</option>

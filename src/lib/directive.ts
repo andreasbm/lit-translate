@@ -1,5 +1,6 @@
 import { Directive, directive, NodePart } from "lit-html";
-import { get, LangChangedEvent, TranslateEventKind, Values } from "./translate";
+import { LangChangedEvent, TranslateEventKind, Values } from "./model";
+import { get } from "./translate";
 
 // Caches the parts and the translations.
 // In the ideal world this would be a weakmap, but it is not possible to loop over weakmaps.

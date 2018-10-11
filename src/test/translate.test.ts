@@ -1,5 +1,5 @@
 import { customElement, html, LitElement, property } from "@polymer/lit-element";
-import { get, LanguageIdentifier, registerLoader, removeCache, translate, use } from "../lib/index";
+import { get, LanguageIdentifier, removeCache, translate, use, registerTranslateConfig } from "../lib/index";
 import { daStrings, enStrings } from "./mock";
 
 const expect = chai.expect;
@@ -30,21 +30,22 @@ class MyComponent extends LitElement {
 	}
 }
 
-
 describe("translate", () => {
 
 	let $myComponent: MyComponent;
 
 	beforeEach(async () => {
-		registerLoader((lang: LanguageIdentifier) => {
-			switch (lang) {
-				case "en":
-					return Promise.resolve(enStrings);
-				case "da":
-					return Promise.resolve(daStrings);
-			}
+		registerTranslateConfig({
+			loader: (lang: LanguageIdentifier) => {
+				switch (lang) {
+					case "en":
+						return Promise.resolve(enStrings);
+					case "da":
+						return Promise.resolve(daStrings);
+				}
 
-			throw new Error(`Language '${lang}' not valid.`);
+				throw new Error(`Language '${lang}' not valid.`);
+			}
 		});
 
 		await use("en");
@@ -97,7 +98,13 @@ describe("translate", () => {
 
 	it("[get] - should show empty placeholder if string does not exist", () => {
 		expect(get("this.does.not.exist")).to.equal("[this.does.not.exist]");
-		expect(get("this.does.not.exist", null, key => `{{ ${key} }}`)).to.equal("{{ this.does.not.exist }}");
+	});
+
+	it("[get] - should overwrite empty placeholder if one is defined", () => {
+		registerTranslateConfig({
+			emptyPlaceholder: key => `{{ ${key} }}`
+		});
+		expect(get("this.does.not.exist", null)).to.equal("{{ this.does.not.exist }}");
 	});
 
 	it("[get] - should interpolate values correctly", async () => {

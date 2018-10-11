@@ -1,6 +1,8 @@
 {
+	"lang": "en",
+	"world": "World",
 	"app": {
-		"lang": "en",
-		"title": "Translate your application"
+		"title": "Translate your application",
+		"subtitle": "Hello {{ thing }}"
 	}
 }
