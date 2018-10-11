@@ -1,11 +1,12 @@
 import { customElement, html, LitElement, property } from "@polymer/lit-element";
+import { repeat } from "../../node_modules/lit-html/directives/repeat";
 import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../lib/index";
 import { daStrings, enStrings } from "./mock";
 
 const expect = chai.expect;
 
-@customElement("my-component" as any)
-class MyComponent extends LitElement {
+@customElement("translated-component" as any)
+class TranslatedComponent extends LitElement {
 
 	@property() things = "";
 
@@ -30,9 +31,18 @@ class MyComponent extends LitElement {
 	}
 }
 
+@customElement("stress-component" as any)
+class StressComponent extends LitElement {
+	render () {
+		return html`
+			${repeat(Array(10000), () => html`<p>${translate("header.title")}</p>`)}
+		`;
+	}
+}
+
 describe("translate", () => {
 
-	let $myComponent: MyComponent;
+	let $translatedComponent: TranslatedComponent;
 
 	beforeEach(async () => {
 		registerTranslateConfig({
@@ -50,8 +60,8 @@ describe("translate", () => {
 
 		await use("en");
 
-		$myComponent = document.createElement("my-component") as MyComponent;
-		document.body.appendChild($myComponent);
+		$translatedComponent = document.createElement("translated-component") as TranslatedComponent;
+		document.body.appendChild($translatedComponent);
 	});
 	after(() => {
 		while (document.body.firstChild) {
@@ -60,23 +70,23 @@ describe("translate", () => {
 	});
 
 	it("[translate] - should translate and interpolate", async () => {
-		$myComponent.things = get("cta.cats");
-		await $myComponent.updateComplete;
+		$translatedComponent.things = get("cta.cats");
+		await $translatedComponent.updateComplete;
 
-		expect($myComponent.title).to.equal("Hello");
-		expect($myComponent.subtitle).to.equal("World");
-		expect($myComponent.awesome).to.equal("Cats are awesome!");
+		expect($translatedComponent.title).to.equal("Hello");
+		expect($translatedComponent.subtitle).to.equal("World");
+		expect($translatedComponent.awesome).to.equal("Cats are awesome!");
 	});
 
 	it("[translate] - should update translations when new strings are set", async () => {
 		await use("da");
-		$myComponent.things = get("cta.cats");
+		$translatedComponent.things = get("cta.cats");
 
-		await $myComponent.updateComplete;
+		await $translatedComponent.updateComplete;
 
-		expect($myComponent.title).to.equal("Hej");
-		expect($myComponent.subtitle).to.equal("Verden");
-		expect($myComponent.awesome).to.equal("Katte er for nice!");
+		expect($translatedComponent.title).to.equal("Hej");
+		expect($translatedComponent.subtitle).to.equal("Verden");
+		expect($translatedComponent.awesome).to.equal("Katte er for nice!");
 	});
 
 	it("[get] - should translate keys based on the current language", async () => {
@@ -109,5 +119,25 @@ describe("translate", () => {
 
 		await use("da");
 		expect(get("cta.awesome", {things: get("cta.cats")})).to.equal("Katte er for nice!");
+	});
+
+	it("[translate] - should be performant", async () => {
+
+		// Create the stress component
+		const $stressComponent = document.createElement("stress-component") as StressComponent;
+		document.body.appendChild($stressComponent);
+
+		// Measure the time it takes to update all of the strings
+		window.performance.mark("stress_start");
+		await use("da").then();
+		await $stressComponent.updateComplete;
+		window.performance.mark("stress_end");
+
+		// Compute the measurement
+		window.performance.measure("stress", "stress_start", "stress_end");
+		const durationMs = window.performance.getEntriesByName("stress")[0].duration;
+
+		// The 400 mark was set based on performance testing in Chrome
+		expect(durationMs).to.be.lessThan(400);
 	});
 });

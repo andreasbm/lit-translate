@@ -9,9 +9,9 @@ export const defaultTranslateConfig: ITranslationConfig = {
 	fetchTranslation: fetchTranslation,
 	interpolate: interpolate,
 	translationCache: new Map<string, CachedTranslation>(),
+	languageCache: new Map<LanguageIdentifier, Translations>(),
 	lang: null,
-	translations: null,
-	languageCache: new Map<LanguageIdentifier, Translations>()
+	translations: null
 };
 
 // The current configuration for the translation.

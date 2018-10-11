@@ -1,13 +1,16 @@
 import { customElement, eventOptions, html, LitElement, property } from "@polymer/lit-element";
 import { TemplateResult } from "lit-html";
+import { repeat } from "../../../node_modules/lit-html/directives/repeat";
 import { LanguageIdentifier, translate, use, registerTranslateConfig, get, listenForLangChanged, LangChangedEvent } from "../../lib";
 
 const styles = require("./demo-page.scss").toString();
 
-// Registers loader and set default language
+// Registers loader
 registerTranslateConfig({
 	loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json())
 });
+
+// Set default language
 use("en").then();
 
 /**
