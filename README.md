@@ -131,7 +131,7 @@ registerTranslateConfig({
       return translation.toString();
   },
 
-  // Writes empty placeholders (eg. [da.headline.title])
+  // Formats empty placeholders (eg. [da.headline.title])
   emptyPlaceholder: (key: string, config: ITranslationConfig) => `!${config.lang}.${key}!`
 });
 ```
