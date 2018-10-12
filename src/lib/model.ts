@@ -2,13 +2,13 @@ export type Values = object;
 export type Translations = {[key: string]: string | Translations};
 export type CachedTranslation = {values: Values, translation: string};
 export type LanguageIdentifier = string;
-export type TranslationsLoader = (lang: LanguageIdentifier) => Promise<Translations>;
 export type LanguageCache = Map<LanguageIdentifier, Translations>;
 export type ValuesCallback = () => Values;
 
-export type InterpolateFunction = (text: string, values: Values) => string;
-export type EmptyPlaceholderFunction = (key: string) => string;
-export type FetchTranslationFunction = (key: string, values: Values | null, config: ITranslationConfig) => string;
+export type TranslationsLoader = (lang: LanguageIdentifier, config: ITranslationConfig) => Promise<Translations>;
+export type InterpolateFunction = (text: string, values: Values | null, config: ITranslationConfig) => string;
+export type EmptyPlaceholderFunction = (key: string, config: ITranslationConfig) => string;
+export type FetchTranslationFunction = (key: string, config: ITranslationConfig) => string;
 
 export enum TranslateEventKind {
 	LANG_CHANGED = "langChanged"

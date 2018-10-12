@@ -36,7 +36,7 @@ export async function loadTranslations (lang: LanguageIdentifier,
 		return config.languageCache.get(lang);
 	}
 
-	return await currentConfig.loader(lang);
+	return await currentConfig.loader(lang, config);
 }
 
 /**
@@ -97,12 +97,9 @@ export function interpolate (text: string, values: Values): string {
 /**
  * Fetches a translation based on a chain of keys using the dot notation.
  * @param key
- * @param values
  * @param config
  */
-export function fetchTranslation (key: string,
-                                  values: Values | null,
-                                  config: ITranslationConfig = currentConfig): string {
+export function fetchTranslation (key: string, config: ITranslationConfig = currentConfig): string {
 
 	// Split the key in parts (example: hello.world)
 	const parts = key.split(".");
@@ -113,7 +110,7 @@ export function fetchTranslation (key: string,
 		translation = translation[parts.shift()];
 
 		// Do not continue if the translation is not defined
-		if (translation == null) return config.emptyPlaceholder(key);
+		if (translation == null) return config.emptyPlaceholder(key, config);
 	}
 
 	// Make sure the translation is a string!
@@ -136,11 +133,11 @@ export function get (key: string, values?: Values, config: ITranslationConfig = 
 	}
 
 	// Fetch the translation
-	let translation = config.fetchTranslation(key, values, config);
+	let translation = config.fetchTranslation(key, config);
 
 	// Replace the placeholders
 	if (values != null) {
-		translation = currentConfig.interpolate(translation, values);
+		translation = currentConfig.interpolate(translation, values, config);
 	}
 
 	config.translationCache.set(key, {values, translation});

@@ -93,6 +93,49 @@ class MyComponent extends LitElement {
 }
 ```
 
+## 💥 Step 7 - Customize!
+
+Customize how keys are translated. Below is an example on what you might want to customize.
+
+```javascript
+registerTranslateConfig({
+
+    // Loads the language from the correct path
+    loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()),
+
+    // Interpolate the values using a [[key]] syntax.
+    interpolate: (text: string, values: Values) => {
+      for (const [key, value] of Object.entries(values)) {
+        text = text.replace(new RegExp(`\[\[${key}\]\]`), value);
+      }
+
+      return text;
+    },
+
+    // Fetches a translation from a given key
+    fetchTranslation: (key: string, config: ITranslationConfig) => {
+
+      // Split the key in parts (example: hello.world)
+      const parts = key.split(".");
+
+      // Find the translation by traversing through the strings matching the chain of keys
+      let translation: string | object = config.translations || {};
+      while (parts.length > 0) {
+        translation = translation[parts.shift()];
+
+        // Do not continue if the translation is not defined
+        if (translation == null) return config.emptyPlaceholder(key, config);
+      }
+
+      // Make sure the translation is a string!
+      return translation.toString();
+  },
+
+  // Writes empty placeholders (eg. [da.headline.title])
+  emptyPlaceholder: (key: string, config: ITranslationConfig) => `!${config.lang}.${key}!`
+});
+```
+
 ## 🎉 License
 
 Licensed under [MIT](https://opensource.org/licenses/MIT).

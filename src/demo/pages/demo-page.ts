@@ -1,7 +1,6 @@
 import { customElement, eventOptions, html, LitElement, property } from "@polymer/lit-element";
 import { TemplateResult } from "lit-html";
-import { repeat } from "../../../node_modules/lit-html/directives/repeat";
-import { LanguageIdentifier, translate, use, registerTranslateConfig, get, listenForLangChanged, LangChangedEvent } from "../../lib";
+import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../../lib";
 
 const styles = require("./demo-page.scss").toString();
 
@@ -36,7 +35,9 @@ export class DemoPageComponent extends LitElement {
 <h1>Translation</h1>
 <p>${translate("lang")}</p>
 <p>${translate("app.title")}</p>
-<p>${translate("app.subtitle", () => { return { thing: get("world" )}})}</p>
+<p>${translate("app.subtitle", () => {
+			return {thing: get("world")};
+		})}</p>
 <select value="${this.lang}" @change="${this.onLanguageChanged}">
 	<option value="en">en</option>
 	<option value="da">da</option>
