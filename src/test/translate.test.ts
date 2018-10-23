@@ -1,5 +1,5 @@
 import { customElement, html, LitElement, property } from "@polymer/lit-element";
-import { repeat } from "../../node_modules/lit-html/directives/repeat";
+import { repeat } from "lit-html/directives/repeat";
 import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../lib/index";
 import { daStrings, enStrings } from "./mock";
 
@@ -11,22 +11,24 @@ class TranslatedComponent extends LitElement {
 	@property() things = "";
 
 	get title () {
-		return this.shadowRoot.querySelector("h1").innerText;
+		return this.shadowRoot!.querySelector("h1")!.innerText;
 	}
 
 	get subtitle () {
-		return this.shadowRoot.querySelector("p").innerText;
+		return this.shadowRoot!.querySelector("p")!.innerText;
 	}
 
 	get awesome () {
-		return this.shadowRoot.querySelector("span").innerText;
+		return this.shadowRoot!.querySelector("span")!.innerText;
 	}
 
 	render () {
 		return html`
 			<h1>${translate("header.title")}</h1>
 			<p>${translate("header.subtitle")}</p>
-			<span>${translate("cta.awesome", () => { return {things: this.things}})}</span>
+			<span>${translate("cta.awesome", () => {
+			return {things: this.things};
+		})}</span>
 		`;
 	}
 }

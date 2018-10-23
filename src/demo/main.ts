@@ -1,2 +1,2 @@
 import "./app.ts";
-import "./styles/global.scss?global";
+import "./styles/global.scss";

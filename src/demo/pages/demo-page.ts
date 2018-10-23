@@ -2,7 +2,7 @@ import { customElement, eventOptions, html, LitElement, property } from "@polyme
 import { TemplateResult } from "lit-html";
 import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../../lib";
 
-const styles = require("./demo-page.scss").toString();
+import styles from "./demo-page.scss";
 
 // Registers loader
 registerTranslateConfig({

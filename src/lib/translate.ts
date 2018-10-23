@@ -33,7 +33,7 @@ export function registerTranslateConfig (config: Partial<ITranslationConfig>): I
 export async function loadTranslations (lang: LanguageIdentifier,
                                         config: ITranslationConfig = currentConfig): Promise<Translations> {
 	if (config.languageCache.has(lang)) {
-		return config.languageCache.get(lang);
+		return config.languageCache.get(lang)!;
 	}
 
 	return await currentConfig.loader(lang, config);
@@ -105,9 +105,9 @@ export function fetchTranslation (key: string, config: ITranslationConfig = curr
 	const parts = key.split(".");
 
 	// Find the translation by traversing through the strings matching the chain of keys
-	let translation: string | object = config.translations || {};
+	let translation: Translations | string | null = config.translations || {};
 	while (parts.length > 0) {
-		translation = translation[parts.shift()];
+		translation = (<Translations>translation)[parts.shift()!];
 
 		// Do not continue if the translation is not defined
 		if (translation == null) return config.emptyPlaceholder(key, config);
@@ -124,7 +124,7 @@ export function fetchTranslation (key: string, config: ITranslationConfig = curr
  * @param values (eg. { count: 42 })
  * @param config
  */
-export function get (key: string, values?: Values, config: ITranslationConfig = currentConfig) {
+export function get (key: string, values?: Values | null, config: ITranslationConfig = currentConfig) {
 
 	// Check in the cache
 	const cached = config.translationCache.get(key);
