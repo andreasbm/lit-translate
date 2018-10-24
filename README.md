@@ -14,6 +14,8 @@ This is a lightweight internationalization (i18n) library for your lit-html base
 * Contains a `lit-html` directive that automatically updates when the language changes
 * Approximately 800 bytes gzipped
 
+![](example.gif)
+
 ## 🎉 Install the dependency
 
 ```javascript
@@ -22,7 +24,7 @@ npm i @appnest/lit-translate
 
 ## 👍 Step 1 - Define the translations
 
-To take advantage of the translation features you first need to have your translations in a JSON structure.
+To take advantage of the translation features you need to be able to provide your translations as a JSON structure. You are able to configure how the strings are loaded, but to make things simple we encourage you to maintain your translations in `.json` files - one for each language you support.
 
 ```json
 // en.json
@@ -41,7 +43,7 @@ To take advantage of the translation features you first need to have your transl
 
 ## 👌 Step 2 - Register a translate config
 
-Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier.
+Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier. In the example below, a loader is registered which loads a `.json` file with translations for a given language.
 
 ```javascript
 registerTranslateConfig({
@@ -49,7 +51,7 @@ registerTranslateConfig({
 });
 ```
 
-It is possible to use this function to customize almost everything from the library.
+It is possible to use this function to customize almost everything from the library. To learn more you can see `step 7`.
 
 ## 🙌 Step 3 - Set the language
 

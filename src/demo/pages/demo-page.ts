@@ -1,8 +1,14 @@
 import { customElement, eventOptions, html, LitElement, property } from "@polymer/lit-element";
 import { TemplateResult } from "lit-html";
+import { repeat } from "lit-html/directives/repeat";
 import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../../lib";
 
 import styles from "./demo-page.scss";
+
+const languages = [
+	"en",
+	"da"
+];
 
 // Registers loader
 registerTranslateConfig({
@@ -18,7 +24,7 @@ use("en").then();
 @customElement("demo-page-component" as any)
 export class DemoPageComponent extends LitElement {
 
-	@property() lang = "en";
+	@property() lang = languages[0];
 
 	@eventOptions({capture: true})
 	private onLanguageChanged (e: Event) {
@@ -39,8 +45,9 @@ export class DemoPageComponent extends LitElement {
 			return {thing: get("world")};
 		})}</p>
 <select value="${this.lang}" @change="${this.onLanguageChanged}">
-	<option value="en">en</option>
-	<option value="da">da</option>
+	${repeat(languages, lang => html`
+		<option value="${lang}">${lang}</option>
+	`)}
 </select>
 
 `;

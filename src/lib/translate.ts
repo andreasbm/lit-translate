@@ -32,11 +32,7 @@ export function registerTranslateConfig (config: Partial<ITranslationConfig>): I
  */
 export async function loadTranslations (lang: LanguageIdentifier,
                                         config: ITranslationConfig = currentConfig): Promise<Translations> {
-	if (config.languageCache.has(lang)) {
-		return config.languageCache.get(lang)!;
-	}
-
-	return await currentConfig.loader(lang, config);
+	return config.languageCache.has(lang) ? config.languageCache.get(lang)! : await currentConfig.loader(lang, config);
 }
 
 /**
@@ -45,6 +41,21 @@ export async function loadTranslations (lang: LanguageIdentifier,
  */
 export function dispatchLangChanged (detail: LangChangedEvent) {
 	window.dispatchEvent(new CustomEvent<LangChangedEvent>(TranslateEventKind.LANG_CHANGED, {detail}));
+}
+
+/**
+ * Updates the configuration object with a new language and translations and then dispatches than the language has changed.
+ * @param config
+ * @param newLang
+ * @param newTranslations
+ */
+export function updateConfig (config: ITranslationConfig, newLang: LanguageIdentifier, newTranslations: Translations) {
+	dispatchLangChanged({
+		previousTranslations: config.translations,
+		previousLang: config.lang,
+		lang: (config.lang = newLang),
+		translations: (config.translations = newTranslations)
+	});
 }
 
 /**
@@ -73,12 +84,7 @@ export async function use (lang: LanguageIdentifier, config: ITranslationConfig 
 	config.translationCache = new Map();
 
 	// Dispatch global language changed event while setting the new values
-	dispatchLangChanged({
-		previousTranslations: config.translations,
-		previousLang: config.lang,
-		lang: (config.lang = lang),
-		translations: (config.translations = translations)
-	});
+	updateConfig(config, lang, translations);
 }
 
 /**
@@ -87,11 +93,7 @@ export async function use (lang: LanguageIdentifier, config: ITranslationConfig 
  * @param values
  */
 export function interpolate (text: string, values: Values): string {
-	for (const [key, value] of Object.entries(values)) {
-		text = text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), value);
-	}
-
-	return text;
+	return Object.entries(values).reduce((text, [key, value]) => text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), value), text);
 }
 
 /**
