@@ -71,6 +71,9 @@ export default {
 		...(isProd ? [
 			...defaultProdPlugins({
 				dist: folders.dist,
+				minifyLitHtmlConfig: {
+					verbose: false
+				},
 				visualizerConfig: {
 					filename: path.join(folders.dist, "stats.html")
 				},

@@ -2,7 +2,7 @@
 
 ## 🤔 What is this?
 
-This is a lightweight internationalization (i18n) library for your lit-html based project (or any other project for that matter).
+This is a lightweight blazing-fast internationalization (i18n) library for your next web-based project.
 
 **Features**
 
@@ -12,7 +12,7 @@ This is a lightweight internationalization (i18n) library for your lit-html base
 * Customizable (choose your own translations loader, how to interpolate values, empty placeholder etc)
 * Caches the translations for maximum performance
 * Contains a `lit-html` directive that automatically updates when the language changes
-* Approximately 800 bytes gzipped
+* Approximately 800 bytes minified & gzipped (2kb without)
 
 <img src="https://github.com/andreasbm/lit-translate/blob/master/example.gif" width="600">
 

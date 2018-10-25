@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"module": "index.js",
 	"author": "Appnest",
-	"description": "A lightweight internationalization (i18n) library for your lit-html based projects",
+	"description": "A lightweight blazing-fast internationalization (i18n) library for your next web-based project",
 	"bugs": {
 		"url": "https://github.com/andreasbm/lit-translate/issues"
 	},
@@ -53,6 +53,6 @@
 		"lit-html": "^0.12.0"
 	},
 	"devDependencies": {
-		"@appnest/web-config": "0.1.18"
+		"@appnest/web-config": "0.1.19"
 	}
 }
