@@ -14,7 +14,7 @@ This is a lightweight blazing-fast internationalization (i18n) library for your 
 * Contains a `lit-html` directive that automatically updates when the language changes
 * Approximately 800 bytes minified & gzipped (2kb without)
 
-<img src="https://github.com/andreasbm/lit-translate/blob/master/example.gif" width="600">
+<img src="https://raw.githubusercontent.com/andreasbm/lit-translate/master/example.gif" width="600">
 
 ## 🎉 Install the dependency
 
