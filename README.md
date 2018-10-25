@@ -14,7 +14,7 @@ This is a lightweight internationalization (i18n) library for your lit-html base
 * Contains a `lit-html` directive that automatically updates when the language changes
 * Approximately 800 bytes gzipped
 
-![](example.gif)
+![](example.gif | width=150)
 
 ## 🎉 Install the dependency
 
