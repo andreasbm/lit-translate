@@ -38,8 +38,10 @@ attachTranslateListener();
  */
 function handleTranslation (part: NodePart, key: string, values?: Values | ValuesCallback) {
 
+	// Grab the values
+	values = (typeof values === "function") ? (<ValuesCallback>values)() : values;
+
 	// Translate the key and interpolate the values
-	values = (values != null && typeof values === "function") ? (<ValuesCallback>values)() : values;
 	const translation = get(key, values);
 
 	// Only set the value if the cache has changed
