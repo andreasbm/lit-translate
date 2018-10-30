@@ -51,11 +51,11 @@ registerTranslateConfig({
 });
 ```
 
-It is possible to use this function to customize almost everything from the library. To learn more you can see `step 7`.
+It is possible to use the `registerTranslateConfig` function to customize almost everything from the library. To learn more you can see `step 7`.
 
 ## 🙌 Step 3 - Set the language
 
-Invoke the `use` function to set a language. This function will use the registered loader to load the translations for the language and dispatch a global `langChanged` event. The translations are stored in a cache for the next time the `use` function is called with the same parameters.
+Invoke the `use` function to set a language. This function will use the registered loader from step 1 to load the translations for the language and dispatch a global `langChanged` event. To avoid fetching the translations again, the translations are stored in a cache for the next time the `use` function is called with the same parameters.
 
 ```javascript
 await use("en");
@@ -63,7 +63,7 @@ await use("en");
 
 ## 💪 Step 4 - Get the translations
 
-To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired string in the JSON structure. The example below is based on the translations defined in `step 1`.
+To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired translation in the JSON structure. The example below is based on the translations defined in `step 1`.
 
 ```javascript
 get("lang"); // "en"
@@ -95,9 +95,9 @@ class MyComponent extends LitElement {
 }
 ```
 
-## 💥 Step 7 - Customize!
+## 💥 Step 7 - Customize! (advanced)
 
-Customize how keys are translated. Below is an example on what you might want to customize.
+If you want you can customize almost anything about how your translations are handled by overwriting the configuration hooks. Below is an example on what you might want to customize.
 
 ```javascript
 registerTranslateConfig({
