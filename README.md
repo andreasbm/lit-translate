@@ -23,15 +23,16 @@ This is a lightweight blazing-fast internationalization (i18n) library for your 
 <img src="https://raw.githubusercontent.com/andreasbm/lit-translate/master/example.gif" width="600">
 
 ## Table of Contents
+
 * [Installation](#installation)
 * [1. Define the translations](#1-Define-the-translations)
-* [2. Register the translate config](2-register-the-translate-config)
-* [3. Set the language](3-set-the-language)
-* [4. Get the translations](4-get-the-translations)
-* [5. Interpolate values](5-interpolate-values)
-* [6. Use the `translate` directive together with `lit-html`](6-use-the-translate-directive-together-with-lit-html)
-* [Customize! (advanced)](customize-advanced)
-* [License](-license)
+* [2. Register the translate config](#2-register-the-translate-config)
+* [3. Set the language](#3-set-the-language)
+* [4. Get the translations](#4-get-the-translations)
+* [5. Interpolate values](#5-interpolate-values)
+* [6. Use the `translate` directive together with `lit-html`](#6-use-the-translate-directive-together-with-lit-html)
+* [Customize! (advanced)](#customize-advanced)
+* [License](#-license)
 
 ## Installation
 
