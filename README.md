@@ -24,7 +24,14 @@ This is a lightweight blazing-fast internationalization (i18n) library for your 
 
 ## Table of Contents
 * [Installation](#installation)
-* [1. Define the translations](#1.-Define-the-translations)
+* [1. Define the translations](#1-Define-the-translations)
+* [2. Register the translate config](2-register-the-translate-config)
+* [3. Set the language](3-set-the-language)
+* [4. Get the translations](4-get-the-translations)
+* [5. Interpolate values](5-interpolate-values)
+* [6. Use the `translate` directive together with `lit-html`](6-use-the-translate-directive-together-with-lit-html)
+* [Customize! (advanced)](customize-advanced)
+* [License](-license)
 
 ## Installation
 
@@ -51,7 +58,7 @@ To take advantage of the translation features you need to be able to provide you
 }
 ```
 
-## Register a translate config
+## 2. Register the translate config
 
 Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier. In the example below, a loader is registered which loads a `.json` file with translations for a given language.
 
@@ -63,7 +70,7 @@ registerTranslateConfig({
 
 It is possible to use the `registerTranslateConfig` function to customize almost everything from the library. To learn more you can see `step 7`.
 
-## 🙌 Step 3 - Set the language
+## 3. Set the language
 
 Invoke the `use` function to set a language. This function will use the registered loader from step 1 to load the translations for the language and dispatch a global `langChanged` event. To avoid fetching the translations again, the translations are stored in a cache for the next time the `use` function is called with the same parameters.
 
@@ -71,7 +78,7 @@ Invoke the `use` function to set a language. This function will use the register
 await use("en");
 ```
 
-## 💪 Step 4 - Get the translations
+## 4. Get the translations
 
 To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired translation in the JSON structure. The example below is based on the translations defined in `step 1`.
 
@@ -81,7 +88,7 @@ get("header.title"); // "Hello"
 get("header.subtitle"); // "World"
 ```
 
-## ✌️ Step 5 - Interpolate values
+## 5. Interpolate values
 
 Using the `get` function it is possible to interpolate values. As default, you can simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the translations defined in `step 1`.
 
@@ -89,7 +96,7 @@ Using the `get` function it is possible to interpolate values. As default, you c
 get("cta.awesome", { thing: get("cta.cats") )); // Cats are awesome!
 ```
 
-## 👊 Step 6 - Use the `translate` directive together with `lit-html`
+## 6. Use the `translate` directive together with `lit-html`
 
 If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from a callback due to how the parts are updated.
 
@@ -105,7 +112,7 @@ class MyComponent extends LitElement {
 }
 ```
 
-## 💥 Step 7 - Customize! (advanced)
+## Customize! (advanced)
 
 If you want you can customize almost anything about how your translations are handled by overwriting the configuration hooks. Below is an example on what you might want to customize.
 
