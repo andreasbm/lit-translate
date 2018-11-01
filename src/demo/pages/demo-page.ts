@@ -38,18 +38,20 @@ export class DemoPageComponent extends LitElement {
 	${styles}
 </style>
 
-<h1>Translation</h1>
-<p>${translate("lang")}</p>
-<p>${translate("app.title")}</p>
-<p>${translate("app.subtitle", () => {
-			return {thing: get("world")};
-		})}</p>
-<select value="${this.lang}" @change="${this.onLanguageChanged}">
-	${repeat(languages, lang => html`
-		<option value="${lang}">${lang}</option>
-	`)}
-</select>
-
+<div id="box">
+	<h1>@appnest/lit-translate</h1>
+	<p>${translate("lang")}</p>
+	<p>${translate("app.title")}</p>
+	<p>${translate("app.subtitle", () => {
+				return {thing: get("world")};
+			})}</p>
+	<select value="${this.lang}" @change="${this.onLanguageChanged}">
+		${repeat(languages, lang => html`
+			<option value="${lang}">${lang}</option>
+		`)}
+	</select>
+</div>
+<a href="https://github.com/andreasbm/lit-translate" target="_blank">View on Github</a>
 `;
 	}
 }
