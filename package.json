@@ -46,7 +46,8 @@
 		"b:demo:prod": "rollup -c --environment NODE_ENV:prod",
 		"s:dev": "rollup -c --watch --environment NODE_ENV:dev",
 		"s:prod": "rollup -c --watch --environment NODE_ENV:prod",
-		"s": "npm run s:dev"
+		"s": "npm run s:dev",
+		"deploy": "npm run b:demo:prod && firebase deploy"
 	},
 	"dependencies": {
 		"@polymer/lit-element": "^0.6.2",

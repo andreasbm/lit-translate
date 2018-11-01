@@ -8,7 +8,7 @@
 
 ## 🤔 What is this?
 
-This is a lightweight blazing-fast internationalization (i18n) library for your next web-based project.
+This is a lightweight blazing-fast internationalization (i18n) library for your next web-based project. Go here to see a demo [https://appnest-demo.firebaseapp.com/lit-translate/](https://appnest-demo.firebaseapp.com/lit-translate).
 
 **Features**
 
@@ -147,3 +147,4 @@ registerTranslateConfig({
 ## 🎉 License
 
 Licensed under [MIT](https://opensource.org/licenses/MIT).
+
