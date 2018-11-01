@@ -22,13 +22,17 @@ This is a lightweight blazing-fast internationalization (i18n) library for your 
 
 <img src="https://raw.githubusercontent.com/andreasbm/lit-translate/master/example.gif" width="600">
 
-## 🎉 Install the dependency
+## Table of Contents
+* [Installation](#installation)
+* [1. Define the translations](#1.-Define-the-translations)
+
+## Installation
 
 ```javascript
 npm i @appnest/lit-translate
 ```
 
-## 👍 Step 1 - Define the translations
+## 1. Define the translations
 
 To take advantage of the translation features you need to be able to provide your translations as a JSON structure. You are able to configure how the strings are loaded, but to make things simple we encourage you to maintain your translations in `.json` files - one for each language you support.
 
@@ -47,7 +51,7 @@ To take advantage of the translation features you need to be able to provide you
 }
 ```
 
-## 👌 Step 2 - Register a translate config
+## Register a translate config
 
 Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier. In the example below, a loader is registered which loads a `.json` file with translations for a given language.
 
