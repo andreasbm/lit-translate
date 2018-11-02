@@ -32,7 +32,7 @@ This is a lightweight blazing-fast internationalization (i18n) library for your 
 * [5. Interpolate values](#5-interpolate-values)
 * [6. Use the `translate` directive together with `lit-html`](#6-use-the-translate-directive-together-with-lit-html)
 * [Customize! (advanced)](#customize-advanced)
-* [Wait for strings to be loaded before displaying the component (advanced)](#wait-for-strings-to-be-loaded-before-displaying-the-component-advanced)
+* [Wait for strings to be loaded before displaying the component](#wait-for-strings-to-be-loaded-before-displaying-the-component)
 * [License](#-license)
 
 ## Installation
@@ -157,7 +157,7 @@ registerTranslateConfig({
 });
 ```
 
-## Wait for strings to be loaded before displaying the component (advanced)
+## Wait for strings to be loaded before displaying the component
 
 Sometimes you want to avoid the placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
 
