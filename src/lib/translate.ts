@@ -1,4 +1,4 @@
-import { CachedTranslation, ITranslationConfig, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translations, Values } from "./model";
+import { CachedTranslation, ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translations, Values } from "./model";
 
 /**
  * Default configuration object.
@@ -8,7 +8,7 @@ export const defaultTranslateConfig: ITranslationConfig = {
 	emptyPlaceholder: (key) => `[${key}]`,
 	fetchTranslation: fetchTranslation,
 	interpolate: interpolate,
-	translationCache: new Map<string, CachedTranslation>(),
+	translationCache: new Map<Key, CachedTranslation>(),
 	languageCache: new Map<LanguageIdentifier, Translations>(),
 	lang: null,
 	translations: null
@@ -93,7 +93,8 @@ export async function use (lang: LanguageIdentifier, config: ITranslationConfig 
  * @param values
  */
 export function interpolate (text: string, values: Values): string {
-	return Object.entries(values).reduce((text, [key, value]) => text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), value), text);
+	return Object.entries(values).reduce((text, [key, value]) =>
+		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), value), text);
 }
 
 /**
@@ -126,7 +127,7 @@ export function fetchTranslation (key: string, config: ITranslationConfig = curr
  * @param values (eg. { count: 42 })
  * @param config
  */
-export function get (key: string, values?: Values | null, config: ITranslationConfig = currentConfig) {
+export function get (key: Key, values?: Values | null, config: ITranslationConfig = currentConfig) {
 
 	// Check in the cache
 	const cached = config.translationCache.get(key);

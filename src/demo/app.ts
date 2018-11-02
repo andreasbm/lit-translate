@@ -1,2 +1,0 @@
-import "./pages/demo-page";
-

@@ -1,2 +1,2 @@
-import "./app.ts";
+import "./pages/demo-page";
 import "./styles/global.scss";

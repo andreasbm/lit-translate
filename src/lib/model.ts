@@ -1,4 +1,5 @@
 export type Values = object;
+export type Key = string;
 export type Translations = {[key: string]: string | Translations};
 export type CachedTranslation = {values?: Values | null, translation: string};
 export type LanguageIdentifier = string;
@@ -26,7 +27,7 @@ export interface ITranslationConfig {
 	interpolate: InterpolateFunction;
 	emptyPlaceholder: EmptyPlaceholderFunction;
 	fetchTranslation: FetchTranslationFunction;
-	translationCache: Map<string, CachedTranslation>;
+	translationCache: Map<Key, CachedTranslation>;
 	translations: Translations | null;
 	lang: LanguageIdentifier | null;
 	languageCache: LanguageCache;

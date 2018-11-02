@@ -1,4 +1,5 @@
 import { customElement, eventOptions, html, LitElement, property } from "@polymer/lit-element";
+import { PropertyValues } from "@polymer/lit-element/src/lib/updating-element";
 import { TemplateResult } from "lit-html";
 import { repeat } from "lit-html/directives/repeat";
 import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../../lib";
@@ -12,11 +13,8 @@ const languages = [
 
 // Registers loader
 registerTranslateConfig({
-	loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json())
+	loader: (lang: LanguageIdentifier) => fetch(`assets/i18n/${lang}.json`).then(res => res.json())
 });
-
-// Set default language
-use("en").then();
 
 /**
  * Demo page.
@@ -25,6 +23,19 @@ use("en").then();
 export class DemoPageComponent extends LitElement {
 
 	@property() lang = languages[0];
+
+	// Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
+	private hasLoadedStrings = false;
+	protected shouldUpdate() {
+		return this.hasLoadedStrings;
+	}
+
+	// Load the initial language and mark that the strings has been loaded.
+	async connectedCallback () {
+		await use(this.lang);
+		this.hasLoadedStrings = true;
+		super.connectedCallback();
+	}
 
 	@eventOptions({capture: true})
 	private onLanguageChanged (e: Event) {
@@ -43,8 +54,8 @@ export class DemoPageComponent extends LitElement {
 	<p>${translate("lang")}</p>
 	<p>${translate("app.title")}</p>
 	<p>${translate("app.subtitle", () => {
-				return {thing: get("world")};
-			})}</p>
+		return {thing: get("world")};
+	})}</p>
 	<select value="${this.lang}" @change="${this.onLanguageChanged}">
 		${repeat(languages, lang => html`
 			<option value="${lang}">${lang}</option>

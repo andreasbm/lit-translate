@@ -6,7 +6,7 @@
 <a href="https://github.com/andreasbm/lit-translate/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/andreasbm/lit-translate.svg" height="20"></img></a>
 <a href="https://opensource.org/licenses/MIT"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" height="20"></img></a>
 
-## 🤔 What is this?
+## What is this?
 
 This is a lightweight blazing-fast internationalization (i18n) library for your next web-based project. Go here to see a demo [https://appnest-demo.firebaseapp.com/lit-translate/](https://appnest-demo.firebaseapp.com/lit-translate).
 
@@ -32,6 +32,7 @@ This is a lightweight blazing-fast internationalization (i18n) library for your 
 * [5. Interpolate values](#5-interpolate-values)
 * [6. Use the `translate` directive together with `lit-html`](#6-use-the-translate-directive-together-with-lit-html)
 * [Customize! (advanced)](#customize-advanced)
+* [Wait for strings to be loaded before displaying the component (advanced)](#wait-for-strings-to-be-loaded-before-displaying-the-component-advanced)
 * [License](#-license)
 
 ## Installation
@@ -63,7 +64,7 @@ To take advantage of the translation features you need to be able to provide you
 
 Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier. In the example below, a loader is registered which loads a `.json` file with translations for a given language.
 
-```javascript
+```typescript
 registerTranslateConfig({
   loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json())
 });
@@ -75,7 +76,7 @@ It is possible to use the `registerTranslateConfig` function to customize almost
 
 Invoke the `use` function to set a language. This function will use the registered loader from step 1 to load the translations for the language and dispatch a global `langChanged` event. To avoid fetching the translations again, the translations are stored in a cache for the next time the `use` function is called with the same parameters.
 
-```javascript
+```typescript
 await use("en");
 ```
 
@@ -83,7 +84,7 @@ await use("en");
 
 To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired translation in the JSON structure. The example below is based on the translations defined in `step 1`.
 
-```javascript
+```typescript
 get("lang"); // "en"
 get("header.title"); // "Hello"
 get("header.subtitle"); // "World"
@@ -93,7 +94,7 @@ get("header.subtitle"); // "World"
 
 Using the `get` function it is possible to interpolate values. As default, you can simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the translations defined in `step 1`.
 
-```javascript
+```typescript
 get("cta.awesome", { thing: get("cta.cats") )); // Cats are awesome!
 ```
 
@@ -101,7 +102,7 @@ get("cta.awesome", { thing: get("cta.cats") )); // Cats are awesome!
 
 If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from a callback due to how the parts are updated.
 
-```javascript
+```typescript
 class MyComponent extends LitElement {
   render () {
     html`
@@ -117,7 +118,7 @@ class MyComponent extends LitElement {
 
 If you want you can customize almost anything about how your translations are handled by overwriting the configuration hooks. Below is an example on what you might want to customize.
 
-```javascript
+```typescript
 registerTranslateConfig({
 
     // Loads the language from the correct path
@@ -154,6 +155,35 @@ registerTranslateConfig({
   // Formats empty placeholders (eg. [da.headline.title])
   emptyPlaceholder: (key: string, config: ITranslationConfig) => `!${config.lang}.${key}!`
 });
+```
+
+## Wait for strings to be loaded before displaying the component (advanced)
+
+Sometimes you want to avoid the placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
+
+```typescript
+@customElement("my-root-component")
+export class MyRootComponent extends LitElement {
+
+  // Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
+  private hasLoadedStrings = false;
+  protected shouldUpdate() {
+    return this.hasLoadedStrings;
+  }
+
+  // Load the initial language and mark that the strings has been loaded.
+  async connectedCallback () {
+    await use("en");
+    this.hasLoadedStrings = true;
+    super.connectedCallback();
+  }
+
+  protected render (): TemplateResult {
+    return html`
+      <p>${translate("title")}</p>
+    `;
+  }
+}
 ```
 
 ## 🎉 License
