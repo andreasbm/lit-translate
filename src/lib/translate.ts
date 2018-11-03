@@ -139,7 +139,7 @@ export function get (key: Key,
 	values = values != null ? extract(values) : null;
 
 	// Replace the placeholders and return the translations
-	return values != null ? translation : currentConfig.interpolate(translation, values, config);
+	return values != null ? currentConfig.interpolate(translation, values, config) : translation;
 }
 
 /**
