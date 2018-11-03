@@ -131,19 +131,15 @@ export function get (key: Key,
                      values?: Values | ValuesCallback | null,
                      config: ITranslationConfig = currentConfig): Translation {
 
-	// Either use the translation from the cache or get it
-	let translation = config.translationCache[key] || config.getTranslation(key, config);
+	// Either use the translation from the cache or get it and add it to the cache
+	let translation = config.translationCache[key]
+		|| (config.translationCache[key] = config.getTranslation(key, config));
 
 	// Extract the values
 	values = values != null ? extract(values) : null;
 
-	// Replace the placeholders
-	if (values != null) {
-		translation = currentConfig.interpolate(translation, values, config);
-	}
-
-	config.translationCache[key] = translation;
-	return translation;
+	// Replace the placeholders and return the translations
+	return values != null ? translation : currentConfig.interpolate(translation, values, config);
 }
 
 /**
