@@ -1,4 +1,4 @@
-import { CachedTranslation, ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translations, Values } from "./model";
+import { ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translation, Translations, Values, ValuesCallback } from "./model";
 
 /**
  * Default configuration object.
@@ -8,8 +8,8 @@ export const defaultTranslateConfig: ITranslationConfig = {
 	emptyPlaceholder: key => `[${key}]`,
 	getTranslation: getTranslation,
 	interpolate: interpolate,
-	translationCache: new Map<Key, CachedTranslation>(),
-	languageCache: new Map<LanguageIdentifier, Translations>(),
+	translationCache: {},
+	languageCache: {},
 	lang: null,
 	translations: null
 };
@@ -32,7 +32,7 @@ export function registerTranslateConfig (config: Partial<ITranslationConfig>): I
  */
 export async function loadTranslations (lang: LanguageIdentifier,
                                         config: ITranslationConfig = currentConfig): Promise<Translations> {
-	return config.languageCache.has(lang) ? config.languageCache.get(lang)! : await currentConfig.loader(lang, config);
+	return config.languageCache[lang] != null ? config.languageCache[lang] : await currentConfig.loader(lang, config);
 }
 
 /**
@@ -80,8 +80,8 @@ export async function use (lang: LanguageIdentifier, config: ITranslationConfig 
 
 	// Load the translations and set the cache
 	const translations = await loadTranslations(lang);
-	config.languageCache.set(lang, translations);
-	config.translationCache = new Map();
+	config.languageCache[lang] = translations;
+	config.translationCache = {};
 
 	// Dispatch global language changed event while setting the new values
 	updateConfig(config, lang, translations);
@@ -92,9 +92,9 @@ export async function use (lang: LanguageIdentifier, config: ITranslationConfig 
  * @param text
  * @param values
  */
-export function interpolate (text: string, values: Values): string {
-	return Object.entries(values).reduce((text, [key, value]) =>
-		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), value), text);
+export function interpolate (text: string, values: Values | ValuesCallback): string {
+	return Object.entries(extract(values)).reduce((text, [key, value]) =>
+		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), extract(value)), text);
 }
 
 /**
@@ -127,22 +127,29 @@ export function getTranslation (key: Key, config: ITranslationConfig = currentCo
  * @param values (eg. { count: 42 })
  * @param config
  */
-export function get (key: Key, values?: Values | null, config: ITranslationConfig = currentConfig) {
+export function get (key: Key,
+                     values?: Values | ValuesCallback | null,
+                     config: ITranslationConfig = currentConfig): Translation {
 
-	// Check in the cache
-	const cached = config.translationCache.get(key);
-	if (cached != null && cached.values === values) {
-		return cached.translation;
-	}
+	// Either use the translation from the cache or get it
+	let translation = config.translationCache[key] || config.getTranslation(key, config);
 
-	// Fetch the translation
-	let translation = config.getTranslation(key, config);
+	// Extract the values
+	values = values != null ? extract(values) : null;
 
 	// Replace the placeholders
 	if (values != null) {
 		translation = currentConfig.interpolate(translation, values, config);
 	}
 
-	config.translationCache.set(key, {values, translation});
+	config.translationCache[key] = translation;
 	return translation;
+}
+
+/**
+ * Extracts either the value from the function or the value that was passed in.
+ * @param obj
+ */
+export function extract<T> (obj: T | (() => T)): T {
+	return (typeof obj === "function") ? (<(() => T)>obj)() : obj;
 }

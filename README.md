@@ -106,7 +106,7 @@ get("cta.awesome", { thing: get("cta.cats") )); // Cats are awesome!
 
 ## 6. Use the `translate` directive together with `lit-html`
 
-If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from a callback to refresh the translated values.
+If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values.
 
 ```typescript
 import { translate } from "@appnest/lit-translate";
@@ -116,7 +116,7 @@ class MyComponent extends LitElement {
     html`
       <h1>${translate("header.title")}</h1>
       <p>${translate("header.subtitle")}</p>
-      <span>${translate("cta.awesome", () => { return { things: get("cta.cats") }})}</span>
+      <span>${translate("cta.awesome", { things: () => get("cta.cats") })}</span>
     `;
   }
 }
@@ -127,39 +127,39 @@ class MyComponent extends LitElement {
 If you want you can customize almost anything about how your translations are handled by overwriting the configuration hooks. Below is an example on what you might want to customize.
 
 ```typescript
-import { registerTranslateConfig, LanguageIdentifier, Values, Key, ITranslationConfig } from "@appnest/lit-translate";
+import { registerTranslateConfig, extract, LanguageIdentifier, Values, Key, ITranslationConfig, ValuesCallback, Translations } from "@appnest/lit-translate";
 
 registerTranslateConfig({
 
-    // Loads the language from the correct path
-    loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()),
+  // Loads the language from the correct path
+  loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()),
 
-    // Interpolate the values using a [[key]] syntax.
-    interpolate: (text: string, values: Values) => {
-      for (const [key, value] of Object.entries(values)) {
-        text = text.replace(new RegExp(`\[\[${key}\]\]`), value);
-      }
+  // Interpolate the values using a [[key]] syntax.
+  interpolate: (text: string, values: Values | ValuesCallback) => {
+    for (const [key, value] of Object.entries(extract(values))) {
+      text = text.replace(new RegExp(`\[\[${key}\]\]`), extract(value));
+    }
 
-      return text;
-    },
+    return text;
+  },
 
-    // Returns a translation for a given key
-    getTranslation: (key: Key, config: ITranslationConfig) => {
+  // Returns a translation for a given key
+  getTranslation: (key: Key, config: ITranslationConfig) => {
 
-      // Split the key in parts (example: hello.world)
-      const parts = key.split(".");
+    // Split the key in parts (example: hello.world)
+    const parts = key.split(".");
 
-      // Find the translation by traversing through the strings matching the chain of keys
-      let translation: string | object = config.translations || {};
-      while (parts.length > 0) {
-        translation = translation[parts.shift()];
+    // Find the translation by traversing through the strings matching the chain of keys
+    let translation: string | object = config.translations || {};
+    while (parts.length > 0) {
+      translation = (<Translations>translation)[parts.shift()!];
 
-        // Do not continue if the translation is not defined
-        if (translation == null) return config.emptyPlaceholder(key, config);
-      }
+      // Do not continue if the translation is not defined
+      if (translation == null) return config.emptyPlaceholder(key, config);
+    }
 
-      // Make sure the translation is a string!
-      return translation.toString();
+    // Make sure the translation is a string!
+    return translation.toString();
   },
 
   // Formats empty placeholders (eg. [da.headline.title])

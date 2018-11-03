@@ -1,6 +1,6 @@
 import { Directive, directive, NodePart } from "lit-html";
 import { LangChangedEvent, Values, ValuesCallback } from "./model";
-import { get, listenForLangChanged } from "./translate";
+import { extract, get, listenForLangChanged } from "./translate";
 
 // Caches the parts and the translations.
 // In the ideal world this would be a weakmap, but it is not possible to loop over weakmaps.
@@ -36,10 +36,10 @@ attachTranslateListener();
  * @param key
  * @param values
  */
-function handleTranslation (part: NodePart, key: string, values?: Values | ValuesCallback) {
+function handleTranslation (part: NodePart, key: string, values?: Values | ValuesCallback | null) {
 
 	// Grab the values
-	values = (typeof values === "function") ? (<ValuesCallback>values)() : values;
+	values = values != null ? extract(values) : null;
 
 	// Translate the key and interpolate the values
 	const translation = get(key, values);
