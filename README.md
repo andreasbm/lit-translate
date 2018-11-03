@@ -133,8 +133,8 @@ registerTranslateConfig({
       return text;
     },
 
-    // Fetches a translation from a given key
-    fetchTranslation: (key: string, config: ITranslationConfig) => {
+    // Returns a translation for a given key
+    getTranslation: (key: string, config: ITranslationConfig) => {
 
       // Split the key in parts (example: hello.world)
       const parts = key.split(".");

@@ -6,7 +6,7 @@ import { CachedTranslation, ITranslationConfig, Key, LangChangedEvent, LanguageI
 export const defaultTranslateConfig: ITranslationConfig = {
 	loader: () => Promise.resolve({}),
 	emptyPlaceholder: (key) => `[${key}]`,
-	fetchTranslation: fetchTranslation,
+	getTranslation: getTranslation,
 	interpolate: interpolate,
 	translationCache: new Map<Key, CachedTranslation>(),
 	languageCache: new Map<LanguageIdentifier, Translations>(),
@@ -98,11 +98,11 @@ export function interpolate (text: string, values: Values): string {
 }
 
 /**
- * Fetches a translation based on a chain of keys using the dot notation.
+ * Returns a translation based on a chain of keys using the dot notation.
  * @param key
  * @param config
  */
-export function fetchTranslation (key: string, config: ITranslationConfig = currentConfig): string {
+export function getTranslation (key: string, config: ITranslationConfig = currentConfig): string {
 
 	// Split the key in parts (example: hello.world)
 	const parts = key.split(".");
@@ -136,7 +136,7 @@ export function get (key: Key, values?: Values | null, config: ITranslationConfi
 	}
 
 	// Fetch the translation
-	let translation = config.fetchTranslation(key, config);
+	let translation = config.getTranslation(key, config);
 
 	// Replace the placeholders
 	if (values != null) {

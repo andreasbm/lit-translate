@@ -9,7 +9,7 @@ export type ValuesCallback = () => Values;
 export type TranslationsLoader = (lang: LanguageIdentifier, config: ITranslationConfig) => Promise<Translations>;
 export type InterpolateFunction = (text: string, values: Values | null, config: ITranslationConfig) => string;
 export type EmptyPlaceholderFunction = (key: string, config: ITranslationConfig) => string;
-export type FetchTranslationFunction = (key: string, config: ITranslationConfig) => string;
+export type GetTranslationFunction = (key: string, config: ITranslationConfig) => string;
 
 export const enum TranslateEventKind {
 	LANG_CHANGED = "langChanged"
@@ -26,7 +26,7 @@ export interface ITranslationConfig {
 	loader: TranslationsLoader;
 	interpolate: InterpolateFunction;
 	emptyPlaceholder: EmptyPlaceholderFunction;
-	fetchTranslation: FetchTranslationFunction;
+	getTranslation: GetTranslationFunction;
 	translationCache: Map<Key, CachedTranslation>;
 	translations: Translations | null;
 	lang: LanguageIdentifier | null;
