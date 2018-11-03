@@ -49,11 +49,11 @@
 		"s": "npm run s:dev",
 		"deploy": "npm run b:demo:prod && firebase deploy"
 	},
-	"dependencies": {
-		"@polymer/lit-element": "^0.6.2",
+	"peerDependencies": {
 		"lit-html": "^0.12.0"
 	},
 	"devDependencies": {
+		"@polymer/lit-element": "^0.6.2",
 		"@appnest/web-config": "0.1.26"
 	}
 }
