@@ -8,8 +8,8 @@ export type ValuesCallback = () => Values;
 
 export type TranslationsLoader = (lang: LanguageIdentifier, config: ITranslationConfig) => Promise<Translations>;
 export type InterpolateFunction = (text: string, values: Values | null, config: ITranslationConfig) => string;
-export type EmptyPlaceholderFunction = (key: string, config: ITranslationConfig) => string;
-export type GetTranslationFunction = (key: string, config: ITranslationConfig) => string;
+export type EmptyPlaceholderFunction = (key: Key, config: ITranslationConfig) => string;
+export type GetTranslationFunction = (key: Key, config: ITranslationConfig) => string;
 
 export const enum TranslateEventKind {
 	LANG_CHANGED = "langChanged"

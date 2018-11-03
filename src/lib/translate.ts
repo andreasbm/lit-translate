@@ -5,7 +5,7 @@ import { CachedTranslation, ITranslationConfig, Key, LangChangedEvent, LanguageI
  */
 export const defaultTranslateConfig: ITranslationConfig = {
 	loader: () => Promise.resolve({}),
-	emptyPlaceholder: (key) => `[${key}]`,
+	emptyPlaceholder: key => `[${key}]`,
 	getTranslation: getTranslation,
 	interpolate: interpolate,
 	translationCache: new Map<Key, CachedTranslation>(),
@@ -102,7 +102,7 @@ export function interpolate (text: string, values: Values): string {
  * @param key
  * @param config
  */
-export function getTranslation (key: string, config: ITranslationConfig = currentConfig): string {
+export function getTranslation (key: Key, config: ITranslationConfig = currentConfig): string {
 
 	// Split the key in parts (example: hello.world)
 	const parts = key.split(".");
