@@ -1,4 +1,4 @@
-import { Directive, directive, NodePart } from "lit-html";
+import { directive, NodePart } from "lit-html";
 import { LangChangedEvent, Values, ValuesCallback } from "./model";
 import { extract, get, listenForLangChanged } from "./translate";
 
@@ -60,9 +60,7 @@ function handleTranslation (part: NodePart, key: string, values?: Values | Value
  * @param values
  * @param listen
  */
-export const translate =
-	(key: string, values?: Values | ValuesCallback, listen = true): Directive<NodePart> =>
-		directive((part: NodePart) => {
-			partCache.set(part, {key, values, listen});
-			handleTranslation(part, key, values);
-		});
+export const translate = directive((key: string, values?: Values | ValuesCallback, listen = true) => (part: NodePart) => {
+	partCache.set(part, {key, values, listen});
+	handleTranslation(part, key, values);
+});
