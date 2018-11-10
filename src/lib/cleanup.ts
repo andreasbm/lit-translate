@@ -13,16 +13,16 @@ import { NodePart } from "lit-html";
  * Check whether the part is still connected / has been removed from the DOM.
  * @param part
  */
-export function isPartConnected (part: NodePart): boolean {
+export function isConnected (part: NodePart): boolean {
 	return part.startNode.isConnected;
 }
 
 /**
  * Removes the disconnected parts from the cache.
  */
-export function removeDisconnectedPartsFromCache (map: Map<NodePart, unknown>) {
+export function removeDisconnectedParts (map: Map<NodePart, unknown>) {
 	for (const [part] of map) {
-		if (!isPartConnected(part)) {
+		if (!isConnected(part)) {
 			map.delete(part);
 		}
 	}
@@ -30,9 +30,9 @@ export function removeDisconnectedPartsFromCache (map: Map<NodePart, unknown>) {
 
 /**
  * Starts an interval that cleans up the part cache map each X ms.
- * @param ms
  * @param map
+ * @param ms
  */
-export function attachPartsGarbageCollector (ms: number, map: Map<NodePart, unknown>) {
-	setInterval(() => removeDisconnectedPartsFromCache(map), ms);
+export function attachPartsGarbageCollector (map: Map<NodePart, unknown>, ms: number) {
+	setInterval(() => removeDisconnectedParts(map), ms);
 }

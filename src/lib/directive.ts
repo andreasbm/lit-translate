@@ -1,5 +1,5 @@
 import { directive, NodePart } from "lit-html";
-import { attachPartsGarbageCollector, isPartConnected } from "./cleanup";
+import { attachPartsGarbageCollector, isConnected } from "./cleanup";
 import { CLEANUP_PARTS_MS, LangChangedEvent, Values, ValuesCallback } from "./model";
 import { get, listenForLangChanged } from "./translate";
 
@@ -14,7 +14,7 @@ const partCache = new Map<NodePart, {key: string, values?: Values | ValuesCallba
 function attachTranslateListener () {
 	listenForLangChanged((e: LangChangedEvent) => {
 		for (const [part, {key, values, listen}] of partCache) {
-			if (listen && isPartConnected(part)) {
+			if (listen && isConnected(part)) {
 				handleTranslation(part, key, values);
 				part.commit();
 			}
@@ -23,7 +23,7 @@ function attachTranslateListener () {
 }
 
 attachTranslateListener();
-attachPartsGarbageCollector(CLEANUP_PARTS_MS, partCache);
+attachPartsGarbageCollector(partCache, CLEANUP_PARTS_MS);
 
 
 /**
