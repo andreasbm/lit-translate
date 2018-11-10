@@ -1,4 +1,4 @@
-export type Value = string;
+export type Value = object;
 export type ValueCallback = () => Value;
 export type Values = {[key: string]: Value | ValueCallback};
 export type ValuesCallback = () => Values;

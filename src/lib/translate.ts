@@ -94,7 +94,7 @@ export async function use (lang: LanguageIdentifier, config: ITranslationConfig 
  */
 export function interpolate (text: string, values: Values | ValuesCallback): string {
 	return Object.entries(extract(values)).reduce((text, [key, value]) =>
-		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), extract(value)), text);
+		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), extract(value).toString()), text);
 }
 
 /**

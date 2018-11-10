@@ -54,6 +54,6 @@
 	},
 	"devDependencies": {
 		"@polymer/lit-element": "^0.6.3",
-		"@appnest/web-config": "0.1.26"
+		"@appnest/web-config": "0.1.33"
 	}
 }
