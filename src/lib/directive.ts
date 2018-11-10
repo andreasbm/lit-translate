@@ -1,5 +1,5 @@
 import { directive, NodePart } from "lit-html";
-import { attachPartsGarbageCollector, isPartConnected } from "./directive-cache";
+import { attachPartsGarbageCollector, isPartConnected } from "./cleanup";
 import { CLEANUP_PARTS_MS, LangChangedEvent, Values, ValuesCallback } from "./model";
 import { get, listenForLangChanged } from "./translate";
 
