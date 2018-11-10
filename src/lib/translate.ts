@@ -138,12 +138,12 @@ export function get (key: Key,
 	// Extract the values
 	values = values != null ? extract(values) : null;
 
-	// Replace the placeholders and return the translations
+	// Replace the placeholders and return the translation
 	return values != null ? currentConfig.interpolate(translation, values, config) : translation;
 }
 
 /**
- * Extracts either the value from the function or the value that was passed in.
+ * Extracts either the value from the function or return the value that was passed in.
  * @param obj
  */
 export function extract<T> (obj: T | (() => T)): T {

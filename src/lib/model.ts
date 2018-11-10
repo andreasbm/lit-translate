@@ -36,4 +36,5 @@ export interface ITranslationConfig {
 	languageCache: LanguageCache;
 }
 
+export const CLEANUP_PARTS_MS = 1000 * 60;
 

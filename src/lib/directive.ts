@@ -1,18 +1,12 @@
 import { directive, NodePart } from "lit-html";
-import { LangChangedEvent, Values, ValuesCallback } from "./model";
-import { extract, get, listenForLangChanged } from "./translate";
+import { attachPartsGarbageCollector, isPartConnected } from "./directive-cache";
+import { CLEANUP_PARTS_MS, LangChangedEvent, Values, ValuesCallback } from "./model";
+import { get, listenForLangChanged } from "./translate";
 
 // Caches the parts and the translations.
 // In the ideal world this would be a weakmap, but it is not possible to loop over weakmaps.
+// This is the best solution until lit-html provides an API to clean up after directives.
 const partCache = new Map<NodePart, {key: string, values?: Values | ValuesCallback, listen: boolean}>();
-
-/**
- * Check whether the element is still connected / has been removed from the DOM.
- * @param part
- */
-export function isPartConnected (part: NodePart) {
-	return ((<HTMLElement>part.options.eventContext).isConnected);
-}
 
 /**
  * Listens for changes in the language and updates all of the cached parts if necessary
@@ -29,6 +23,8 @@ function attachTranslateListener () {
 }
 
 attachTranslateListener();
+attachPartsGarbageCollector(CLEANUP_PARTS_MS, partCache);
+
 
 /**
  * Handles the translation.
@@ -37,9 +33,6 @@ attachTranslateListener();
  * @param values
  */
 function handleTranslation (part: NodePart, key: string, values?: Values | ValuesCallback | null) {
-
-	// Grab the values
-	values = values != null ? extract(values) : null;
 
 	// Translate the key and interpolate the values
 	const translation = get(key, values);
@@ -60,7 +53,9 @@ function handleTranslation (part: NodePart, key: string, values?: Values | Value
  * @param values
  * @param listen
  */
-export const translate = directive((key: string, values?: Values | ValuesCallback, listen = true) => (part: NodePart) => {
+export const translate = directive((key: string,
+                                    values?: Values | ValuesCallback,
+                                    listen = true) => (part: NodePart) => {
 	partCache.set(part, {key, values, listen});
 	handleTranslation(part, key, values);
 });
