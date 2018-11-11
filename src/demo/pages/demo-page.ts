@@ -22,6 +22,7 @@ registerTranslateConfig({
 export class DemoPageComponent extends LitElement {
 
 	@property() lang = languages[0];
+	@property() thing: string;
 
 	// Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
 	private hasLoadedStrings = false;
@@ -35,12 +36,16 @@ export class DemoPageComponent extends LitElement {
 		await use(this.lang);
 		this.hasLoadedStrings = true;
 		super.connectedCallback();
+
+		this.thing = get("world");
 	}
 
 	@eventOptions({capture: true})
-	private onLanguageChanged (e: Event) {
+	private async onLanguageChanged (e: Event) {
 		this.lang = (<HTMLSelectElement>e.target).value;
-		use(this.lang).then();
+		await use(this.lang).then();
+
+		this.thing = get("world");
 	}
 
 	protected render (): TemplateResult {
@@ -53,12 +58,13 @@ export class DemoPageComponent extends LitElement {
 	<h1>@appnest/lit-translate</h1>
 	<p>${translate("lang")}</p>
 	<p>${translate("app.title")}</p>
-	<p>${translate("app.subtitle", {thing: () => get("world")})}</p>
+	<p>${translate("app.subtitle", {thing: this.thing})}</p>
 	<select value="${this.lang}" @change="${this.onLanguageChanged}">
 		${repeat(languages, lang => html`
 			<option value="${lang}">${lang}</option>
 		`)}
 	</select>
+	<input .value="${this.thing}" @input="${(e: Event) => this.thing = (<HTMLInputElement>e.target).value}" />
 </div>
 <a href="https://github.com/andreasbm/lit-translate" target="_blank">View on Github</a>
 `;

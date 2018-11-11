@@ -137,7 +137,7 @@ registerTranslateConfig({
   // Interpolate the values using a [[key]] syntax.
   interpolate: (text: string, values: Values | ValuesCallback) => {
     for (const [key, value] of Object.entries(extract(values))) {
-      text = text.replace(new RegExp(`\[\[${key}\]\]`), extract(value).toString());
+      text = text.replace(new RegExp(`\[\[${key}\]\]`), String(extract(value)));
     }
 
     return text;
