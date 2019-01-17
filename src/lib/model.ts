@@ -5,6 +5,7 @@ export type ValuesCallback = () => Values;
 export type Key = string;
 export type LanguageIdentifier = string;
 export type Translation = string;
+export type TranslationWithInterpolation = string;
 export type Translations = {[key: string]: string | Translations};
 export type LanguageCache = { [key: string]: Translations };
 export type CachedTranslations = { [key: string]: Translation };

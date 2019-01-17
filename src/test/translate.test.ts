@@ -1,4 +1,4 @@
-import { customElement, html, LitElement, property } from "@polymer/lit-element";
+import { customElement, html, LitElement, property } from "lit-element";
 import { repeat } from "lit-html/directives/repeat";
 import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../lib/index";
 import { daStrings, enStrings } from "./mock";

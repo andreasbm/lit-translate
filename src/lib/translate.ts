@@ -1,21 +1,23 @@
-import { ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translation, Translations, Values, ValuesCallback } from "./model";
+import { ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translation, Translations, TranslationWithInterpolation, Values, ValuesCallback } from "./model";
 
 /**
  * Default configuration object.
  */
-export const defaultTranslateConfig: ITranslationConfig = {
-	loader: () => Promise.resolve({}),
-	emptyPlaceholder: key => `[${key}]`,
-	getTranslation: getTranslation,
-	interpolate: interpolate,
-	translationCache: {},
-	languageCache: {},
-	lang: null,
-	translations: null
+export const defaultTranslateConfig: (() => ITranslationConfig) = () => {
+	return {
+		loader: () => Promise.resolve({}),
+		emptyPlaceholder: key => `[${key}]`,
+		getTranslation: getTranslation,
+		interpolate: interpolate,
+		translationCache: {},
+		languageCache: {},
+		lang: null,
+		translations: null
+	};
 };
 
 // The current configuration for the translation.
-let currentConfig: ITranslationConfig = defaultTranslateConfig;
+let currentConfig: ITranslationConfig = defaultTranslateConfig();
 
 /**
  * Registers a translation config.
@@ -79,7 +81,7 @@ export function listenForLangChanged (callback: (e: LangChangedEvent) => void,
 export async function use (lang: LanguageIdentifier, config: ITranslationConfig = currentConfig) {
 
 	// Load the translations and set the cache
-	const translations = await loadTranslations(lang);
+	const translations = await loadTranslations(lang, config);
 	config.languageCache[lang] = translations;
 	config.translationCache = {};
 
@@ -102,7 +104,7 @@ export function interpolate (text: string, values: Values | ValuesCallback): str
  * @param key
  * @param config
  */
-export function getTranslation (key: Key, config: ITranslationConfig = currentConfig): string {
+export function getTranslation (key: Key, config: ITranslationConfig = currentConfig): Translation {
 
 	// Split the key in parts (example: hello.world)
 	const parts = key.split(".");
@@ -129,7 +131,7 @@ export function getTranslation (key: Key, config: ITranslationConfig = currentCo
  */
 export function get (key: Key,
                      values?: Values | ValuesCallback | null,
-                     config: ITranslationConfig = currentConfig): Translation {
+                     config: ITranslationConfig = currentConfig): TranslationWithInterpolation {
 
 	// Either use the translation from the cache or get it and add it to the cache
 	let translation = config.translationCache[key]
@@ -138,12 +140,12 @@ export function get (key: Key,
 	// Extract the values
 	values = values != null ? extract(values) : null;
 
-	// Replace the placeholders and return the translation
+	// Interpolate the values and return the translation
 	return values != null ? currentConfig.interpolate(translation, values, config) : translation;
 }
 
 /**
- * Extracts either the value from the function or return the value that was passed in.
+ * Extracts either the value from the function or returns the value that was passed in.
  * @param obj
  */
 export function extract<T> (obj: T | (() => T)): T {

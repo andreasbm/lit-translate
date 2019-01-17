@@ -1,4 +1,4 @@
-import { customElement, eventOptions, html, LitElement, property } from "@polymer/lit-element";
+import { customElement, eventOptions, html, LitElement, property } from "lit-element";
 import { TemplateResult } from "lit-html";
 import { repeat } from "lit-html/directives/repeat";
 import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../../lib";
@@ -18,7 +18,7 @@ registerTranslateConfig({
 /**
  * Demo page.
  */
-@customElement("demo-page-component" as any)
+@customElement("demo-page-component")
 export class DemoPageComponent extends LitElement {
 
 	@property() lang = languages[0];
@@ -41,7 +41,7 @@ export class DemoPageComponent extends LitElement {
 	}
 
 	@eventOptions({capture: true})
-	private async onLanguageChanged (e: Event) {
+	private async onLanguageSelected (e: Event) {
 		this.lang = (<HTMLSelectElement>e.target).value;
 		await use(this.lang).then();
 
@@ -59,7 +59,7 @@ export class DemoPageComponent extends LitElement {
 	<p>${translate("lang")}</p>
 	<p>${translate("app.title")}</p>
 	<p>${translate("app.subtitle", {thing: this.thing})}</p>
-	<select value="${this.lang}" @change="${this.onLanguageChanged}">
+	<select value="${this.lang}" @change="${this.onLanguageSelected}">
 		${repeat(languages, lang => html`
 			<option value="${lang}">${lang}</option>
 		`)}
