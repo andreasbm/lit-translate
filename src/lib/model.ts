@@ -5,15 +5,13 @@ export type ValuesCallback = () => Values;
 export type Key = string;
 export type LanguageIdentifier = string;
 export type Translation = string;
-export type TranslationWithInterpolation = string;
-export type Translations = {[key: string]: string | Translations};
-export type LanguageCache = { [key: string]: Translations };
-export type CachedTranslations = { [key: string]: Translation };
+export type Strings = {[key: string]: string | Strings};
+export type TranslationCache = { [key: string]: Translation };
 
-export type TranslationsLoader = (lang: LanguageIdentifier, config: ITranslationConfig) => Promise<Translations>;
+export type StringsLoader = (lang: LanguageIdentifier, config: ITranslationConfig) => Promise<Strings>;
 export type InterpolateFunction = (text: string, values: Values | ValuesCallback | null, config: ITranslationConfig) => Translation;
-export type EmptyPlaceholderFunction = (key: Key, config: ITranslationConfig) => string;
-export type GetTranslationFunction = (key: Key, config: ITranslationConfig) => Translation;
+export type EmptyFunction = (key: Key, config: ITranslationConfig) => string;
+export type LookupFunction = (key: Key, config: ITranslationConfig) => string | null;
 
 export const enum TranslateEventKind {
 	LANG_CHANGED = "langChanged"
@@ -21,20 +19,19 @@ export const enum TranslateEventKind {
 
 export type LangChangedEvent = {
 	previousLang: LanguageIdentifier | null;
-	previousTranslations: Translations | null;
-	translations: Translations;
+	previousStrings: Strings | null;
+	strings: Strings;
 	lang: LanguageIdentifier;
 };
 
 export interface ITranslationConfig {
-	loader: TranslationsLoader;
+	loader: StringsLoader;
 	interpolate: InterpolateFunction;
-	emptyPlaceholder: EmptyPlaceholderFunction;
-	getTranslation: GetTranslationFunction;
-	translationCache: CachedTranslations;
-	translations: Translations | null;
+	empty: EmptyFunction;
+	lookup: LookupFunction;
 	lang: LanguageIdentifier | null;
-	languageCache: LanguageCache;
+	strings: Strings | null;
+	translationCache: TranslationCache;
 }
 
 export const CLEANUP_PARTS_MS = 1000 * 60;

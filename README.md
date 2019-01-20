@@ -43,7 +43,7 @@ npm i @appnest/lit-translate
 
 ## 1. Define the translations
 
-To take advantage of the translation features you need to be able to provide your translations as a JSON structure. You are able to configure how the strings are loaded, but to make things simple we encourage you to maintain your translations in `.json` files - one for each language you support.
+To take advantage of the translation features you need to be able to provide your translations as a JSON structure. You are able to configure how these strings are loaded, but to make things simple we encourage you to maintain your translations in `.json` files - one for each language you support.
 
 ```json
 // en.json
@@ -75,7 +75,7 @@ It is possible to use the `registerTranslateConfig` function to customize almost
 
 ## 3. Set the language
 
-Invoke the `use` function to set a language. This function will use the registered loader from step 1 to load the translations for the language and dispatch a global `langChanged` event. To avoid fetching the translations again, the translations are stored in a cache for the next time the `use` function is called with the same parameters.
+Invoke the `use` function to set a language. This function will use the registered loader from step 1 to load the strings for the language and dispatch a global `langChanged` event.
 
 ```typescript
 import { use } from "@appnest/lit-translate";
@@ -96,7 +96,7 @@ get("header.subtitle"); // "World"
 
 ## 5. Interpolate values
 
-Using the `get` function it is possible to interpolate values. As default, you can simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the translations defined in `step 1`.
+Using the `get` function it is possible to interpolate values. As default, you can simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in `step 1`.
 
 ```typescript
 import { get } from "@appnest/lit-translate";
@@ -144,35 +144,36 @@ registerTranslateConfig({
   },
 
   // Returns a translation for a given key
-  getTranslation: (key: Key, config: ITranslationConfig) => {
+  lookup: (key: Key, config: ITranslationConfig) => {
 
     // Split the key in parts (example: hello.world)
     const parts = key.split(".");
 
-    // Find the translation by traversing through the strings matching the chain of keys
-    let translation: string | object = config.translations || {};
+    // Find the string by traversing through the strings matching the chain of keys
+    let string: string | object = config.translations || {};
     while (parts.length > 0) {
-      translation = (<Translations>translation)[parts.shift()!];
+      string = (<Translations>translation)[parts.shift()!];
 
-      // Do not continue if the translation is not defined
-      if (translation == null) return config.emptyPlaceholder(key, config);
+      // Do not continue if the string is not defined
+      if (string == null) return null;
     }
 
-    // Make sure the translation is a string!
-    return translation.toString();
+    // Make sure the string is in fact a string!
+    return string.toString();
   },
 
-  // Formats empty placeholders (eg. [da.headline.title])
-  emptyPlaceholder: (key: Key, config: ITranslationConfig) => `!${config.lang}.${key}!`
+  // Formats empty placeholders (eg. !da.headline.title!)
+  empty: (key: Key, config: ITranslationConfig) => `!${config.lang}.${key}!`
 });
 ```
 
 ## Wait for strings to be loaded before displaying the component
 
-Sometimes you want to avoid the placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
+Sometimes you want to avoid the empty placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
 
 ```typescript
 import { use, translate } from "@appnest/lit-translate";
+import { LitElement, customElement } from "lit-element";
 
 @customElement("my-root-component")
 export class MyRootComponent extends LitElement {

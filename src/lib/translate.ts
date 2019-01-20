@@ -1,4 +1,4 @@
-import { ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, TranslateEventKind, Translation, Translations, TranslationWithInterpolation, Values, ValuesCallback } from "./model";
+import { ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, Strings, TranslateEventKind, Translation, Values, ValuesCallback } from "./model";
 
 /**
  * Default configuration object.
@@ -6,35 +6,34 @@ import { ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, Translat
 export const defaultTranslateConfig: (() => ITranslationConfig) = () => {
 	return {
 		loader: () => Promise.resolve({}),
-		emptyPlaceholder: key => `[${key}]`,
-		getTranslation: getTranslation,
+		empty: key => `[${key}]`,
+		lookup: lookup,
 		interpolate: interpolate,
 		translationCache: {},
-		languageCache: {},
 		lang: null,
-		translations: null
+		strings: null
 	};
 };
 
-// The current configuration for the translation.
-let currentConfig: ITranslationConfig = defaultTranslateConfig();
+// The current configuration.
+export let translateConfig: ITranslationConfig = defaultTranslateConfig();
 
 /**
  * Registers a translation config.
  * @param config
  */
 export function registerTranslateConfig (config: Partial<ITranslationConfig>): ITranslationConfig {
-	return (currentConfig = {...currentConfig, ...config});
+	return (translateConfig = {...translateConfig, ...config});
 }
 
 /**
- * Loads translations using either the values from the cache or the provided translations loader.
+ * Loads the strings using the provided loader.
  * @param lang
  * @param config
  */
-export async function loadTranslations (lang: LanguageIdentifier,
-                                        config: ITranslationConfig = currentConfig): Promise<Translations> {
-	return config.languageCache[lang] != null ? config.languageCache[lang] : await currentConfig.loader(lang, config);
+export async function loadStrings (lang: LanguageIdentifier,
+                                   config: ITranslationConfig = translateConfig): Promise<Strings> {
+	return await translateConfig.loader(lang, config);
 }
 
 /**
@@ -46,17 +45,20 @@ export function dispatchLangChanged (detail: LangChangedEvent) {
 }
 
 /**
- * Updates the configuration object with a new language and translations and then dispatches than the language has changed.
- * @param config
+ * Updates the configuration object with a new language and strings.
+ * Then dispatches that the language has changed.
  * @param newLang
- * @param newTranslations
+ * @param newStrings
+ * @param config
  */
-export function updateConfig (config: ITranslationConfig, newLang: LanguageIdentifier, newTranslations: Translations) {
+export function updateLang (newLang: LanguageIdentifier,
+                            newStrings: Strings,
+                            config: ITranslationConfig = translateConfig) {
 	dispatchLangChanged({
-		previousTranslations: config.translations,
+		previousStrings: config.strings,
 		previousLang: config.lang,
 		lang: (config.lang = newLang),
-		translations: (config.translations = newTranslations)
+		strings: (config.strings = newStrings)
 	});
 }
 
@@ -78,15 +80,14 @@ export function listenForLangChanged (callback: (e: LangChangedEvent) => void,
  * @param lang
  * @param config
  */
-export async function use (lang: LanguageIdentifier, config: ITranslationConfig = currentConfig) {
+export async function use (lang: LanguageIdentifier, config: ITranslationConfig = translateConfig) {
 
 	// Load the translations and set the cache
-	const translations = await loadTranslations(lang, config);
-	config.languageCache[lang] = translations;
+	const strings = await loadStrings(lang, config);
 	config.translationCache = {};
 
 	// Dispatch global language changed event while setting the new values
-	updateConfig(config, lang, translations);
+	updateLang(lang, strings, config);
 }
 
 /**
@@ -100,48 +101,48 @@ export function interpolate (text: string, values: Values | ValuesCallback): str
 }
 
 /**
- * Returns a translation based on a chain of keys using the dot notation.
+ * Returns a string based on a chain of keys using the dot notation.
  * @param key
  * @param config
  */
-export function getTranslation (key: Key, config: ITranslationConfig = currentConfig): Translation {
+export function lookup (key: Key, config: ITranslationConfig = translateConfig): string | null {
 
 	// Split the key in parts (example: hello.world)
 	const parts = key.split(".");
 
-	// Find the translation by traversing through the strings matching the chain of keys
-	let translation: Translations | string | null = config.translations || {};
+	// Find the string by traversing through the strings matching the chain of keys
+	let string: Strings | string | null = config.strings || {};
 	while (parts.length > 0) {
-		translation = (<Translations>translation)[parts.shift()!];
+		string = (<Strings> string)[parts.shift()!];
 
-		// Do not continue if the translation is not defined
-		if (translation == null) return config.emptyPlaceholder(key, config);
+		// Do not continue if the string is not defined
+		if (string == null) return null;
 	}
 
-	// Make sure the translation is a string!
-	return translation.toString();
+	// Make sure the string is in fact a string!
+	return string.toString();
 }
 
 /**
  * Translates a key and interpolates if values are defined.
- * Uses the current strings and string cache to fetch the string.
+ * Uses the current strings and translation cache to fetch the translation.
  * @param key (eg. "common.get_started")
  * @param values (eg. { count: 42 })
  * @param config
  */
 export function get (key: Key,
                      values?: Values | ValuesCallback | null,
-                     config: ITranslationConfig = currentConfig): TranslationWithInterpolation {
+                     config: ITranslationConfig = translateConfig): Translation {
 
 	// Either use the translation from the cache or get it and add it to the cache
 	let translation = config.translationCache[key]
-		|| (config.translationCache[key] = config.getTranslation(key, config));
+		|| (config.translationCache[key] = config.lookup(key, config) || config.empty(key, config));
 
 	// Extract the values
 	values = values != null ? extract(values) : null;
 
 	// Interpolate the values and return the translation
-	return values != null ? currentConfig.interpolate(translation, values, config) : translation;
+	return values != null ? translateConfig.interpolate(translation, values, config) : translation;
 }
 
 /**

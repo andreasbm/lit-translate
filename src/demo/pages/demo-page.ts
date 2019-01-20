@@ -1,7 +1,7 @@
 import { customElement, eventOptions, html, LitElement, property } from "lit-element";
 import { TemplateResult } from "lit-html";
 import { repeat } from "lit-html/directives/repeat";
-import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../../lib";
+import { translateConfig, get, LanguageIdentifier, listenForLangChanged, registerTranslateConfig, translate, use } from "../../lib";
 
 import styles from "./demo-page.scss";
 
@@ -38,6 +38,21 @@ export class DemoPageComponent extends LitElement {
 		super.connectedCallback();
 
 		this.thing = get("world");
+
+		// The below example is how parts of the strings could be lazy loaded
+		listenForLangChanged( () => {
+			setTimeout(async () => {
+				const subpageStrings = await (await fetch(`./../assets/i18n/subpage-${translateConfig.lang}.json`)
+					.then(d => d.json()));
+
+				translateConfig.strings = {...translateConfig.strings, ...subpageStrings};
+				translateConfig.translationCache = {};
+
+				this.requestUpdate().then();
+
+				console.log(get("subpage.title"));
+			}, 2000);
+		});
 	}
 
 	@eventOptions({capture: true})

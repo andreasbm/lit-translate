@@ -111,7 +111,7 @@ describe("translate", () => {
 
 	it("[get] - should overwrite empty placeholder if one is defined", () => {
 		registerTranslateConfig({
-			emptyPlaceholder: key => `{{ ${key} }}`
+			empty: key => `{{ ${key} }}`
 		});
 		expect(get("this.does.not.exist", null)).to.equal("{{ this.does.not.exist }}");
 	});
