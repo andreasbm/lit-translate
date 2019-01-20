@@ -143,7 +143,7 @@ registerTranslateConfig({
     return text;
   },
 
-  // Returns a translation for a given key
+  // Returns a string for a given key
   lookup: (key: Key, config: ITranslationConfig) => {
 
     // Split the key in parts (example: hello.world)
