@@ -101,7 +101,7 @@ Using the `get` function it is possible to interpolate values. As default, you c
 ```typescript
 import { get } from "@appnest/lit-translate";
 
-get("cta.awesome", { things: get("cta.cats") )); // Cats are awesome!
+get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 ```
 
 ## 6. Use the `translate` directive together with `lit-html`
