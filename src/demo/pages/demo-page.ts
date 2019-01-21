@@ -1,4 +1,4 @@
-import { customElement, eventOptions, html, LitElement, property } from "lit-element";
+import { customElement, eventOptions, html, LitElement, property, PropertyValues } from "lit-element";
 import { TemplateResult } from "lit-html";
 import { repeat } from "lit-html/directives/repeat";
 import { translateConfig, get, LanguageIdentifier, listenForLangChanged, registerTranslateConfig, translate, use } from "../../lib";
@@ -27,8 +27,8 @@ export class DemoPageComponent extends LitElement {
 	// Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
 	private hasLoadedStrings = false;
 
-	protected shouldUpdate () {
-		return this.hasLoadedStrings;
+	protected shouldUpdate (changedProperties: PropertyValues) {
+		return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
 	}
 
 	// Load the initial language and mark that the strings has been loaded.

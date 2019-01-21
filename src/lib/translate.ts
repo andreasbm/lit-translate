@@ -69,7 +69,7 @@ export function updateLang (newLang: LanguageIdentifier,
  * @param options
  */
 export function listenForLangChanged (callback: (e: LangChangedEvent) => void,
-                                      options?: EventListenerOptions): (() => void) {
+                                      options?: AddEventListenerOptions): (() => void) {
 	const handler = (e: CustomEvent<LangChangedEvent>) => callback(e.detail);
 	window.addEventListener(TranslateEventKind.LANG_CHANGED, handler, options);
 	return () => window.removeEventListener(TranslateEventKind.LANG_CHANGED, handler);

@@ -180,8 +180,8 @@ export class MyRootComponent extends LitElement {
 
   // Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
   private hasLoadedStrings = false;
-  protected shouldUpdate() {
-    return this.hasLoadedStrings;
+  protected shouldUpdate (changedProperties: PropertyValues) {
+    return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
   }
 
   // Load the initial language and mark that the strings has been loaded.
