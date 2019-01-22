@@ -1,6 +1,6 @@
 import { directive, NodePart } from "lit-html";
 import { attachPartsGarbageCollector, isConnected } from "./cleanup";
-import { CLEANUP_PARTS_MS, LangChangedEvent, Values, ValuesCallback } from "./model";
+import { CLEANUP_PARTS_MS, Values, ValuesCallback } from "./model";
 import { get, listenForLangChanged } from "./translate";
 
 // Caches the parts and the translations.
@@ -12,7 +12,7 @@ const partCache = new Map<NodePart, {key: string, values?: Values | ValuesCallba
  * Listens for changes in the language and updates all of the cached parts if necessary
  */
 function attachTranslateListener () {
-	listenForLangChanged((e: LangChangedEvent) => {
+	listenForLangChanged(() => {
 		for (const [part, {key, values, listen}] of partCache) {
 			if (listen && isConnected(part)) {
 				handleTranslation(part, key, values);
@@ -32,7 +32,9 @@ attachPartsGarbageCollector(partCache, CLEANUP_PARTS_MS);
  * @param key
  * @param values
  */
-function handleTranslation (part: NodePart, key: string, values?: Values | ValuesCallback | null) {
+function handleTranslation (part: NodePart,
+                            key: string,
+                            values?: Values | ValuesCallback | null) {
 
 	// Translate the key and interpolate the values
 	const translation = get(key, values);
@@ -48,7 +50,7 @@ function handleTranslation (part: NodePart, key: string, values?: Values | Value
 
 
 /**
- * Directive that makes translations more efficient.
+ * A lit directive that updates the translation when the language changes.
  * @param key
  * @param values
  * @param listen
