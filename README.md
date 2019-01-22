@@ -15,7 +15,7 @@ This is a lightweight blazing-fast internationalization (i18n) library for your 
 * Simple API that can return a translation for a given key (out of the box you can use the dot notation eg. `get("home.header.title")`)
 * Works very well with JSON based translation data-structures
 * Can interpolate values into the strings
-* Extremely customizable (choose your own translations loader, how to interpolate values, empty placeholder, how to look up the strings etc)
+* Customize just about everything (eg. choose your own translations loader, how to interpolate values, empty placeholder and how to look up the strings)
 * Caches the translations for maximum performance
 * Contains a `lit-html` directive that automatically updates when the language changes
 * Approximately 800 bytes minified & gzipped (2kb without)
