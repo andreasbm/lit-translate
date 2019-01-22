@@ -8,10 +8,10 @@ export type Translation = string;
 export type Strings = {[key: string]: string | Strings};
 export type TranslationCache = { [key: string]: Translation };
 
-export type StringsLoader = (lang: LanguageIdentifier, config: ITranslationConfig) => Promise<Strings>;
-export type InterpolateFunction = (text: string, values: Values | ValuesCallback | null, config: ITranslationConfig) => Translation;
-export type EmptyFunction = (key: Key, config: ITranslationConfig) => string;
-export type LookupFunction = (key: Key, config: ITranslationConfig) => string | null;
+export type StringsLoader = (lang: LanguageIdentifier, config: ITranslateConfig) => Promise<Strings>;
+export type InterpolateFunction = (text: string, values: Values | ValuesCallback | null, config: ITranslateConfig) => Translation;
+export type EmptyFunction = (key: Key, config: ITranslateConfig) => string;
+export type LookupFunction = (key: Key, config: ITranslateConfig) => string | null;
 
 export const enum TranslateEventKind {
 	LANG_CHANGED = "langChanged"
@@ -24,7 +24,7 @@ export type LangChangedEvent = {
 	lang: LanguageIdentifier;
 };
 
-export interface ITranslationConfig {
+export interface ITranslateConfig {
 	loader: StringsLoader;
 	interpolate: InterpolateFunction;
 	empty: EmptyFunction;

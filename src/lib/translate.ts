@@ -1,9 +1,10 @@
-import { ITranslationConfig, Key, LangChangedEvent, LanguageIdentifier, Strings, TranslateEventKind, Translation, Values, ValuesCallback } from "./model";
+import { extract, interpolate, lookup } from "./helpers";
+import { ITranslateConfig, Key, LangChangedEvent, LanguageIdentifier, Strings, TranslateEventKind, Translation, Values, ValuesCallback } from "./model";
 
 /**
  * Default configuration object.
  */
-export const defaultTranslateConfig: (() => ITranslationConfig) = () => {
+export const defaultTranslateConfig: (() => ITranslateConfig) = () => {
 	return {
 		loader: () => Promise.resolve({}),
 		empty: key => `[${key}]`,
@@ -16,13 +17,13 @@ export const defaultTranslateConfig: (() => ITranslationConfig) = () => {
 };
 
 // The current configuration.
-export let translateConfig: ITranslationConfig = defaultTranslateConfig();
+export let translateConfig: ITranslateConfig = defaultTranslateConfig();
 
 /**
  * Registers a translation config.
  * @param config
  */
-export function registerTranslateConfig (config: Partial<ITranslationConfig>): ITranslationConfig {
+export function registerTranslateConfig (config: Partial<ITranslateConfig>): ITranslateConfig {
 	return (translateConfig = {...translateConfig, ...config});
 }
 
@@ -32,8 +33,8 @@ export function registerTranslateConfig (config: Partial<ITranslationConfig>): I
  * @param config
  */
 export async function loadStrings (lang: LanguageIdentifier,
-                                   config: ITranslationConfig = translateConfig): Promise<Strings> {
-	return await translateConfig.loader(lang, config);
+                                   config: ITranslateConfig = translateConfig): Promise<Strings> {
+	return await config.loader(lang, config);
 }
 
 /**
@@ -53,7 +54,7 @@ export function dispatchLangChanged (detail: LangChangedEvent) {
  */
 export function updateLang (newLang: LanguageIdentifier,
                             newStrings: Strings,
-                            config: ITranslationConfig = translateConfig) {
+                            config: ITranslateConfig = translateConfig) {
 	dispatchLangChanged({
 		previousStrings: config.strings,
 		previousLang: config.lang,
@@ -80,7 +81,7 @@ export function listenForLangChanged (callback: (e: LangChangedEvent) => void,
  * @param lang
  * @param config
  */
-export async function use (lang: LanguageIdentifier, config: ITranslationConfig = translateConfig) {
+export async function use (lang: LanguageIdentifier, config: ITranslateConfig = translateConfig) {
 
 	// Load the translations and set the cache
 	const strings = await loadStrings(lang, config);
@@ -90,38 +91,6 @@ export async function use (lang: LanguageIdentifier, config: ITranslationConfig 
 	updateLang(lang, strings, config);
 }
 
-/**
- * Interpolates the values into the string.
- * @param text
- * @param values
- */
-export function interpolate (text: string, values: Values | ValuesCallback): string {
-	return Object.entries(extract(values)).reduce((text, [key, value]) =>
-		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), String(extract(value))), text);
-}
-
-/**
- * Returns a string based on a chain of keys using the dot notation.
- * @param key
- * @param config
- */
-export function lookup (key: Key, config: ITranslationConfig = translateConfig): string | null {
-
-	// Split the key in parts (example: hello.world)
-	const parts = key.split(".");
-
-	// Find the string by traversing through the strings matching the chain of keys
-	let string: Strings | string | null = config.strings || {};
-	while (parts.length > 0) {
-		string = (<Strings> string)[parts.shift()!];
-
-		// Do not continue if the string is not defined
-		if (string == null) return null;
-	}
-
-	// Make sure the string is in fact a string!
-	return string.toString();
-}
 
 /**
  * Translates a key and interpolates if values are defined.
@@ -132,7 +101,7 @@ export function lookup (key: Key, config: ITranslationConfig = translateConfig):
  */
 export function get (key: Key,
                      values?: Values | ValuesCallback | null,
-                     config: ITranslationConfig = translateConfig): Translation {
+                     config: ITranslateConfig = translateConfig): Translation {
 
 	// Either use the translation from the cache or get it and add it to the cache
 	let translation = config.translationCache[key]
@@ -143,12 +112,4 @@ export function get (key: Key,
 
 	// Interpolate the values and return the translation
 	return values != null ? translateConfig.interpolate(translation, values, config) : translation;
-}
-
-/**
- * Extracts either the value from the function or returns the value that was passed in.
- * @param obj
- */
-export function extract<T> (obj: T | (() => T)): T {
-	return (typeof obj === "function") ? (<(() => T)>obj)() : obj;
 }

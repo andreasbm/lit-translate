@@ -12,10 +12,10 @@ This is a lightweight blazing-fast internationalization (i18n) library for your 
 
 **Features**
 
-* Simple API that can return a translation for a given key using the dot notation (eg. `get("home.header.title")`)
-* Works well with JSON based translation structures
-* Can interpolate values into the translations
-* Customizable (choose your own translations loader, how to interpolate values, empty placeholder etc)
+* Simple API that can return a translation for a given key (out of the box you can use the dot notation eg. `get("home.header.title")`)
+* Works very well with JSON based translation data-structures
+* Can interpolate values into the strings
+* Extremely customizable (choose your own translations loader, how to interpolate values, empty placeholder, how to look up the strings etc)
 * Caches the translations for maximum performance
 * Contains a `lit-html` directive that automatically updates when the language changes
 * Approximately 800 bytes minified & gzipped (2kb without)
@@ -124,10 +124,10 @@ class MyComponent extends LitElement {
 
 ## Customize! (advanced)
 
-If you want you can customize almost anything about how your translations are handled by overwriting the configuration hooks. Below is an example on what you might want to customize.
+If you want you can customize just about anything by overwriting the configuration hooks. Below is an example on what you might want to customize.
 
 ```typescript
-import { registerTranslateConfig, extract, LanguageIdentifier, Values, Key, ITranslationConfig, ValuesCallback, Translations } from "@appnest/lit-translate";
+import { registerTranslateConfig, extract, LanguageIdentifier, Values, Key, ITranslateConfig, ValuesCallback, Translations } from "@appnest/lit-translate";
 
 registerTranslateConfig({
 
@@ -144,26 +144,25 @@ registerTranslateConfig({
   },
 
   // Returns a string for a given key
-  lookup: (key: Key, config: ITranslationConfig) => {
+  lookup: (key: Key, config: ITranslateConfig) => {
 
     // Split the key in parts (example: hello.world)
     const parts = key.split(".");
 
     // Find the string by traversing through the strings matching the chain of keys
-    let string: string | object = config.translations || {};
-    while (parts.length > 0) {
-      string = (<Translations>translation)[parts.shift()!];
+    let string: Strings | string | null = config.strings;
 
-      // Do not continue if the string is not defined
-      if (string == null) return null;
+    // Do not continue if the string is not defined or if we have traversed all of the key parts
+    while (string != null && parts.length > 0) {
+      string = (<Strings>string)[parts.shift()!];
     }
 
     // Make sure the string is in fact a string!
-    return string.toString();
+    return string != null ? string.toString() : null;
   },
 
   // Formats empty placeholders (eg. !da.headline.title!)
-  empty: (key: Key, config: ITranslationConfig) => `!${config.lang}.${key}!`
+  empty: (key: Key, config: ITranslateConfig) => `!${config.lang}.${key}!`
 });
 ```
 
