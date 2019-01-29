@@ -1,4 +1,4 @@
-import { NodePart } from "lit-html";
+import { NodePart, AttributePart, BooleanAttributePart, EventPart, PropertyPart } from "lit-html";
 
 /** #################################################################################
  ** The purpose of this module is to provide an API to clean up the node parts cache.
@@ -13,8 +13,16 @@ import { NodePart } from "lit-html";
  * Check whether the part is still connected / has been removed from the DOM.
  * @param part
  */
-export function isConnected (part: NodePart): boolean {
-	return part.startNode.isConnected;
+export function isConnected (part: NodePart | AttributePart | BooleanAttributePart | EventPart | PropertyPart): boolean {
+	if (part instanceof NodePart) {
+		return part.startNode.isConnected;
+
+	} else if (part instanceof AttributePart) {
+		return part.committer.element.isConnected;
+
+	} else {
+		return part.element.isConnected;
+	}
 }
 
 /**
