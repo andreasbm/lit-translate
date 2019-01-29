@@ -1,21 +1,20 @@
 import { directive, NodePart } from "lit-html";
 import { attachPartsGarbageCollector, isConnected } from "./cleanup";
-import { CLEANUP_PARTS_MS, Values, ValuesCallback } from "./model";
+import { CLEANUP_PARTS_MS, LangChangedDirectiveCallback, LangChangedEvent, Values, ValuesCallback } from "./model";
 import { get, listenForLangChanged } from "./translate";
 
 // Caches the parts and the translations.
 // In the ideal world this would be a weakmap, but it is not possible to loop over weakmaps.
 // This is the best solution until lit-html provides an API to clean up after directives.
-const partCache = new Map<NodePart, {key: string, values?: Values | ValuesCallback, listen: boolean}>();
+const partCache = new Map<NodePart, LangChangedDirectiveCallback>();
 
 /**
  * Listens for changes in the language and updates all of the cached parts if necessary
  */
 function attachTranslateListener () {
-	listenForLangChanged(() => {
-		for (const [part, {key, values, listen}] of partCache) {
-			if (listen && isConnected(part)) {
-				handleTranslation(part, key, values);
+	listenForLangChanged((e: LangChangedEvent) => {
+		for (const [part, cb] of partCache) {
+			if (isConnected(part) && updatePart(part, cb, e)) {
 				part.commit();
 			}
 		}
@@ -25,39 +24,41 @@ function attachTranslateListener () {
 attachTranslateListener();
 attachPartsGarbageCollector(partCache, CLEANUP_PARTS_MS);
 
-
 /**
  * Handles the translation.
  * @param part
- * @param key
- * @param values
+ * @param cb
+ * @param e
  */
-function handleTranslation (part: NodePart,
-                            key: string,
-                            values?: Values | ValuesCallback | null) {
+function updatePart (part: NodePart, cb: LangChangedDirectiveCallback, e?: LangChangedEvent): boolean {
 
-	// Translate the key and interpolate the values
-	const translation = get(key, values);
+	// Grab the new value
+	const newValue = cb(e);
 
-	// Only set the value if the cache has changed
-	if (part.value === translation) {
-		return;
+	// Only set the value if it has changed
+	if (part.value === newValue) {
+		return false;
 	}
 
-	// Set the value of the new translation
-	part.setValue(translation);
+	// Set the new value
+	part.setValue(newValue);
+	return true;
 }
 
+/**
+ * A lit directive that invokes the callback when the language changes.
+ * @param key
+ * @param values
+ * @param listen
+ */
+export const langChanged = directive((cb: LangChangedDirectiveCallback) => (part: NodePart) => {
+	partCache.set(part, cb);
+	updatePart(part, cb);
+});
 
 /**
  * A lit directive that updates the translation when the language changes.
  * @param key
  * @param values
- * @param listen
  */
-export const translate = directive((key: string,
-                                    values?: Values | ValuesCallback,
-                                    listen = true) => (part: NodePart) => {
-	partCache.set(part, {key, values, listen});
-	handleTranslation(part, key, values);
-});
+export const translate = (key: string, values?: Values | ValuesCallback) => langChanged(() => get(key, values));

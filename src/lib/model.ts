@@ -6,10 +6,12 @@ export type Key = string;
 export type LanguageIdentifier = string;
 export type Translation = string;
 export type Strings = {[key: string]: string | Strings};
-export type TranslationCache = { [key: string]: Translation };
+export type TranslationCache = {[key: string]: Translation};
 
 export type StringsLoader = (lang: LanguageIdentifier, config: ITranslateConfig) => Promise<Strings>;
-export type InterpolateFunction = (text: string, values: Values | ValuesCallback | null, config: ITranslateConfig) => Translation;
+export type InterpolateFunction = (text: string,
+                                   values: Values | ValuesCallback | null,
+                                   config: ITranslateConfig) => Translation;
 export type EmptyFunction = (key: Key, config: ITranslateConfig) => string;
 export type LookupFunction = (key: Key, config: ITranslateConfig) => string | null;
 
@@ -35,4 +37,5 @@ export interface ITranslateConfig {
 }
 
 export const CLEANUP_PARTS_MS = 1000 * 60;
+export type LangChangedDirectiveCallback = ((e?: LangChangedEvent) => any);
 

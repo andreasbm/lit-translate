@@ -1,7 +1,7 @@
 import { customElement, eventOptions, html, LitElement, property, PropertyValues } from "lit-element";
 import { TemplateResult } from "lit-html";
 import { repeat } from "lit-html/directives/repeat";
-import { translateConfig, get, LanguageIdentifier, listenForLangChanged, registerTranslateConfig, translate, use, defaultTranslateConfig } from "../../lib";
+import { translateConfig, get, LanguageIdentifier, listenForLangChanged, registerTranslateConfig, translate, use, langChanged } from "../../lib";
 
 import styles from "./demo-page.scss";
 
