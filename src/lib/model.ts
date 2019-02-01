@@ -20,8 +20,8 @@ export const enum TranslateEventKind {
 }
 
 export type LangChangedEvent = {
-	previousLang: LanguageIdentifier | null;
-	previousStrings: Strings | null;
+	previousLang?: LanguageIdentifier;
+	previousStrings?: Strings;
 	strings: Strings;
 	lang: LanguageIdentifier;
 };
@@ -31,8 +31,8 @@ export interface ITranslateConfig {
 	interpolate: InterpolateFunction;
 	empty: EmptyFunction;
 	lookup: LookupFunction;
-	lang: LanguageIdentifier | null;
-	strings: Strings | null;
+	lang?: LanguageIdentifier;
+	strings?: Strings;
 	translationCache: TranslationCache;
 }
 

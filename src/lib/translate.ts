@@ -10,9 +10,7 @@ export const defaultTranslateConfig: (() => ITranslateConfig) = () => {
 		empty: key => `[${key}]`,
 		lookup: lookup,
 		interpolate: interpolate,
-		translationCache: {},
-		lang: null,
-		strings: null
+		translationCache: {}
 	};
 };
 

@@ -151,7 +151,7 @@ registerTranslateConfig({
     const parts = key.split(".");
 
     // Find the string by traversing through the strings matching the chain of keys
-    let string: Strings | string | null = config.strings;
+    let string: Strings | string | undefined = config.strings;
 
     // Do not continue if the string is not defined or if we have traversed all of the key parts
     while (string != null && parts.length > 0) {
