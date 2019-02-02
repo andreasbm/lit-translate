@@ -36,6 +36,6 @@ export interface ITranslateConfig {
 	translationCache: TranslationCache;
 }
 
-export const CLEANUP_PARTS_MS = 1000 * 4;
+export const CLEANUP_PARTS_MS = 1000 * 60;
 export type LangChangedDirectiveCallback = ((e?: LangChangedEvent) => any);
 
