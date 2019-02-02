@@ -6,7 +6,7 @@ import { get, listenForLangChanged } from "./translate";
 // Caches the parts and the translations.
 // In the ideal world this would be a weakmap, but it is not possible to loop over weakmaps.
 // This is the best solution until lit-html provides an API to clean up after directives.
-const partCache = new Map<NodePart, LangChangedDirectiveCallback>();
+export const partCache = new Map<NodePart, LangChangedDirectiveCallback>();
 
 /**
  * Listens for changes in the language and updates all of the cached parts if necessary
@@ -14,8 +14,8 @@ const partCache = new Map<NodePart, LangChangedDirectiveCallback>();
 function attachTranslateListener () {
 	listenForLangChanged((e: LangChangedEvent) => {
 		for (const [part, cb] of partCache) {
-			if (isConnected(part) && updatePart(part, cb, e)) {
-				part.commit();
+			if (isConnected(part)) {
+				updatePart(part, cb, e);
 			}
 		}
 	});
@@ -30,19 +30,19 @@ attachPartsGarbageCollector(partCache, CLEANUP_PARTS_MS);
  * @param cb
  * @param e
  */
-function updatePart (part: NodePart, cb: LangChangedDirectiveCallback, e?: LangChangedEvent): boolean {
+function updatePart (part: NodePart, cb: LangChangedDirectiveCallback, e?: LangChangedEvent) {
 
 	// Grab the new value
 	const newValue = cb(e);
 
 	// Only set the value if it has changed
 	if (part.value === newValue) {
-		return false;
+		return;
 	}
 
 	// Set the new value
 	part.setValue(newValue);
-	return true;
+	part.commit();
 }
 
 /**

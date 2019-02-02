@@ -37,10 +37,19 @@ export function removeDisconnectedParts (map: Map<NodePart, unknown>) {
 }
 
 /**
+ * Invokes a callback when the browser is idle.
+ * Fallback to setTimeout.
+ * @param cb
+ */
+export function whenIdle (cb: (() => void)) {
+	"requestIdleCallback" in window ? (<any>window).requestIdleCallback(cb) : setTimeout(cb)
+}
+
+/**
  * Starts an interval that cleans up the part cache map each X ms.
  * @param map
  * @param ms
  */
 export function attachPartsGarbageCollector (map: Map<NodePart, unknown>, ms: number) {
-	setInterval(() => removeDisconnectedParts(map), ms);
+	setInterval(() => whenIdle(() => removeDisconnectedParts(map)), ms);
 }

@@ -62,7 +62,7 @@ describe("translate", () => {
 
 		await use("en");
 
-		$translatedComponent = document.createElement("translated-component") as TranslatedComponent;
+		$translatedComponent = new TranslatedComponent();
 		document.body.appendChild($translatedComponent);
 	});
 	after(() => {
