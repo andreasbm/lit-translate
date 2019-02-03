@@ -81,6 +81,11 @@ export default {
 					thirdParty: {
 						output: path.join(folders.dist, "licenses.txt")
 					}
+				},
+				budgetConfig: {
+					sizes: {
+						".js": 1024 * 200
+					}
 				}
 			})
 		] : [])
