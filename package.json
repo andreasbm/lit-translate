@@ -47,13 +47,40 @@
 		"s:dev": "rollup -c --watch --environment NODE_ENV:dev",
 		"s:prod": "rollup -c --watch --environment NODE_ENV:prod",
 		"s": "npm run s:dev",
-		"deploy": "npm run b:demo:prod && firebase deploy"
+		"deploy": "npm run b:demo:prod && firebase deploy",
+		"readme": "node node_modules/.bin/readme"
 	},
 	"peerDependencies": {
 		"lit-html": "^1.0.0"
 	},
 	"devDependencies": {
-		"@appnest/web-config": "0.3.11",
+		"@appnest/web-config": "0.3.19",
+		"@appnest/readme": "^1.0.1",
 		"lit-element": "^2.0.1"
+	},
+	"readme": {
+		"demo": "https://appnest-demo.firebaseapp.com/lit-translate",
+		"toc": true,
+		"ids": {
+			"github": "andreasbm/lit-translate",
+			"npm": "@appnest/lit-translate",
+			"webcomponents": "@appnest/lit-translate"
+		},
+		"badges": [
+			{
+				"text": "Awesome",
+				"url": "https://github.com/web-padawan/awesome-lit-html",
+				"img": "https://awesome.re/badge.svg"
+			}
+		],
+		"bullets": [
+			"Simple API that can return a translation for a given key (out of the box you can use the dot notation eg. `get(\"home.header.title\")`)",
+			"Works very well with JSON based translation data-structures",
+			"Can interpolate values into the strings",
+			"Customize just about everything (eg. choose your own translations loader, how to interpolate values, empty placeholder and how to look up the strings)",
+			"Caches the translations for maximum performance",
+			"Contains a `lit-html` directive that automatically updates when the language changes",
+			"Approximately 800 bytes minified & gzipped (2kb without)"
+		]
 	}
 }
