@@ -35,14 +35,14 @@
 * [❯ Wait for strings to be loaded before displaying the component](#-wait-for-strings-to-be-loaded-before-displaying-the-component)
 * [❯ License](#-license)
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ Installation
 
 ```javascript
 npm i @appnest/lit-translate
 ```
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ 1. Define the translations
 
@@ -62,7 +62,7 @@ To take advantage of the translation features you need to be able to provide you
 }
 ```
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ 2. Register the translate config
 
@@ -76,7 +76,7 @@ registerTranslateConfig({
 });
 ```
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ 3. Set the language
 
@@ -88,7 +88,7 @@ import { use } from "@appnest/lit-translate";
 use("en");
 ```
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ 4. Get the translations
 
@@ -101,7 +101,7 @@ get("header.title"); // "Hello"
 get("header.subtitle"); // "World"
 ```
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ 5. Interpolate values
 
@@ -114,7 +114,7 @@ get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 ```
 
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ 6. Use the `translate` directive together with `lit-html`
 
@@ -134,7 +134,7 @@ class MyComponent extends LitElement {
 }
 ```
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ Customize! (advanced)
 
@@ -180,7 +180,7 @@ registerTranslateConfig({
 });
 ```
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ Wait for strings to be loaded before displaying the component
 
@@ -215,7 +215,7 @@ export class MyRootComponent extends LitElement {
 ```
 
 
-![line](https://github.com/andreasbm/readme/blob/master/assets/line.png)
+![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
 ## ❯ License
 	
