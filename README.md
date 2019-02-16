@@ -22,6 +22,8 @@
 * Contains a `lit-html` directive that automatically updates when the language changes
 * Approximately 800 bytes minified & gzipped (2kb without)
 
+<img src="https://raw.githubusercontent.com/andreasbm/lit-translate/master/example.gif" width="600">
+
 ## Table of Contents
 
 * [❯ Installation](#-installation)
