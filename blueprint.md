@@ -2,7 +2,7 @@
 {{ template:badges }}
 {{ template:description }}
 
-{{ template:bullets }}
+{{ readme.bullets }}
 
 <img src="https://raw.githubusercontent.com/andreasbm/lit-translate/master/example.gif" width="600">
 

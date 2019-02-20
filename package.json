@@ -54,11 +54,12 @@
 		"lit-html": "^1.0.0"
 	},
 	"devDependencies": {
-		"@appnest/web-config": "0.3.19",
-		"@appnest/readme": "^1.0.2",
+		"@appnest/web-config": "0.3.21",
+		"@appnest/readme": "^1.0.18",
 		"lit-element": "^2.0.1"
 	},
 	"readme": {
+		"line": "rainbow",
 		"demo": "https://appnest-demo.firebaseapp.com/lit-translate",
 		"toc": true,
 		"ids": {
