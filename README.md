@@ -27,7 +27,7 @@
 <img src="https://raw.githubusercontent.com/andreasbm/lit-translate/master/example.gif" width="600">
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#table-of-contents)
 
 ## ➤ Table of Contents
 
@@ -43,7 +43,7 @@
 * [➤ License](#-license)
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#installation)
 
 ## ➤ Installation
 
@@ -51,7 +51,7 @@
 npm i @appnest/lit-translate
 ```
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#1-define-the-translations)
 
 ## ➤ 1. Define the translations
 
@@ -72,7 +72,7 @@ To take advantage of the translation features you need to be able to provide you
 ```
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#2-register-the-translate-config)
 
 ## ➤ 2. Register the translate config
 
@@ -87,7 +87,7 @@ registerTranslateConfig({
 ```
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#3-set-the-language)
 
 ## ➤ 3. Set the language
 
@@ -100,7 +100,7 @@ use("en");
 ```
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#4-get-the-translations)
 
 ## ➤ 4. Get the translations
 
@@ -114,7 +114,7 @@ get("header.subtitle"); // "World"
 ```
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#5-interpolate-values)
 
 ## ➤ 5. Interpolate values
 
@@ -128,7 +128,7 @@ get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#6-use-the-translate-directive-together-with-lit-html)
 
 ## ➤ 6. Use the `translate` directive together with `lit-html`
 
@@ -149,7 +149,7 @@ class MyComponent extends LitElement {
 ```
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#customize-advanced)
 
 ## ➤ Customize! (advanced)
 
@@ -196,7 +196,7 @@ registerTranslateConfig({
 ```
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#wait-for-strings-to-be-loaded-before-displaying-the-component)
 
 ## ➤ Wait for strings to be loaded before displaying the component
 
@@ -232,7 +232,7 @@ export class MyRootComponent extends LitElement {
 
 
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#license)
 
 ## ➤ License
 	
