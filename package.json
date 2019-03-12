@@ -54,8 +54,8 @@
 		"lit-html": "^1.0.0"
 	},
 	"devDependencies": {
-		"@appnest/web-config": "0.3.26",
-		"@appnest/readme": "^1.1.1",
+		"@appnest/web-config": "0.3.32",
+		"@appnest/readme": "^1.1.14",
 		"lit-element": "^2.0.1"
 	}
 }
