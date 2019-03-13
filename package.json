@@ -50,7 +50,7 @@
 		"deploy": "npm run b:demo:prod && firebase deploy",
 		"readme": "node node_modules/.bin/readme"
 	},
-	"peerDependencies": {
+	"dependencies": {
 		"lit-html": "^1.0.0"
 	},
 	"devDependencies": {
