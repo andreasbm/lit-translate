@@ -1,4 +1,4 @@
-import { directive, NodePart } from "lit-html";
+import { directive, NodePart, Part } from "lit-html";
 import { attachPartsGarbageCollector, isConnected } from "./cleanup";
 import { CLEANUP_PARTS_MS, LangChangedDirectiveCallback, LangChangedEvent, Values, ValuesCallback } from "./model";
 import { get, listenForLangChanged } from "./translate";
@@ -30,7 +30,7 @@ attachPartsGarbageCollector(partCache, CLEANUP_PARTS_MS);
  * @param cb
  * @param e
  */
-function updatePart (part: NodePart, cb: LangChangedDirectiveCallback, e?: LangChangedEvent) {
+function updatePart (part: Part, cb: LangChangedDirectiveCallback, e?: LangChangedEvent) {
 
 	// Grab the new value
 	const newValue = cb(e);
