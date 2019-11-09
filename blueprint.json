@@ -1,6 +1,7 @@
 {
 	"line": "rainbow",
 	"demo": "https://appnest-demo.firebaseapp.com/lit-translate",
+	"text": "Go here to try the playground [https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010)(https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010).",
 	"toc": true,
 	"ids": {
 		"github": "andreasbm/lit-translate",

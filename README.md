@@ -10,7 +10,7 @@
 
 <p align="center">
   <b>A lightweight blazing-fast internationalization (i18n) library for your next web-based project</b></br>
-  <sub> Go here to see a demo <a href="https://appnest-demo.firebaseapp.com/lit-translate">https://appnest-demo.firebaseapp.com/lit-translate</a>.<sub>
+  <sub>Go here to try the playground [https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010)(https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010). Go here to see a demo <a href="https://appnest-demo.firebaseapp.com/lit-translate">https://appnest-demo.firebaseapp.com/lit-translate</a>.<sub>
 </p>
 
 <br />
