@@ -4,8 +4,8 @@
 	"toc": true,
 	"ids": {
 		"github": "andreasbm/lit-translate",
-		"npm": "@appnest/lit-translate",
-		"webcomponents": "@appnest/lit-translate"
+		"npm": "lit-translate",
+		"webcomponents": "lit-translate"
 	},
 	"badges": [
 		{

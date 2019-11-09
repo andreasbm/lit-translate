@@ -70,7 +70,7 @@ export class DemoPageComponent extends LitElement {
 </style>
 
 <div id="box">
-	<h1>@appnest/lit-translate</h1>
+	<h1>lit-translate</h1>
 	<p>${translate("lang")}</p>
 	<p>${translate("app.title")}</p>
 	<p>${translate("app.subtitle", {thing: this.thing})}</p>

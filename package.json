@@ -1,5 +1,5 @@
 {
-	"name": "@appnest/lit-translate",
+	"name": "lit-translate",
 	"version": "1.1.18",
 	"license": "MIT",
 	"module": "index.js",

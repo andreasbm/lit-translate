@@ -1,10 +1,10 @@
-<h1 align="center">@appnest/lit-translate</h1>
+<h1 align="center">lit-translate</h1>
 <p align="center">
-		<a href="https://npmcharts.com/compare/@appnest/lit-translate?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/@appnest/lit-translate.svg" height="20"/></a>
-<a href="https://www.npmjs.com/package/@appnest/lit-translate"><img alt="NPM Version" src="https://img.shields.io/npm/v/@appnest/lit-translate.svg" height="20"/></a>
+		<a href="https://npmcharts.com/compare/lit-translate?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/lit-translate.svg" height="20"/></a>
+<a href="https://www.npmjs.com/package/lit-translate"><img alt="NPM Version" src="https://img.shields.io/npm/v/lit-translate.svg" height="20"/></a>
 <a href="https://david-dm.org/andreasbm/lit-translate"><img alt="Dependencies" src="https://img.shields.io/david/andreasbm/lit-translate.svg" height="20"/></a>
 <a href="https://github.com/andreasbm/lit-translate/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/andreasbm/lit-translate.svg" height="20"/></a>
-<a href="https://www.webcomponents.org/element/@appnest/lit-translate"><img alt="Published on webcomponents.org" src="https://img.shields.io/badge/webcomponents.org-published-blue.svg" height="20"/></a>
+<a href="https://www.webcomponents.org/element/lit-translate"><img alt="Published on webcomponents.org" src="https://img.shields.io/badge/webcomponents.org-published-blue.svg" height="20"/></a>
 <a href="https://github.com/web-padawan/awesome-lit-html"><img alt="undefined" src="https://awesome.re/badge.svg" height="20"/></a>
 	</p>
 
@@ -48,7 +48,7 @@
 ## ➤ Installation
 
 ```javascript
-npm i @appnest/lit-translate
+npm i lit-translate
 ```
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#1-define-the-translations)
@@ -79,7 +79,7 @@ To take advantage of the translation features you need to be able to provide you
 Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier. In the example below, a loader is registered which loads a `.json` file with translations for a given language.
 
 ```typescript
-import { registerTranslateConfig } from "@appnest/lit-translate";
+import { registerTranslateConfig } from "lit-translate";
 
 registerTranslateConfig({
   loader: lang => fetch(`/assets/i18n/${lang}.json`).then(res => res.json())
@@ -94,7 +94,7 @@ registerTranslateConfig({
 Invoke the `use` function to set a language. This function will use the registered loader from step 1 to load the strings for the language and dispatch a global `langChanged` event.
 
 ```typescript
-import { use } from "@appnest/lit-translate";
+import { use } from "lit-translate";
 
 use("en");
 ```
@@ -107,7 +107,7 @@ use("en");
 To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired translation in the JSON structure. The example below is based on the translations defined in `step 1`.
 
 ```typescript
-import { get } from "@appnest/lit-translate";
+import { get } from "lit-translate";
 
 get("header.title"); // "Hello"
 get("header.subtitle"); // "World"
@@ -121,7 +121,7 @@ get("header.subtitle"); // "World"
 When using the `get` function it is possible to interpolate values (eg. replace the placeholders with content). As default, you can simply use the `key` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in `step 1`.
 
 ```typescript
-import { get } from "@appnest/lit-translate";
+import { get } from "lit-translate";
 
 get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 ```
@@ -135,7 +135,7 @@ get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values.
 
 ```typescript
-import { translate } from "@appnest/lit-translate";
+import { translate } from "lit-translate";
 
 class MyComponent extends LitElement {
   render () {
@@ -156,7 +156,7 @@ class MyComponent extends LitElement {
 If you want you can customize just about anything by overwriting the configuration hooks. Below is an example on what you might want to customize.
 
 ```typescript
-import { registerTranslateConfig, extract, LanguageIdentifier, Values, Key, ITranslateConfig, ValuesCallback, Translations } from "@appnest/lit-translate";
+import { registerTranslateConfig, extract, LanguageIdentifier, Values, Key, ITranslateConfig, ValuesCallback, Translations } from "lit-translate";
 
 registerTranslateConfig({
 
@@ -203,7 +203,7 @@ registerTranslateConfig({
 Sometimes you want to avoid the empty placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
 
 ```typescript
-import { use, translate } from "@appnest/lit-translate";
+import { use, translate } from "lit-translate";
 import { LitElement, customElement } from "lit-element";
 
 @customElement("my-root-component")

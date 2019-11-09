@@ -3,7 +3,7 @@
 If you want you can customize just about anything by overwriting the configuration hooks. Below is an example on what you might want to customize.
 
 ```typescript
-import { registerTranslateConfig, extract, LanguageIdentifier, Values, Key, ITranslateConfig, ValuesCallback, Translations } from "@appnest/lit-translate";
+import { registerTranslateConfig, extract, LanguageIdentifier, Values, Key, ITranslateConfig, ValuesCallback, Translations } from "lit-translate";
 
 registerTranslateConfig({
 

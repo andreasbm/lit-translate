@@ -3,7 +3,7 @@
 If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values.
 
 ```typescript
-import { translate } from "@appnest/lit-translate";
+import { translate } from "lit-translate";
 
 class MyComponent extends LitElement {
   render () {

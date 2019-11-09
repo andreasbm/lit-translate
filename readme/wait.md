@@ -3,7 +3,7 @@
 Sometimes you want to avoid the empty placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
 
 ```typescript
-import { use, translate } from "@appnest/lit-translate";
+import { use, translate } from "lit-translate";
 import { LitElement, customElement } from "lit-element";
 
 @customElement("my-root-component")
