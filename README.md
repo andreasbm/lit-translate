@@ -37,7 +37,7 @@
 * [➤ 3. Set the language](#-3-set-the-language)
 * [➤ 4. Get the translations](#-4-get-the-translations)
 * [➤ 5. Interpolate values](#-5-interpolate-values)
-* [➤ 6. Use the `translate` directive together with `lit-html`](#-6-use-the-translate-directive-together-with-lit-html)
+* [➤ 6. Use the `translate` directive with `lit-html`](#-6-use-the-translate-directive-with-lit-html)
 * [➤ Customize! (advanced)](#-customize-advanced)
 * [➤ Wait for strings to be loaded before displaying the component](#-wait-for-strings-to-be-loaded-before-displaying-the-component)
 * [➤ License](#-license)
@@ -128,9 +128,9 @@ get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#6-use-the-translate-directive-together-with-lit-html)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#6-use-the-translate-directive-with-lit-html)
 
-## ➤ 6. Use the `translate` directive together with `lit-html`
+## ➤ 6. Use the `translate` directive with `lit-html`
 
 If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values.
 
@@ -183,7 +183,7 @@ registerTranslateConfig({
 
     // Do not continue if the string is not defined or if we have traversed all of the key parts
     while (string != null && parts.length > 0) {
-      string = (<Strings>string)[parts.shift()!];
+      string = (string as Strings)[parts.shift()!];
     }
 
     // Make sure the string is in fact a string!

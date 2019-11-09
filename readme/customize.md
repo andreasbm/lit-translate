@@ -30,7 +30,7 @@ registerTranslateConfig({
 
     // Do not continue if the string is not defined or if we have traversed all of the key parts
     while (string != null && parts.length > 0) {
-      string = (<Strings>string)[parts.shift()!];
+      string = (string as Strings)[parts.shift()!];
     }
 
     // Make sure the string is in fact a string!

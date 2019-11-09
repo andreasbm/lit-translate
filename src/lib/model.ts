@@ -15,9 +15,7 @@ export type InterpolateFunction = (text: string,
 export type EmptyFunction = (key: Key, config: ITranslateConfig) => string;
 export type LookupFunction = (key: Key, config: ITranslateConfig) => string | null;
 
-export const enum TranslateEventKind {
-	LANG_CHANGED = "langChanged"
-}
+export const LANG_CHANGED_EVENT = "langChanged";
 
 export type LangChangedEvent = {
 	previousLang?: LanguageIdentifier;
@@ -31,11 +29,17 @@ export interface ITranslateConfig {
 	interpolate: InterpolateFunction;
 	empty: EmptyFunction;
 	lookup: LookupFunction;
+	translationCache: TranslationCache;
 	lang?: LanguageIdentifier;
 	strings?: Strings;
-	translationCache: TranslationCache;
 }
 
 export const CLEANUP_PARTS_MS = 1000 * 60;
 export type LangChangedDirectiveCallback = ((e?: LangChangedEvent) => any);
 
+/* Extend the global event handlers map with the history related events */
+declare global {
+	interface GlobalEventHandlersEventMap {
+		"langChanged": CustomEvent<LangChangedEvent>
+	}
+}

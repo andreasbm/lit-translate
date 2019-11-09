@@ -1,5 +1,5 @@
 import { extract, interpolate, lookup } from "./helpers";
-import { ITranslateConfig, Key, LangChangedEvent, LanguageIdentifier, Strings, TranslateEventKind, Translation, Values, ValuesCallback } from "./model";
+import { ITranslateConfig, Key, LANG_CHANGED_EVENT, LangChangedEvent, LanguageIdentifier, Strings, Translation, Values, ValuesCallback } from "./model";
 
 /**
  * Default configuration object.
@@ -40,7 +40,7 @@ export async function loadStrings (lang: LanguageIdentifier,
  * @param detail
  */
 export function dispatchLangChanged (detail: LangChangedEvent) {
-	window.dispatchEvent(new CustomEvent<LangChangedEvent>(TranslateEventKind.LANG_CHANGED, {detail}));
+	window.dispatchEvent(new CustomEvent<LangChangedEvent>(LANG_CHANGED_EVENT, {detail}));
 }
 
 /**
@@ -70,8 +70,8 @@ export function updateLang (newLang: LanguageIdentifier,
 export function listenForLangChanged (callback: (e: LangChangedEvent) => void,
                                       options?: AddEventListenerOptions): (() => void) {
 	const handler = (e: CustomEvent<LangChangedEvent>) => callback(e.detail);
-	window.addEventListener(TranslateEventKind.LANG_CHANGED, handler, options);
-	return () => window.removeEventListener(TranslateEventKind.LANG_CHANGED, handler);
+	window.addEventListener(LANG_CHANGED_EVENT, handler, options);
+	return () => window.removeEventListener(LANG_CHANGED_EVENT, handler);
 }
 
 /**
@@ -109,5 +109,5 @@ export function get (key: Key,
 	values = values != null ? extract(values) : null;
 
 	// Interpolate the values and return the translation
-	return values != null ? translateConfig.interpolate(translation, values, config) : translation;
+	return values != null ? config.interpolate(translation, values, config) : translation;
 }

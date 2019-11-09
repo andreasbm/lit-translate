@@ -4,9 +4,10 @@ import { ITranslateConfig, Key, Strings, Values, ValuesCallback } from "./model"
  * Interpolates the values into the string.
  * @param text
  * @param values
+ * @param config
  */
-export function interpolate (text: string, values: Values | ValuesCallback): string {
-	return Object.entries(extract(values)).reduce((text, [key, value]) =>
+export function interpolate (text: string, values: Values | ValuesCallback | null, config: ITranslateConfig): string {
+	return Object.entries(extract(values || {})).reduce((text, [key, value]) =>
 		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), String(extract(value))), text);
 }
 

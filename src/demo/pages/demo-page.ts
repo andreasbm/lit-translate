@@ -22,7 +22,7 @@ registerTranslateConfig({
 export class DemoPageComponent extends LitElement {
 
 	@property() lang = languages[0];
-	@property() thing: string;
+	@property() thing: string = "";
 
 	// Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
 	private hasLoadedStrings = false;
