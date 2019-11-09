@@ -24,9 +24,10 @@ export function lookup (key: Key, config: ITranslateConfig): string | null {
 	// Find the string by traversing through the strings matching the chain of keys
 	let string: Strings | string | undefined = config.strings;
 
+	// Shift through all of the parts of the key while matching with the strings.
 	// Do not continue if the string is not defined or if we have traversed all of the key parts
 	while (string != null && parts.length > 0) {
-		string = (<Strings>string)[parts.shift()!];
+		string = (string as Strings)[parts.shift()!];
 	}
 
 	// Make sure the string is in fact a string!
@@ -38,5 +39,5 @@ export function lookup (key: Key, config: ITranslateConfig): string | null {
  * @param obj
  */
 export function extract<T> (obj: T | (() => T)): T {
-	return (typeof obj === "function") ? (<(() => T)>obj)() : obj;
+	return (typeof obj === "function") ? (obj as (() => T))() : obj;
 }

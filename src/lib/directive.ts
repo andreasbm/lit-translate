@@ -1,6 +1,7 @@
 import { directive, NodePart, Part } from "lit-html";
 import { attachPartsGarbageCollector, isConnected } from "./cleanup";
-import { CLEANUP_PARTS_MS, LangChangedDirectiveCallback, LangChangedEvent, Values, ValuesCallback } from "./model";
+import { CLEANUP_PARTS_MS } from "./config";
+import { ITranslateConfig, LangChangedDirectiveCallback, LangChangedEvent, Values, ValuesCallback } from "./model";
 import { get, listenForLangChanged } from "./translate";
 
 // Caches the parts and the translations.
@@ -60,5 +61,6 @@ export const langChanged = directive((cb: LangChangedDirectiveCallback) => (part
  * A lit directive that updates the translation when the language changes.
  * @param key
  * @param values
+ * @param config
  */
-export const translate = (key: string, values?: Values | ValuesCallback) => langChanged(() => get(key, values));
+export const translate = (key: string, values?: Values | ValuesCallback, config?: ITranslateConfig) => langChanged(() => get(key, values, config));

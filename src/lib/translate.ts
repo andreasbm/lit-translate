@@ -1,5 +1,6 @@
+import { LANG_CHANGED_EVENT } from "./config";
 import { extract, interpolate, lookup } from "./helpers";
-import { ITranslateConfig, Key, LANG_CHANGED_EVENT, LangChangedEvent, LanguageIdentifier, Strings, Translation, Values, ValuesCallback } from "./model";
+import { ITranslateConfig, Key, LangChangedEvent, LanguageIdentifier, Strings, Translation, Values, ValuesCallback } from "./model";
 
 /**
  * Default configuration object.
@@ -23,16 +24,6 @@ export let translateConfig: ITranslateConfig = defaultTranslateConfig();
  */
 export function registerTranslateConfig (config: Partial<ITranslateConfig>): ITranslateConfig {
 	return (translateConfig = {...translateConfig, ...config});
-}
-
-/**
- * Loads the strings using the provided loader.
- * @param lang
- * @param config
- */
-export async function loadStrings (lang: LanguageIdentifier,
-                                   config: ITranslateConfig = translateConfig): Promise<Strings> {
-	return await config.loader(lang, config);
 }
 
 /**
@@ -82,13 +73,12 @@ export function listenForLangChanged (callback: (e: LangChangedEvent) => void,
 export async function use (lang: LanguageIdentifier, config: ITranslateConfig = translateConfig) {
 
 	// Load the translations and set the cache
-	const strings = await loadStrings(lang, config);
+	const strings = await config.loader(lang, config);
 	config.translationCache = {};
 
 	// Dispatch global language changed event while setting the new values
 	updateLang(lang, strings, config);
 }
-
 
 /**
  * Translates a key and interpolates if values are defined.

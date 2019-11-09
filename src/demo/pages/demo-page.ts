@@ -1,7 +1,7 @@
 import { customElement, eventOptions, html, LitElement, property, PropertyValues } from "lit-element";
 import { TemplateResult } from "lit-html";
 import { repeat } from "lit-html/directives/repeat";
-import { translateConfig, get, LanguageIdentifier, listenForLangChanged, registerTranslateConfig, translate, use, langChanged } from "../../lib";
+import { get, LanguageIdentifier, listenForLangChanged, registerTranslateConfig, translate, translateConfig, use } from "../../lib";
 
 import styles from "./demo-page.scss";
 
@@ -14,6 +14,13 @@ const languages = [
 registerTranslateConfig({
 	loader: (lang: LanguageIdentifier) => fetch(`assets/i18n/${lang}.json`).then(res => res.json())
 });
+
+// const testTranslateConfig: ITranslateConfig = {
+// 	...defaultTranslateConfig(),
+// 	loader: (lang: LanguageIdentifier) => fetch(`assets/i18n/${lang}.json`).then(res => res.json()),
+// };
+//
+// use("da", testTranslateConfig);
 
 /**
  * Demo page.
@@ -40,7 +47,7 @@ export class DemoPageComponent extends LitElement {
 		this.thing = get("world");
 
 		// The below example is how parts of the strings could be lazy loaded
-		listenForLangChanged( () => {
+		listenForLangChanged(() => {
 			setTimeout(async () => {
 				const subpageStrings = await (await fetch(`./../assets/i18n/subpage-${translateConfig.lang}.json`)
 					.then(d => d.json()));

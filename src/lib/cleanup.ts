@@ -42,7 +42,7 @@ export function removeDisconnectedParts (map: Map<NodePart, unknown>) {
  * @param cb
  */
 export function whenIdle (cb: (() => void)) {
-	"requestIdleCallback" in window ? (<any>window).requestIdleCallback(cb) : setTimeout(cb)
+	"requestIdleCallback" in window ? (window as any).requestIdleCallback(cb) : setTimeout(cb)
 }
 
 /**
