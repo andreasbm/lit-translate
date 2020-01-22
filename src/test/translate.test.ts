@@ -123,6 +123,14 @@ describe("translate", () => {
 		expect(get("cta.awesome", {things: get("cta.cats")})).to.equal("Katte er for nice!");
 	});
 
+	it("[get] - should interpolate values correctly with same placeholder used multiple times", async () => {
+		const email = "test@test.com";
+		expect(get("footer.contact", {email})).to.equal(`Contact us on ${email}. It was ${email}!`);
+
+		await use("da");
+		expect(get("footer.contact", {email})).to.equal(`Kontakt os på ${email}. Det var ${email}!`);
+	});
+
 	it("[translate] - should be performant", async () => {
 
 		// Create the stress component

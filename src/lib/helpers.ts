@@ -8,7 +8,7 @@ import { ITranslateConfig, Key, Strings, Values, ValuesCallback } from "./model"
  */
 export function interpolate (text: string, values: Values | ValuesCallback | null, config: ITranslateConfig): string {
 	return Object.entries(extract(values || {})).reduce((text, [key, value]) =>
-		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`), String(extract(value))), text);
+		text.replace(new RegExp(`{{[  ]*${key}[  ]*}}`, `gm`), String(extract(value))), text);
 }
 
 /**

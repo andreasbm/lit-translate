@@ -7,6 +7,9 @@ export const enStrings = {
 	"cta": {
 		"awesome": "{{ things }} are awesome!",
 		"cats": "Cats"
+	},
+	"footer": {
+		"contact": "Contact us on {{ email }}. It was {{ email }}!"
 	}
 };
 
@@ -19,5 +22,8 @@ export const daStrings = {
 	"cta": {
 		"awesome": "{{ things }} er for nice!",
 		"cats": "Katte"
+	},
+	"footer": {
+		"contact": "Kontakt os på {{ email }}. Det var {{ email }}!"
 	}
 };
