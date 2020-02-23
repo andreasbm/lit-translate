@@ -147,7 +147,7 @@ describe("translate", () => {
 		window.performance.measure("stress", "stress_start", "stress_end");
 		const durationMs = window.performance.getEntriesByName("stress")[0].duration;
 
-		// The 400 mark was set based on performance testing in Chrome
-		expect(durationMs).to.be.lessThan(400);
+		// The 500 mark was set based on performance testing in Chrome
+		expect(durationMs).to.be.lessThan(500);
 	});
 });
