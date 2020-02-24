@@ -183,7 +183,7 @@ registerTranslateConfig({
 
     // Do not continue if the string is not defined or if we have traversed all of the key parts
     while (string != null && parts.length > 0) {
-      string = (string as Strings)[parts.shift()!];
+      string = string[parts.shift()];
     }
 
     // Make sure the string is in fact a string!
@@ -201,16 +201,20 @@ registerTranslateConfig({
 
 Sometimes you want to avoid the empty placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
 
-```typescript
+```js
 import { use, translate } from "lit-translate";
-import { LitElement, html, customElement } from "lit-element";
+import { LitElement, html } from "lit-element";
 
-@customElement("my-app")
 export class MyApp extends LitElement {
 
+  // Construct the component
+  constructor () {
+    super();
+    this.hasLoadedStrings = false;
+  }
+
   // Defer the first update of the component until the strings have been loaded to avoid empty strings being shown
-  private hasLoadedStrings = false;
-  protected shouldUpdate (changedProperties: PropertyValues) {
+  shouldUpdate (changedProperties) {
     return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
   }
 
@@ -222,12 +226,15 @@ export class MyApp extends LitElement {
     this.hasLoadedStrings = true;
   }
 
-  protected render (): TemplateResult {
+  // Render the component
+  protected render () {
     return html`
       <p>${translate("title")}</p>
     `;
   }
 }
+
+customElements.define("my-app", MyApp);
 ```
 
 
