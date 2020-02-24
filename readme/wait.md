@@ -4,22 +4,23 @@ Sometimes you want to avoid the empty placeholders being shown initially before 
 
 ```typescript
 import { use, translate } from "lit-translate";
-import { LitElement, customElement } from "lit-element";
+import { LitElement, html, customElement } from "lit-element";
 
-@customElement("my-root-component")
-export class MyRootComponent extends LitElement {
+@customElement("my-app")
+export class MyApp extends LitElement {
 
-  // Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
+  // Defer the first update of the component until the strings have been loaded to avoid empty strings being shown
   private hasLoadedStrings = false;
   protected shouldUpdate (changedProperties: PropertyValues) {
     return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
   }
 
-  // Load the initial language and mark that the strings has been loaded.
+  // Load the initial language and mark that the strings have been loaded.
   async connectedCallback () {
+    super.connectedCallback();
+
     await use("en");
     this.hasLoadedStrings = true;
-    super.connectedCallback();
   }
 
   protected render (): TemplateResult {

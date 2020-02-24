@@ -55,7 +55,7 @@ npm i lit-translate
 
 ## ➤ 1. Define the translations
 
-To take advantage of the translation features you need to be able to provide your translations as a JSON structure. You are able to configure how these strings are loaded, but to make things simple we encourage you to maintain your translations in `.json` files - one for each language you support.
+To take advantage of the translation features you need to be able to provide your translations as a JSON structure. You are able to configure how these strings are loaded, but to make things simple you are encouraged to maintain your translations as `.json` files - one for each language you support.
 
 ```json
 // en.json
@@ -91,7 +91,7 @@ registerTranslateConfig({
 
 ## ➤ 3. Set the language
 
-Invoke the `use` function to set a language. This function will use the registered loader from step 1 to load the strings for the language and dispatch a global `langChanged` event.
+Invoke the `use` function to set a language. This function will use the registered loader from [step 1](#-1-define-the-translations) to load the strings for the language and dispatch a global `langChanged` event.
 
 ```typescript
 import { use } from "lit-translate";
@@ -104,7 +104,7 @@ use("en");
 
 ## ➤ 4. Get the translations
 
-To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired translation in the JSON structure. The example below is based on the translations defined in `step 1`.
+To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired translation in the JSON structure. The example below is based on the translations defined in [step 1](#-1-define-the-translations).
 
 ```typescript
 import { get } from "lit-translate";
@@ -118,7 +118,7 @@ get("header.subtitle"); // "World"
 
 ## ➤ 5. Interpolate values
 
-When using the `get` function it is possible to interpolate values (eg. replace the placeholders with content). As default, you can simply use the `key` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in `step 1`.
+When using the `get` function it is possible to interpolate values (eg. replace the placeholders with content). As default, you can simply use the `key` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in [step 1](#-1-define-the-translations).
 
 ```typescript
 import { get } from "lit-translate";
@@ -132,7 +132,7 @@ get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 
 ## ➤ 6. Use the `translate` directive with `lit-html`
 
-If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values.
+If you are using `lit-html` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called with a new language and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values.
 
 ```typescript
 import { translate } from "lit-translate";
@@ -155,31 +155,31 @@ class MyComponent extends LitElement {
 
 If you want you can customize just about anything by overwriting the configuration hooks. Below is an example on what you might want to customize.
 
-```typescript
-import { registerTranslateConfig, extract, LanguageIdentifier, Values, Key, ITranslateConfig, ValuesCallback, Translations } from "lit-translate";
+```js
+import { registerTranslateConfig, extract } from "lit-translate";
 
 registerTranslateConfig({
 
   // Loads the language from the correct path
-  loader: (lang: LanguageIdentifier) => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()),
+  loader: lang => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()),
 
   // Interpolate the values using a [[key]] syntax.
-  interpolate: (text: string, values: Values | ValuesCallback) => {
+  interpolate: (text, values) => {
     for (const [key, value] of Object.entries(extract(values))) {
-      text = text.replace(new RegExp(`\[\[${key}\]\]`), String(extract(value)));
+      text = text.replace(new RegExp(`\[\[${key}\]\]`, `gm`), String(extract(value)));
     }
 
     return text;
   },
 
   // Returns a string for a given key
-  lookup: (key: Key, config: ITranslateConfig) => {
+  lookup: (key, config) => {
 
     // Split the key in parts (example: hello.world)
     const parts = key.split(".");
 
     // Find the string by traversing through the strings matching the chain of keys
-    let string: Strings | string | undefined = config.strings;
+    let string = config.strings;
 
     // Do not continue if the string is not defined or if we have traversed all of the key parts
     while (string != null && parts.length > 0) {
@@ -191,10 +191,9 @@ registerTranslateConfig({
   },
 
   // Formats empty placeholders (eg. !da.headline.title!)
-  empty: (key: Key, config: ITranslateConfig) => `!${config.lang}.${key}!`
+  empty: (key, config) => `!${config.lang}.${key}!`
 });
 ```
-
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#wait-for-strings-to-be-loaded-before-displaying-the-component)
 
@@ -204,22 +203,23 @@ Sometimes you want to avoid the empty placeholders being shown initially before 
 
 ```typescript
 import { use, translate } from "lit-translate";
-import { LitElement, customElement } from "lit-element";
+import { LitElement, html, customElement } from "lit-element";
 
-@customElement("my-root-component")
-export class MyRootComponent extends LitElement {
+@customElement("my-app")
+export class MyApp extends LitElement {
 
-  // Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
+  // Defer the first update of the component until the strings have been loaded to avoid empty strings being shown
   private hasLoadedStrings = false;
   protected shouldUpdate (changedProperties: PropertyValues) {
     return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
   }
 
-  // Load the initial language and mark that the strings has been loaded.
+  // Load the initial language and mark that the strings have been loaded.
   async connectedCallback () {
+    super.connectedCallback();
+
     await use("en");
     this.hasLoadedStrings = true;
-    super.connectedCallback();
   }
 
   protected render (): TemplateResult {

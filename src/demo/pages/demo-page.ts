@@ -40,9 +40,10 @@ export class DemoPageComponent extends LitElement {
 
 	// Load the initial language and mark that the strings has been loaded.
 	async connectedCallback () {
+		super.connectedCallback();
+
 		await use(this.lang);
 		this.hasLoadedStrings = true;
-		super.connectedCallback();
 
 		this.thing = get("world");
 
@@ -72,23 +73,23 @@ export class DemoPageComponent extends LitElement {
 
 	protected render (): TemplateResult {
 		return html`
-<style>
-	${styles}
-</style>
+			<style>
+				${styles}
+			</style>
 
-<div id="box">
-	<h1>lit-translate</h1>
-	<p>${translate("lang")}</p>
-	<p>${translate("app.title")}</p>
-	<p>${translate("app.subtitle", {thing: this.thing})}</p>
-	<select value="${this.lang}" @change="${this.onLanguageSelected}">
-		${repeat(languages, lang => html`
-			<option value="${lang}">${lang}</option>
-		`)}
-	</select>
-	<input .value="${this.thing}" @input="${(e: Event) => this.thing = (<HTMLInputElement>e.target).value}" />
-</div>
-<a href="https://github.com/andreasbm/lit-translate" target="_blank">View on Github</a>
-`;
+			<div id="box">
+				<h1>lit-translate</h1>
+				<p>${translate("lang")}</p>
+				<p>${translate("app.title")}</p>
+				<p>${translate("app.subtitle", {thing: this.thing})}</p>
+				<select value="${this.lang}" @change="${this.onLanguageSelected}">
+					${repeat(languages, lang => html`
+						<option value="${lang}">${lang}</option>
+					`)}
+				</select>
+				<input .value="${this.thing}" @input="${(e: Event) => this.thing = (<HTMLInputElement>e.target).value}" />
+			</div>
+			<a href="https://github.com/andreasbm/lit-translate" target="_blank">View on Github</a>
+		`;
 	}
 }
