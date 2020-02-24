@@ -38,8 +38,10 @@
 * [➤ 4. Get the translations](#-4-get-the-translations)
 * [➤ 5. Interpolate values](#-5-interpolate-values)
 * [➤ 6. Use the `translate` directive with `lit-html`](#-6-use-the-translate-directive-with-lit-html)
-* [➤ Customize! (advanced)](#-customize-advanced)
 * [➤ Wait for strings to be loaded before displaying the component](#-wait-for-strings-to-be-loaded-before-displaying-the-component)
+* [➤ Customize! (advanced)](#-customize-advanced)
+	* [Format text with `IntlMessageFormat`](#format-text-with-intlmessageformat)
+	* [Using the default translations as keys](#using-the-default-translations-as-keys)
 * [➤ License](#-license)
 
 
@@ -150,6 +152,49 @@ class MyComponent extends LitElement {
 ```
 
 
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#wait-for-strings-to-be-loaded-before-displaying-the-component)
+
+## ➤ Wait for strings to be loaded before displaying the component
+
+Sometimes you want to avoid the empty placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
+
+```js
+import { use, translate } from "lit-translate";
+import { LitElement, html } from "lit-element";
+
+export class MyApp extends LitElement {
+
+  // Construct the component
+  constructor () {
+    super();
+    this.hasLoadedStrings = false;
+  }
+
+  // Defer the first update of the component until the strings have been loaded to avoid empty strings being shown
+  shouldUpdate (changedProperties) {
+    return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
+  }
+
+  // Load the initial language and mark that the strings have been loaded.
+  async connectedCallback () {
+    super.connectedCallback();
+
+    await use("en");
+    this.hasLoadedStrings = true;
+  }
+
+  // Render the component
+  protected render () {
+    return html`
+      <p>${translate("title")}</p>
+    `;
+  }
+}
+
+customElements.define("my-app", MyApp);
+```
+
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#customize-advanced)
 
 ## ➤ Customize! (advanced)
@@ -196,48 +241,66 @@ registerTranslateConfig({
 });
 ```
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#wait-for-strings-to-be-loaded-before-displaying-the-component)
+### Format text with `IntlMessageFormat`
 
-## ➤ Wait for strings to be loaded before displaying the component
-
-Sometimes you want to avoid the empty placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
+[IntlMessageFormat](https://www.npmjs.com/package/intl-messageformat) is a library that formats ICU Message strings with number, date, plural, and select placeholders to create localized messages. This library is a good addition to `lit-translate`. You can add it to the interpolate hook to get the benefits as shown in the following example.
 
 ```js
-import { use, translate } from "lit-translate";
-import { LitElement, html } from "lit-element";
+import { registerTranslateConfig, extract } from "lit-translate";
+import { IntlMessageFormat } from "intl-messageformat";
 
-export class MyApp extends LitElement {
+registerTranslateConfig({
+  loader: lang => {
+    switch (lang) {
+      case "en":
+        return {
+          photos: `You have {numPhotos, plural, =0 {no photos.} =1 {one photo.} other {# photos.}}`
+        };
+    }
 
-  // Construct the component
-  constructor () {
-    super();
-    this.hasLoadedStrings = false;
-  }
+    throw new Error(`The language ${lang} is not supported..`);
+  },
 
-  // Defer the first update of the component until the strings have been loaded to avoid empty strings being shown
-  shouldUpdate (changedProperties) {
-    return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
-  }
+  // Use the "intl-messageformat" library for formatting.
+  interpolate: (text, values, config) => {
+    const msg = new IntlMessageFormat(text, config.lang);
+    return msg.format(extract(values));
+  },
+});
 
-  // Load the initial language and mark that the strings have been loaded.
-  async connectedCallback () {
-    super.connectedCallback();
+use("en");
 
-    await use("en");
-    this.hasLoadedStrings = true;
-  }
-
-  // Render the component
-  protected render () {
-    return html`
-      <p>${translate("title")}</p>
-    `;
-  }
-}
-
-customElements.define("my-app", MyApp);
+get("photos", {numPhotos: 0}); // Will return "You have no photos"
+get("photos", {numPhotos: 1}); // Will return "You have one photo."
+get("photos", {numPhotos: 5}); // Will return "You have 5 photos."
 ```
 
+### Using the default translations as keys
+
+Inspired by [GNU gettext](https://en.wikipedia.org/wiki/Gettext) you can use the default translation as keys. The benefit of doing this is that you will save typing time and reduce code clutter. You can use [xgettext](https://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html) to extract the translatable strings from your code and then use [po2json](https://github.com/mikeedwards/po2json) to turn your `.po` files into `.json` files. The following code shows an example of how you could implement this.
+
+```js
+import { registerTranslateConfig, use, get } from "lit-translate";
+
+registerTranslateConfig({
+  lookup: (key, config) => config.strings != null ? config.strings[key] : key,
+  empty: key => key,
+  loader: lang => {
+    switch (lang) {
+      case "da":
+        return {
+          "The page is being loaded...": "Siden indlæses..."
+        };
+    }
+  }
+});
+
+use("en");
+get("The page is being loaded..."); // Will return "The page is being loaded..."
+
+use("da");
+get("The page is being loaded..."); // Will return "Siden indlæses..."
+```
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#license)

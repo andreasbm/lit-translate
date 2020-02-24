@@ -15,7 +15,7 @@
 {{ load:readme/4-get-translations.md }}
 {{ load:readme/5-interpolate.md }}
 {{ load:readme/6-lit-html.md }}
-{{ load:readme/customize.md }}
 {{ load:readme/wait.md }}
+{{ load:readme/customize.md }}
 
 {{ template:license }}
