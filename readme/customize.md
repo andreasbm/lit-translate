@@ -33,11 +33,11 @@ registerTranslateConfig({
       string = string[parts.shift()];
     }
 
-    // Make sure the string is in fact a string!
+    // Make sure the string is a string!
     return string != null ? string.toString() : null;
   },
 
-  // Formats empty placeholders (eg. !da.headline.title!)
+  // Formats empty placeholders (eg. !da.headline.title!) if lookup returns null
   empty: (key, config) => `!${config.lang}.${key}!`
 });
 ```
@@ -58,8 +58,6 @@ registerTranslateConfig({
           photos: `You have {numPhotos, plural, =0 {no photos.} =1 {one photo.} other {# photos.}}`
         };
     }
-
-    throw new Error(`The language ${lang} is not supported..`);
   },
 
   // Use the "intl-messageformat" library for formatting.
