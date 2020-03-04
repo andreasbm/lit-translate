@@ -64,3 +64,17 @@ export const langChanged = directive((cb: LangChangedDirectiveCallback) => (part
  * @param config
  */
 export const translate = (key: string, values?: Values | ValuesCallback, config?: ITranslateConfig) => langChanged(() => get(key, values, config));
+
+/**
+ * A lit directive that updates the translation (including rendering html from the translation string) when the language
+ * changes.
+ * @param key
+ * @param values
+ * @param config
+ */
+export const translateUnsafeHTML = (key, values?, config?) => langChanged(() => {
+	const tl = get(key, values, config);
+	const template = document.createElement('template');
+	template.innerHTML = tl;
+	return document.importNode(template.content, true);
+});
