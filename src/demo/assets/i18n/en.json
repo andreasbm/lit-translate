@@ -3,6 +3,7 @@
 	"world": "World",
 	"app": {
 		"title": "Translate your application",
-		"subtitle": "Hello {{ thing }}!"
+		"subtitle": "Hello {{ thing }}!",
+		"html": "This is <b>html</b>"
 	}
 }

@@ -3,6 +3,7 @@
 	"world": "Verden",
 	"app": {
 		"title": "Oversæt din app",
-		"subtitle": "Hej {{ thing }}!"
+		"subtitle": "Hej {{ thing }}!",
+		"html": "Dette er <b>html</b>"
 	}
 }

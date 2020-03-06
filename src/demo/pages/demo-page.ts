@@ -1,7 +1,8 @@
 import { customElement, eventOptions, html, LitElement, property, PropertyValues } from "lit-element";
 import { TemplateResult } from "lit-html";
 import { repeat } from "lit-html/directives/repeat";
-import { get, LanguageIdentifier, listenForLangChanged, registerTranslateConfig, translate, translateConfig, use } from "../../lib";
+import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../../lib";
+// import { unsafeTranslate } from "../../lib/directive";
 
 import styles from "./demo-page.scss";
 
@@ -29,7 +30,6 @@ registerTranslateConfig({
 export class DemoPageComponent extends LitElement {
 
 	@property() lang = languages[0];
-	@property() thing: string = "";
 
 	// Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
 	private hasLoadedStrings = false;
@@ -44,31 +44,28 @@ export class DemoPageComponent extends LitElement {
 
 		await use(this.lang);
 		this.hasLoadedStrings = true;
-
-		this.thing = get("world");
+		this.requestUpdate().then();
 
 		// The below example is how parts of the strings could be lazy loaded
-		listenForLangChanged(() => {
-			setTimeout(async () => {
-				const subpageStrings = await (await fetch(`./../assets/i18n/subpage-${translateConfig.lang}.json`)
-					.then(d => d.json()));
-
-				translateConfig.strings = {...translateConfig.strings, ...subpageStrings};
-				translateConfig.translationCache = {};
-
-				this.requestUpdate().then();
-
-				console.log(translateConfig, get("subpage.title"));
-			}, 2000);
-		});
+		// listenForLangChanged(() => {
+		// 	setTimeout(async () => {
+		// 		const subpageStrings = await (await fetch(`./../assets/i18n/subpage-${translateConfig.lang}.json`)
+		// 			.then(d => d.json()));
+		//
+		// 		translateConfig.strings = {...translateConfig.strings, ...subpageStrings};
+		// 		translateConfig.translationCache = {};
+		//
+		// 		this.requestUpdate().then();
+		//
+		// 		console.log(translateConfig, get("subpage.title"));
+		// 	}, 2000);
+		// });
 	}
 
 	@eventOptions({capture: true})
 	private async onLanguageSelected (e: Event) {
 		this.lang = (<HTMLSelectElement>e.target).value;
 		await use(this.lang).then();
-
-		this.thing = get("world");
 	}
 
 	protected render (): TemplateResult {
@@ -81,13 +78,13 @@ export class DemoPageComponent extends LitElement {
 				<h1>lit-translate</h1>
 				<p>${translate("lang")}</p>
 				<p>${translate("app.title")}</p>
-				<p>${translate("app.subtitle", {thing: this.thing})}</p>
+				<p>${translate("app.subtitle", () => ({thing: get("world")}))}</p>
+				<p>$ {unsafeTranslate("app.html")}</p>
 				<select value="${this.lang}" @change="${this.onLanguageSelected}">
 					${repeat(languages, lang => html`
 						<option value="${lang}">${lang}</option>
 					`)}
 				</select>
-				<input .value="${this.thing}" @input="${(e: Event) => this.thing = (<HTMLInputElement>e.target).value}" />
 			</div>
 			<a href="https://github.com/andreasbm/lit-translate" target="_blank">View on Github</a>
 		`;
