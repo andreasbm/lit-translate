@@ -1,5 +1,5 @@
 import { directive, NodePart, Part } from "lit-html";
-import { unsafeHTML } from "lit-html/directives/unsafe-html";
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { attachPartsGarbageCollector, isConnected } from "./cleanup";
 import { CLEANUP_PARTS_MS } from "./config";
 import { ITranslateConfig, LangChangedDirectiveCallback, LangChangedEvent, Values, ValuesCallback } from "./model";
@@ -63,6 +63,13 @@ export const langChanged = directive((cb: LangChangedDirectiveCallback) => (part
  * @param key
  * @param values
  * @param config
- * @param renderHTML
  */
-export const translate = (key: string, values?: Values | ValuesCallback, config?: ITranslateConfig, renderHTML = false) => langChanged(() => renderHTML ? unsafeHTML(get(key, values, config)) : get(key, values, config));
+export const translate = (key: string, values?: Values | ValuesCallback, config?: ITranslateConfig) => langChanged(() => get(key, values, config));
+
+/**
+ * A lit directive that updates the translation and renders embedded HTML markup when the language changes.
+ * @param key
+ * @param values
+ * @param config
+ */
+export const unsafeTranslate = (key: string, values?: Values | ValuesCallback, config?: ITranslateConfig) => langChanged(() => unsafeHTML(get(key, values, config)));
