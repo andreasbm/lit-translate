@@ -1,5 +1,6 @@
 export const enStrings = {
 	"lang": "en",
+	"html": `This is <b>html</b>`,
 	"header": {
 		"title": "Hello",
 		"subtitle": "World"
@@ -15,12 +16,13 @@ export const enStrings = {
 
 export const daStrings = {
 	"lang": "da",
+	"html": `Dette er <b>html</b>`,
 	"header": {
 		"title": "Hej",
 		"subtitle": "Verden"
 	},
 	"cta": {
-		"awesome": "{{ things }} er for nice!",
+		"awesome": "{{ things }} er nice!",
 		"cats": "Katte"
 	},
 	"footer": {

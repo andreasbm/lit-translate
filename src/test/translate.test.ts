@@ -1,6 +1,6 @@
 import { customElement, html, LitElement, property } from "lit-element";
 import { repeat } from "lit-html/directives/repeat";
-import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../lib/index";
+import { get, LanguageIdentifier, registerTranslateConfig, translate, translateUnsafeHTML, use } from "../lib/index";
 import { daStrings, enStrings } from "./mock";
 
 const expect = chai.expect;
@@ -11,24 +11,29 @@ class TranslatedComponent extends LitElement {
 	@property() things = "";
 
 	get title () {
-		return this.shadowRoot!.querySelector("h1")!.innerText;
+		return this.shadowRoot!.querySelector<HTMLElement>("#title")!.innerText;
 	}
 
 	get subtitle () {
-		return this.shadowRoot!.querySelector("p")!.innerText;
+		return this.shadowRoot!.querySelector<HTMLElement>("#subtitle")!.innerText;
 	}
 
 	get awesome () {
-		return this.shadowRoot!.querySelector("span")!.innerText;
+		return this.shadowRoot!.querySelector<HTMLElement>("#awesome")!.innerText;
+	}
+
+	get html (): HTMLElement {
+		return this.shadowRoot!.querySelector<HTMLElement>("#html")!;
 	}
 
 	render () {
 		return html`
-			<h1>${translate("header.title")}</h1>
-			<p>${translate("header.subtitle")}</p>
-			<span>${translate("cta.awesome", () => {
+			<h1 id="title">${translate("header.title")}</h1>
+			<p id="subtitle">${translate("header.subtitle")}</p>
+			<span id="awesome">${translate("cta.awesome", () => {
 			return {things: this.things};
 		})}</span>
+			<p id="html">${translateUnsafeHTML("html")}</p>
 		`;
 	}
 }
@@ -88,7 +93,18 @@ describe("translate", () => {
 
 		expect($translatedComponent.title).to.equal("Hej");
 		expect($translatedComponent.subtitle).to.equal("Verden");
-		expect($translatedComponent.awesome).to.equal("Katte er for nice!");
+		expect($translatedComponent.awesome).to.equal("Katte er nice!");
+	});
+
+	it("[translateUnsafeHTML] - should render HTML when new strings are set", async () => {
+		expect($translatedComponent.html.children.length).to.equal(1);
+		expect($translatedComponent.html.innerText).to.equal("This is html");
+
+		await use("da");
+		await $translatedComponent.updateComplete;
+
+		expect($translatedComponent.html.children.length).to.equal(1);
+		expect($translatedComponent.html.innerText).to.equal("Dette er html");
 	});
 
 	it("[get] - should translate keys based on the current language", async () => {
@@ -120,7 +136,7 @@ describe("translate", () => {
 		expect(get("cta.awesome", {things: get("cta.cats")})).to.equal("Cats are awesome!");
 
 		await use("da");
-		expect(get("cta.awesome", {things: get("cta.cats")})).to.equal("Katte er for nice!");
+		expect(get("cta.awesome", {things: get("cta.cats")})).to.equal("Katte er nice!");
 	});
 
 	it("[get] - should interpolate values correctly with same placeholder used multiple times", async () => {
