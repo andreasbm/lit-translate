@@ -49,7 +49,7 @@
 
 ## ➤ Installation
 
-```javascript
+```js
 npm i lit-translate
 ```
 
@@ -80,7 +80,7 @@ To take advantage of the translation features you need to be able to provide you
 
 Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier. In the example below, a loader is registered which loads a `.json` file with translations for a given language.
 
-```typescript
+```js
 import { registerTranslateConfig } from "lit-translate";
 
 registerTranslateConfig({
@@ -95,7 +95,7 @@ registerTranslateConfig({
 
 Invoke the `use` function to set a language. This function will use the registered loader from [step 1](#-1-define-the-translations) to load the strings for the language and dispatch a global `langChanged` event.
 
-```typescript
+```js
 import { use } from "lit-translate";
 
 use("en");
@@ -108,7 +108,7 @@ use("en");
 
 To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired translation in the JSON structure. The example below is based on the translations defined in [step 1](#-1-define-the-translations).
 
-```typescript
+```js
 import { get } from "lit-translate";
 
 get("header.title"); // "Hello"
@@ -122,7 +122,7 @@ get("header.subtitle"); // "World"
 
 When using the `get` function it is possible to interpolate values (eg. replace the placeholders with content). As default, you can simply use the `key` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in [step 1](#-1-define-the-translations).
 
-```typescript
+```js
 import { get } from "lit-translate";
 
 get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
@@ -134,10 +134,10 @@ get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 
 ## ➤ 6. Use the `translate` directive with `lit-html`
 
-If you are using `lit-html` or `lit-element` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called with a new language and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values.
+If you are using `lit-html` or `lit-element` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called with a new language and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values. If your strings contain HTML you can use the `translateUnsafeHTML` directive.
 
-```typescript
-import { translate } from "lit-translate";
+```js
+import { translate, translateUnsafeHTML } from "lit-translate";
 import { LitElement, html } from "lit-element";
 
 class MyComponent extends LitElement {
@@ -146,6 +146,7 @@ class MyComponent extends LitElement {
       <h1>${translate("header.title")}</h1>
       <p>${translate("header.subtitle")}</p>
       <span>${translate("cta.awesome", { things: () => get("cta.cats") })}</span>
+      <span>${translateUnsafeHTML("footer.html")}</span>
     `;
   }
 }

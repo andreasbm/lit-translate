@@ -2,7 +2,7 @@
 
 Use the `registerTranslateConfig` function to register a loader that loads and parses the translations based on a language identifier. In the example below, a loader is registered which loads a `.json` file with translations for a given language.
 
-```typescript
+```js
 import { registerTranslateConfig } from "lit-translate";
 
 registerTranslateConfig({

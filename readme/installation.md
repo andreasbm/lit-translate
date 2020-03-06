@@ -1,5 +1,5 @@
 ## Installation
 
-```javascript
+```js
 npm i {{ ids.npm }}
 ```
