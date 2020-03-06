@@ -1,8 +1,7 @@
 import { customElement, eventOptions, html, LitElement, property, PropertyValues } from "lit-element";
 import { TemplateResult } from "lit-html";
 import { repeat } from "lit-html/directives/repeat";
-import { get, LanguageIdentifier, registerTranslateConfig, translate, use } from "../../lib";
-// import { unsafeTranslate } from "../../lib/directive";
+import { get, LanguageIdentifier, registerTranslateConfig, translate, use, translateUnsafeHTML } from "../../lib";
 
 import styles from "./demo-page.scss";
 
@@ -79,7 +78,7 @@ export class DemoPageComponent extends LitElement {
 				<p>${translate("lang")}</p>
 				<p>${translate("app.title")}</p>
 				<p>${translate("app.subtitle", () => ({thing: get("world")}))}</p>
-				<p>$ {unsafeTranslate("app.html")}</p>
+				<p>${translateUnsafeHTML("app.html")}</p>
 				<select value="${this.lang}" @change="${this.onLanguageSelected}">
 					${repeat(languages, lang => html`
 						<option value="${lang}">${lang}</option>

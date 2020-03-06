@@ -1,9 +1,8 @@
 import { directive, NodePart, Part } from "lit-html";
-import { unsafeHTML } from "lit-html/directives/unsafe-html";
 import { attachPartsGarbageCollector, isConnected } from "./cleanup";
 import { CLEANUP_PARTS_MS } from "./config";
-import { ITranslateConfig, LangChangedDirectiveCallback, LangChangedEvent, Values, ValuesCallback } from "./model";
-import { get, listenForLangChanged } from "./translate";
+import { LangChangedDirectiveCallback, LangChangedEvent } from "./model";
+import { listenForLangChanged } from "./util";
 
 // Caches the parts and the translations.
 // In the ideal world this would be a weakmap, but it is not possible to loop over weakmaps.
@@ -57,23 +56,3 @@ export const langChanged = directive((cb: LangChangedDirectiveCallback) => (part
 	partCache.set(part, cb);
 	updatePart(part, cb);
 });
-
-/**
- * A lit directive that updates the translation when the language changes.
- * @param key
- * @param values
- * @param config
- */
-export const translate = (key: string,
-                          values?: Values | ValuesCallback,
-                          config?: ITranslateConfig) => langChanged(() => get(key, values, config));
-
-/**
- * A lit directive that updates the translation and renders embedded HTML markup when the language changes.
- * @param key
- * @param values
- * @param config
- */
-export const unsafeTranslate = (key: string,
-                                values?: Values | ValuesCallback,
-                                config?: ITranslateConfig) => langChanged(() => unsafeHTML(get(key, values, config)));
