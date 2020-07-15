@@ -67,7 +67,7 @@ To take advantage of the translation features you need to be able to provide you
     "subtitle": "World"
   },
   "cta": {
-    "awesome": "things are awesome!",
+    "awesome": "{{ things }} are awesome!",
     "cats": "Cats"
   }
 }
@@ -93,7 +93,7 @@ registerTranslateConfig({
 
 ## ➤ 3. Set the language
 
-Invoke the `use` function to set a language. This function will use the registered loader from [step 1](#-1-define-the-translations) to load the strings for the language and dispatch a global `langChanged` event.
+Invoke the `use` function to set a language. This function will use the registered loader from [step 2](#-2-register-the-translate-config) to load the strings for the language and dispatch a global `langChanged` event.
 
 ```js
 import { use } from "lit-translate";
@@ -106,7 +106,7 @@ use("en");
 
 ## ➤ 4. Get the translations
 
-To get a translation use the `get` function. Give this function a string of keys (using the dot notation) that points to the desired translation in the JSON structure. The example below is based on the translations defined in [step 1](#-1-define-the-translations).
+To get a translation use the `get` function. Give this function a string of keys (separated with .) that points to the desired translation in the JSON structure. The example below is based on the translations defined in [step 1](#-1-define-the-translations).
 
 ```js
 import { get } from "lit-translate";
@@ -120,7 +120,7 @@ get("header.subtitle"); // "World"
 
 ## ➤ 5. Interpolate values
 
-When using the `get` function it is possible to interpolate values (eg. replace the placeholders with content). As default, you can simply use the `key` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in [step 1](#-1-define-the-translations).
+When using the `get` function it is possible to interpolate values (replacing placeholders with content). As default, you can simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in [step 1](#-1-define-the-translations).
 
 ```js
 import { get } from "lit-translate";
@@ -210,7 +210,7 @@ registerTranslateConfig({
   // Loads the language from the correct path
   loader: lang => fetch(`/assets/i18n/${lang}.json`).then(res => res.json()),
 
-  // Interpolate the values using a [[key]] syntax.
+  // Interpolate the values using a key syntax.
   interpolate: (text, values) => {
     for (const [key, value] of Object.entries(extract(values))) {
       text = text.replace(new RegExp(`\[\[${key}\]\]`, `gm`), String(extract(value)));

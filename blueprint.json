@@ -3,6 +3,7 @@
 	"demo": "https://appnest-demo.firebaseapp.com/lit-translate",
 	"text": "Go here to try the playground <a href='https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010'>https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010</a>.",
 	"toc": true,
+	"placeholder": ["[[", "]]"],
 	"ids": {
 		"github": "andreasbm/lit-translate",
 		"npm": "lit-translate",
