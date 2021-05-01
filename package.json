@@ -47,11 +47,12 @@
 		"publish:major": "np major --contents=dist --no-cleanup"
 	},
 	"dependencies": {
-		"lit-html": "^1.2.1"
+		"lit": "2.0.0-rc.1",
+		"lit-html": "^1.4.0"
 	},
 	"devDependencies": {
-		"@appnest/web-config": "0.5.0",
-		"@appnest/readme": "^1.2.5",
-		"lit-element": "^2.3.1"
+		"@appnest/readme": "^1.2.7",
+		"@appnest/web-config": "0.5.4",
+		"lit-element": "^2.5.0"
 	}
 }

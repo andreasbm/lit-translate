@@ -2,7 +2,7 @@ import { customElement, html, LitElement, property } from "lit-element";
 import { repeat } from "lit-html/directives/repeat";
 import { removeDisconnectedParts } from "../lib/cleanup";
 import { partCache } from "../lib/directive";
-import { registerTranslateConfig, translate, use } from "../lib/index";
+import { registerTranslateConfig, translateUnsafeHTML, use } from "../lib/index";
 
 const expect = chai.expect;
 
@@ -13,7 +13,7 @@ class CleanupComponent extends LitElement {
 
 	render () {
 		return html`
-			${repeat(this.items, item => html`<p>${translate("key", {item})}</p>`)};
+			${repeat(this.items, item => html`<p>${translateUnsafeHTML("key", {item})}</p>`)};
 		`;
 	}
 }

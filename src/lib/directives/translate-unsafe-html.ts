@@ -1,14 +1,18 @@
-import { unsafeHTML } from "lit-html/directives/unsafe-html";
-import { langChanged } from "../directive";
+import { directive } from "lit/directive.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ITranslateConfig, Values, ValuesCallback } from "../model";
-import { get } from "../util";
+import { TranslateDirective } from "./translate";
 
-/**
- * A lit directive that updates the translation and renders embedded HTML markup when the language changes.
- * @param key
- * @param values
- * @param config
- */
-export const translateUnsafeHTML = (key: string,
-                                    values?: Values | ValuesCallback,
-                                    config?: ITranslateConfig) => langChanged(() => unsafeHTML(get(key, values, config)));
+export class TranslateUnsafeHTMLDirective extends TranslateDirective {
+	render (key: string, values?: Values | ValuesCallback, config?: ITranslateConfig) {
+		super.render(key, values, config);
+		return unsafeHTML(this.getTranslation());
+	}
+
+	updateTranslation () {
+		const translation = this.getTranslation();
+		this.setValue(unsafeHTML(translation));
+	}
+}
+
+export const translateUnsafeHTML = directive(TranslateUnsafeHTMLDirective);

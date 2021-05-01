@@ -1,6 +1,6 @@
 import { customElement, html, LitElement, property } from "lit-element";
 import { repeat } from "lit-html/directives/repeat";
-import { get, LanguageIdentifier, registerTranslateConfig, translate, translateUnsafeHTML, use } from "../lib/index";
+import { get, LanguageIdentifier, registerTranslateConfig, translateUnsafeHTML, translateUnsafeHTML, use } from "../lib/index";
 import { daStrings, enStrings } from "./mock";
 
 const expect = chai.expect;
@@ -28,9 +28,9 @@ class TranslatedComponent extends LitElement {
 
 	render () {
 		return html`
-			<h1 id="title">${translate("header.title")}</h1>
-			<p id="subtitle">${translate("header.subtitle")}</p>
-			<span id="awesome">${translate("cta.awesome", () => {
+			<h1 id="title">${translateUnsafeHTML("header.title")}</h1>
+			<p id="subtitle">${translateUnsafeHTML("header.subtitle")}</p>
+			<span id="awesome">${translateUnsafeHTML("cta.awesome", () => {
 			return {things: this.things};
 		})}</span>
 			<p id="html">${translateUnsafeHTML("html")}</p>
@@ -42,7 +42,7 @@ class TranslatedComponent extends LitElement {
 class StressComponent extends LitElement {
 	render () {
 		return html`
-			${repeat(Array(10000), () => html`<p>${translate("header.title")}</p>`)}
+			${repeat(Array(10000), () => html`<p>${translateUnsafeHTML("header.title")}</p>`)}
 		`;
 	}
 }

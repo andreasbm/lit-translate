@@ -32,7 +32,7 @@ export interface ITranslateConfig {
 	strings?: Strings;
 }
 
-export type LangChangedDirectiveCallback = ((e?: LangChangedEvent) => any);
+export type LangChangedSubscription = (() => void);
 
 /* Extend the global event handlers map with the history related events */
 declare global {
