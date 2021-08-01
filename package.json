@@ -50,11 +50,11 @@
 		"publish:major": "np major --contents=dist --no-cleanup"
 	},
 	"dependencies": {
-		"lit": "2.0.0-rc.2"
+		"lit": "latest"
 	},
 	"devDependencies": {
 		"@appnest/readme": "^1.2.7",
 		"@appnest/web-config": "0.5.4",
-		"lit": "2.0.0-rc.2"
+		"lit": "latest"
 	}
 }
