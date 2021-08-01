@@ -16,6 +16,7 @@
 	"keywords": [
 		"lit-html",
 		"lit-element",
+		"lit",
 		"custom",
 		"elements",
 		"web",
@@ -25,7 +26,9 @@
 		"util",
 		"decorators",
 		"directives",
-		"translate"
+		"translate",
+		"localisation",
+		"localization"
 	],
 	"main": "index.js",
 	"types": "index.d.ts",
@@ -47,12 +50,11 @@
 		"publish:major": "np major --contents=dist --no-cleanup"
 	},
 	"dependencies": {
-		"lit": "2.0.0-rc.1",
-		"lit-html": "^1.4.0"
+		"lit": "2.0.0-rc.2"
 	},
 	"devDependencies": {
 		"@appnest/readme": "^1.2.7",
 		"@appnest/web-config": "0.5.4",
-		"lit-element": "^2.5.0"
+		"lit": "2.0.0-rc.2"
 	}
 }

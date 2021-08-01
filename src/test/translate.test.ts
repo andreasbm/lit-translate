@@ -1,6 +1,6 @@
 import {  html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { repeat } from "lit-html/directives/repeat";
+import { repeat } from "lit/directives/repeat.js";
 import { get, LanguageIdentifier, registerTranslateConfig, translate, translateUnsafeHTML, use } from "../lib/index";
 import { daStrings, enStrings } from "./mock";
 
