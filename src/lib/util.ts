@@ -1,6 +1,6 @@
 import { LANG_CHANGED_EVENT } from "./config";
 import { extract, interpolate, lookup } from "./helpers";
-import { ITranslateConfig, Key, LangChangedEvent, LanguageIdentifier, Strings, Translation, Values, ValuesCallback } from "./model";
+import { ITranslateConfig, Key, LangChangedEvent, LangChangedSubscription, LanguageIdentifier, Strings, Translation, Values, ValuesCallback } from "./model";
 
 /**
  * Default configuration object.
@@ -59,7 +59,7 @@ export function updateLang (newLang: LanguageIdentifier,
  * @param options
  */
 export function listenForLangChanged (callback: (e: LangChangedEvent) => void,
-                                      options?: AddEventListenerOptions): (() => void) {
+                                      options?: AddEventListenerOptions): LangChangedSubscription {
 	const handler = (e: CustomEvent<LangChangedEvent>) => callback(e.detail);
 	window.addEventListener(LANG_CHANGED_EVENT, handler, options);
 	return () => window.removeEventListener(LANG_CHANGED_EVENT, handler);

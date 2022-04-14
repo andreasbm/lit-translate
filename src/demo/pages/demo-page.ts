@@ -1,7 +1,7 @@
-import { customElement, eventOptions, html, LitElement, property, PropertyValues } from "lit-element";
-import { TemplateResult } from "lit-html";
-import { repeat } from "lit-html/directives/repeat";
-import { get, LanguageIdentifier, registerTranslateConfig, translate, use, translateUnsafeHTML } from "../../lib";
+import { html, LitElement, PropertyValues, TemplateResult } from "lit";
+import { customElement, eventOptions, property } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
+import { get, LanguageIdentifier, registerTranslateConfig, translate, translateUnsafeHTML, use } from "../../lib";
 
 import styles from "./demo-page.scss";
 
@@ -29,6 +29,7 @@ registerTranslateConfig({
 export class DemoPageComponent extends LitElement {
 
 	@property() lang = languages[0];
+	@property() thing = "";
 
 	// Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
 	private hasLoadedStrings = false;
@@ -43,7 +44,7 @@ export class DemoPageComponent extends LitElement {
 
 		await use(this.lang);
 		this.hasLoadedStrings = true;
-		this.requestUpdate().then();
+		this.requestUpdate();
 
 		// The below example is how parts of the strings could be lazy loaded
 		// listenForLangChanged(() => {
@@ -77,13 +78,15 @@ export class DemoPageComponent extends LitElement {
 				<h1>lit-translate</h1>
 				<p>${translate("lang")}</p>
 				<p>${translate("app.title")}</p>
-				<p>${translate("app.subtitle", () => ({thing: get("world")}))}</p>
+				<p>${translate("app.subtitle", () => ({thing: this.thing || get("world")}))}</p>
 				<p>${translateUnsafeHTML("app.html")}</p>
 				<select value="${this.lang}" @change="${this.onLanguageSelected}">
 					${repeat(languages, lang => html`
 						<option value="${lang}">${lang}</option>
 					`)}
 				</select>
+				<input placeholder="Your name"
+				       @input="${(e: Event) => this.thing = (e.target as HTMLInputElement)!.value}"/>
 			</div>
 			<a href="https://github.com/andreasbm/lit-translate" target="_blank">View on Github</a>
 		`;
