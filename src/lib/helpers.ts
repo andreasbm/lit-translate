@@ -24,8 +24,8 @@ export function lookup (key: Key, config: ITranslateConfig): string | null {
 	// Find the string by traversing through the strings matching the chain of keys
 	let string: Strings | string | undefined = config.strings;
 
-	// Shift through all of the parts of the key while matching with the strings.
-	// Do not continue if the string is not defined or if we have traversed all of the key parts
+	// Shift through all the parts of the key while matching with the strings.
+	// Do not continue if the string is not defined or if we have traversed all the key parts
 	while (string != null && parts.length > 0) {
 		string = (string as Strings)[parts.shift()!];
 	}

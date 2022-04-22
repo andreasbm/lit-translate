@@ -16,13 +16,14 @@
 <br />
 
 
-* Simple API that can return a translation for a given key (out of the box you can use the dot notation eg. `get("home.header.title")`)
+* Contains a [lit](https://www.npmjs.com/package/lit) directive that automatically updates the translations when the language changes
+* Has a simple API that can return a translation for a given key using the dot notation (eg. `get("home.header.title")`)
 * Works very well with JSON based translation data-structures
-* Can interpolate values into the strings
-* Customize just about everything (eg. choose your own translations loader, how to interpolate values, empty placeholder and how to look up the strings)
+* Can interpolate values into the strings using the {{ key }} syntax out of the box.
 * Caches the translations for maximum performance
-* Contains a `lit-html` directive that automatically updates when the language changes
-* Approximately 800 bytes minified & gzipped (2kb without)
+* Has a very small footprint, approximately 800 bytes minified & gzipped (2kb without)
+* Extremely customizable, just about everything can be changed (eg. choose your own translations loader, how to interpolate values, empty placeholder and how to look up the strings)
+* Check out the playground [here](https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010)
 
 <img src="https://raw.githubusercontent.com/andreasbm/lit-translate/master/example.gif" width="600">
 
@@ -67,8 +68,11 @@ To take advantage of the translation features you need to be able to provide you
     "subtitle": "World"
   },
   "cta": {
-    "awesome": "{{ things }} are awesome!",
+    "awesome": "{{ animals }} are awesome!",
     "cats": "Cats"
+  },
+  "footer": {
+    "html": "<b>Bold text</b>"
   }
 }
 ```
@@ -106,7 +110,7 @@ use("en");
 
 ## ➤ 4. Get the translations
 
-To get a translation use the `get` function. Give this function a string of keys (separated with .) that points to the desired translation in the JSON structure. The example below is based on the translations defined in [step 1](#-1-define-the-translations).
+To get a translation use the `get` function. Give this function a string of keys (separated with .) that points to the desired translation in the JSON structure. The example below is based on the translations defined in [step 1](#-1-define-the-translations) and registered in [step 2](#-2-register-the-translate-config).
 
 ```js
 import { get } from "lit-translate";
@@ -120,12 +124,12 @@ get("header.subtitle"); // "World"
 
 ## ➤ 5. Interpolate values
 
-When using the `get` function it is possible to interpolate values (replacing placeholders with content). As default, you can simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in [step 1](#-1-define-the-translations).
+When using the `get` function it is possible to interpolate values (replacing placeholders with content). As default, you can simply use the `{{ key }}` syntax in your translations and provide an object with values replacing those defined in the translations when using the `get` function. The example below is based on the strings defined in [step 1](#-1-define-the-translations) and registered in [step 2](#-2-register-the-translate-config).
 
 ```js
 import { get } from "lit-translate";
 
-get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
+get("cta.awesome", { animals: get("cta.cats") }); // Cats are awesome!
 ```
 
 
@@ -134,7 +138,7 @@ get("cta.awesome", { things: get("cta.cats") }); // Cats are awesome!
 
 ## ➤ 6. Use the `translate` directive with `lit-html`
 
-If you are using `lit-html` or `lit-element` you might want to use the `translate` directive. This directive makes sure to automatically update all of the translated parts when the `use` function is called with a new language and the global `langChanged` event is dispatched. Note that values have to be returned from callbacks to refresh the translated values. If your strings contain HTML you can use the `translateUnsafeHTML` directive.
+If you are using [lit](https://www.npmjs.com/package/lit) you might want to use the `translate` directive. This directive makes sure to automatically update all the translated parts when the `use` function is called with a new language and the global `langChanged` event is dispatched. If your strings contain HTML you can use the `translateUnsafeHTML` directive. The example below is based on the strings defined in [step 1](#-1-define-the-translations) and registered in [step 2](#-2-register-the-translate-config).
 
 ```js
 import { translate, translateUnsafeHTML } from "lit-translate";
@@ -145,7 +149,7 @@ class MyComponent extends LitElement {
     html`
       <h1>${translate("header.title")}</h1>
       <p>${translate("header.subtitle")}</p>
-      <span>${translate("cta.awesome", { things: () => get("cta.cats") })}</span>
+      <span>${translate("cta.awesome", { animals: () => get("cta.cats") })}</span>
       <span>${translateUnsafeHTML("footer.html")}</span>
     `;
   }

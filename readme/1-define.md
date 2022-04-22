@@ -10,8 +10,11 @@ To take advantage of the translation features you need to be able to provide you
     "subtitle": "World"
   },
   "cta": {
-    "awesome": "{{ things }} are awesome!",
+    "awesome": "{{ animals }} are awesome!",
     "cats": "Cats"
+  },
+  "footer": {
+    "html": "<b>Bold text</b>"
   }
 }
 ```

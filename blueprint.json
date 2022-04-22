@@ -17,12 +17,13 @@
 		}
 	],
 	"bullets": [
-		"Simple API that can return a translation for a given key (out of the box you can use the dot notation eg. `get(\"home.header.title\")`)",
+		"Contains a [lit](https://www.npmjs.com/package/lit) directive that automatically updates the translations when the language changes",
+		"Has a simple API that can return a translation for a given key using the dot notation (eg. `get(\"home.header.title\")`)",
 		"Works very well with JSON based translation data-structures",
-		"Can interpolate values into the strings",
-		"Customize just about everything (eg. choose your own translations loader, how to interpolate values, empty placeholder and how to look up the strings)",
+		"Can interpolate values into the strings using the {{ key }} syntax out of the box.",
 		"Caches the translations for maximum performance",
-		"Contains a `lit-html` directive that automatically updates when the language changes",
-		"Approximately 800 bytes minified & gzipped (2kb without)"
+		"Has a very small footprint, approximately 800 bytes minified & gzipped (2kb without)",
+		"Extremely customizable, just about everything can be changed (eg. choose your own translations loader, how to interpolate values, empty placeholder and how to look up the strings)",
+		"Check out the playground [here](https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010)"
 	]
 }
