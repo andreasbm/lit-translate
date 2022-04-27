@@ -1,8 +1,7 @@
-import {html, LitElement, PropertyValues, TemplateResult} from "lit";
-import {customElement, eventOptions, property} from "lit/decorators.js";
-import {repeat} from "lit/directives/repeat.js";
-import {get, LanguageIdentifier, registerTranslateConfig, translate, translateUnsafeHTML, use} from "../../lib";
-
+import { html, LitElement, PropertyValues, TemplateResult } from "lit";
+import { customElement, eventOptions, property, state } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
+import { get, langChanged, registerTranslateConfig, translate, translateUnsafeHTML, use } from "../../lib";
 import styles from "./demo-page.scss";
 
 const languages = [
@@ -10,17 +9,10 @@ const languages = [
     "da"
 ];
 
-// Registers loader
+// Register loader
 registerTranslateConfig({
-    loader: (lang: LanguageIdentifier) => fetch(`assets/i18n/${lang}.json`).then(res => res.json())
+    loader: lang => fetch(`assets/i18n/${lang}.json`).then(res => res.json())
 });
-
-// const testTranslateConfig: ITranslateConfig = {
-// 	...defaultTranslateConfig(),
-// 	loader: (lang: LanguageIdentifier) => fetch(`assets/i18n/${lang}.json`).then(res => res.json()),
-// };
-//
-// use("da", testTranslateConfig);
 
 /**
  * Demo page.
@@ -32,10 +24,10 @@ export class DemoPageComponent extends LitElement {
     @property() thing = "";
 
     // Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
-    private hasLoadedStrings = false;
+    @state() hasLoadedStrings = false;
 
-    protected shouldUpdate(changedProperties: PropertyValues) {
-        return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
+    protected shouldUpdate(props: PropertyValues) {
+        return this.hasLoadedStrings && super.shouldUpdate(props);
     }
 
     // Load the initial language and mark that the strings has been loaded.
@@ -44,28 +36,16 @@ export class DemoPageComponent extends LitElement {
 
         await use(this.lang);
         this.hasLoadedStrings = true;
-        this.requestUpdate();
-
-        // The below example is how parts of the strings could be lazy loaded
-        // listenForLangChanged(() => {
-        // 	setTimeout(async () => {
-        // 		const subpageStrings = await (await fetch(`./../assets/i18n/subpage-${translateConfig.lang}.json`)
-        // 			.then(d => d.json()));
-        //
-        // 		translateConfig.strings = {...translateConfig.strings, ...subpageStrings};
-        // 		translateConfig.translationCache = {};
-        //
-        // 		this.requestUpdate().then();
-        //
-        // 		console.log(translateConfig, get("subpage.title"));
-        // 	}, 2000);
-        // });
     }
 
     @eventOptions({capture: true})
-    private async onLanguageSelected(e: Event) {
-        this.lang = (<HTMLSelectElement>e.target).value;
-        await use(this.lang).then();
+    private onLanguageSelected(e: Event) {
+        this.lang = (e.target as HTMLSelectElement).value;
+        use(this.lang).then();
+    }
+
+    private async loadDemoComponent() {
+        await import("./../components/demo-component")
     }
 
     protected render(): TemplateResult {
@@ -74,9 +54,8 @@ export class DemoPageComponent extends LitElement {
                 ${styles}
             </style>
 
-            <div id="box">
+            <div class="box">
                 <h1>lit-translate</h1>
-                <p>${translate("lang")}</p>
                 <p>${translate("app.title")}</p>
                 <p>${translate("app.subtitle", () => ({thing: this.thing || get("world")}))}</p>
                 <p>${translateUnsafeHTML("app.html")}</p>
@@ -87,6 +66,11 @@ export class DemoPageComponent extends LitElement {
                 </select>
                 <input placeholder="Your name"
                        @input="${(e: Event) => this.thing = (e.target as HTMLInputElement)!.value}"/>
+            </div>
+            <div class="box">
+                <button @click="${this.loadDemoComponent}">Load components</button>
+                <demo-component></demo-component>
+                <demo-component></demo-component>
             </div>
             <a href="https://github.com/andreasbm/lit-translate" target="_blank">View on Github</a>
         `;

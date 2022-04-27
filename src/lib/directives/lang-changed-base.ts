@@ -1,20 +1,20 @@
-import {AsyncDirective} from "lit/async-directive.js";
-import {LangChangedEvent, LangChangedSubscription} from "../model";
-import {listenForLangChanged} from "../util";
+import { AsyncDirective } from "lit/async-directive.js";
+import { LangChangedSubscription } from "../types";
+import { listenForLangChanged } from "../util";
 
 /**
  * An abstract lit directive that reacts when the language changes.
  */
 export abstract class LangChangedDirectiveBase extends AsyncDirective {
     protected langChangedSubscription: LangChangedSubscription | null = null;
-    protected getValue: ((e?: LangChangedEvent) => unknown) = (() => "");
+    protected getValue: (() => unknown) = (() => "");
 
     /**
      * Sets up the directive by setting the getValue property and subscribing.
      * When subclassing LangChangedDirectiveBase this function should be call in the render function.
      * @param getValue
      */
-    renderValue(getValue: ((e?: LangChangedEvent) => unknown)): unknown {
+    renderValue(getValue: (() => unknown)): unknown {
         this.getValue = getValue;
         this.subscribe();
         return this.getValue();
@@ -22,10 +22,9 @@ export abstract class LangChangedDirectiveBase extends AsyncDirective {
 
     /**
      * Called when the lang changed event is dispatched.
-     * @param e
      */
-    langChanged(e?: LangChangedEvent) {
-        this.setValue(this.getValue(e));
+    updateValue() {
+        this.setValue(this.getValue());
     }
 
     /**
@@ -33,7 +32,7 @@ export abstract class LangChangedDirectiveBase extends AsyncDirective {
      */
     subscribe() {
         if (this.langChangedSubscription == null) {
-            this.langChangedSubscription = listenForLangChanged(this.langChanged.bind(this));
+            this.langChangedSubscription = listenForLangChanged(this.updateValue.bind(this));
         }
     }
 

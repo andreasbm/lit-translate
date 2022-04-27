@@ -1,7 +1,5 @@
 {
 	"line": "rainbow",
-	"demo": "https://appnest-demo.firebaseapp.com/lit-translate",
-	"text": "Go here to try the playground <a href='https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010'>https://codepen.io/andreasbm/pen/MWWXPNO?editors=1010</a>.",
 	"toc": true,
 	"placeholder": ["[[", "]]"],
 	"ids": {
@@ -20,7 +18,7 @@
 		"Contains a [lit](https://www.npmjs.com/package/lit) directive that automatically updates the translations when the language changes",
 		"Has a simple API that can return a translation for a given key using the dot notation (eg. `get(\"home.header.title\")`)",
 		"Works very well with JSON based translation data-structures",
-		"Can interpolate values into the strings using the {{ key }} syntax out of the box.",
+		"Can interpolate values into the strings using the {{ key }} syntax out of the box",
 		"Caches the translations for maximum performance",
 		"Has a very small footprint, approximately 800 bytes minified & gzipped (2kb without)",
 		"Extremely customizable, just about everything can be changed (eg. choose your own translations loader, how to interpolate values, empty placeholder and how to look up the strings)",

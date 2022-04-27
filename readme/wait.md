@@ -1,26 +1,24 @@
-## Wait for strings to be loaded before displaying the component
+## Wait for strings to be loaded before displaying your app
 
-Sometimes you want to avoid the empty placeholders being shown initially before any of the translation strings has been loaded. To avoid this issue you might want to defer the first update of the component. Here's an example of what you could do if using `lit-element`.
+You might want to avoid empty placeholders being shown initially before any of the translation strings have been loaded. This it how you could defer the first render of your app until the strings have been loaded.
 
-```js
+```typescript
 import { use, translate } from "lit-translate";
-import { LitElement, html } from "lit-element";
+import { LitElement, html, PropertyValues } from "lit";
+import { customElement, state } from "lit/decorators.js";
 
+@customElement("my-app")
 export class MyApp extends LitElement {
+  
+  // Defer the first update of the component until the strings has been loaded to avoid empty strings being shown
+  @state() hasLoadedStrings = false;
 
-  // Construct the component
-  constructor () {
-    super();
-    this.hasLoadedStrings = false;
+  protected shouldUpdate(props: PropertyValues) {
+    return this.hasLoadedStrings && super.shouldUpdate(props);
   }
 
-  // Defer the first update of the component until the strings have been loaded to avoid empty strings being shown
-  shouldUpdate (changedProperties) {
-    return this.hasLoadedStrings && super.shouldUpdate(changedProperties);
-  }
-
-  // Load the initial language and mark that the strings have been loaded.
-  async connectedCallback () {
+  // Load the initial language and mark that the strings has been loaded so the component can render.
+  async connectedCallback() {
     super.connectedCallback();
 
     await use("en");
@@ -34,6 +32,4 @@ export class MyApp extends LitElement {
     `;
   }
 }
-
-customElements.define("my-app", MyApp);
 ```
