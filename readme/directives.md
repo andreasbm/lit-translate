@@ -24,10 +24,11 @@ export class MyComponent extends LitElement {
 Extend the `LangChangedDirectiveBase` base class to create your own directives that re-renders a value when the language changes. Below is an example of a directive that localizes assets paths based on the selected language.
 
 ```typescript
-import { LangChangedDirectiveBase, ITranslateConfig, translateConfig } from "lit-translate";
+import { LangChangedDirectiveBase, translateConfig } from "lit-translate";
+import { directive } from "lit/directive.js";
 
 export const localizeAssetPath = directive(class extends LangChangedDirectiveBase {
-  render (fileName: string, config: ITranslateConfig = translateConfig) {
+  render (fileName: string, config = translateConfig) {
     return this.renderValue(() => `localized-assets/${config.lang || "en"}/${fileName}`);
   }
 });

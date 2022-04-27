@@ -16,7 +16,7 @@ registerTranslateConfig({
         return {
           app: {
             title: "This is a title",
-            description: "This description is [[ placeholder ]]!"
+            description: "This description is {placeholder}!"
           },
           awesome: "awesome"
         };
@@ -26,7 +26,7 @@ registerTranslateConfig({
         return {
           app: {
             title: "Dette er en titel",
-            description: "Denne beskrivelse er [[ placeholder ]]!"
+            description: "Denne beskrivelse er {placeholder}!"
           },
           awesome: "fed"
         };
@@ -39,7 +39,7 @@ registerTranslateConfig({
   // Interpolate the values using a [[ key ]] syntax.
   interpolate: (text, values) => {
     for (const [key, value] of Object.entries(extract(values || {}))) {
-      text = text.replace(new RegExp(`\\[\\[.*${key}.*\\]\\]`, `gm`), String(extract(value)));
+      text = text.replace(new RegExp(`{.*${key}.*}`, `gm`), String(extract(value)));
     }
 
 
@@ -114,7 +114,7 @@ use("en").then(() => {
 });
 ```
 
-### Using the default translations as keys
+### Use the default translations as keys
 
 Inspired by [GNU gettext](https://en.wikipedia.org/wiki/Gettext) you can use the default translation as keys. The benefit of doing this is that you will save typing time and reduce code clutter. You can use [xgettext](https://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html) to extract the translatable strings from your code and then use [po2json](https://github.com/mikeedwards/po2json) to turn your `.po` files into `.json` files. The following code shows an example of how you could implement this. Try it as a playground [here](https://codepen.io/andreasbm/pen/RwxXjJX?editors=0010).
 

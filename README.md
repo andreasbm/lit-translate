@@ -47,7 +47,10 @@
 * [➤ Wait for strings to be loaded before displaying your app](#-wait-for-strings-to-be-loaded-before-displaying-your-app)
 * [➤ Advanced Customisation](#-advanced-customisation)
 	* [Format text with `IntlMessageFormat`](#format-text-with-intlmessageformat)
-	* [Using the default translations as keys](#using-the-default-translations-as-keys)
+	* [Use the default translations as keys](#use-the-default-translations-as-keys)
+* [➤ `lit` Directives](#-lit-directives)
+	* [Re-render a value when the language changes with the `langChanged` directive](#re-render-a-value-when-the-language-changes-with-the-langchanged-directive)
+	* [Create your own `lit` directives that re-renders a value when the language changes](#create-your-own-lit-directives-that-re-renders-a-value-when-the-language-changes)
 * [➤ License](#-license)
 
 
@@ -222,8 +225,7 @@ registerTranslateConfig({
         return {
           app: {
             title: "This is a title",
-            description: "This description is * [[
-* ]]!"
+            description: "This description is {placeholder}!"
           },
           awesome: "awesome"
         };
@@ -233,8 +235,7 @@ registerTranslateConfig({
         return {
           app: {
             title: "Dette er en titel",
-            description: "Denne beskrivelse er * [[
-* ]]!"
+            description: "Denne beskrivelse er {placeholder}!"
           },
           awesome: "fed"
         };
@@ -247,7 +248,7 @@ registerTranslateConfig({
   // Interpolate the values using a key syntax.
   interpolate: (text, values) => {
     for (const [key, value] of Object.entries(extract(values || {}))) {
-      text = text.replace(new RegExp(`\\[\\[.*${key}.*\\]\\]`, `gm`), String(extract(value)));
+      text = text.replace(new RegExp(`{.*${key}.*}`, `gm`), String(extract(value)));
     }
 
 
@@ -322,7 +323,7 @@ use("en").then(() => {
 });
 ```
 
-### Using the default translations as keys
+### Use the default translations as keys
 
 Inspired by [GNU gettext](https://en.wikipedia.org/wiki/Gettext) you can use the default translation as keys. The benefit of doing this is that you will save typing time and reduce code clutter. You can use [xgettext](https://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html) to extract the translatable strings from your code and then use [po2json](https://github.com/mikeedwards/po2json) to turn your `.po` files into `.json` files. The following code shows an example of how you could implement this. Try it as a playground [here](https://codepen.io/andreasbm/pen/RwxXjJX?editors=0010).
 
@@ -348,6 +349,44 @@ get("The page is being loaded..."); // Will return "The page is being loaded..."
 
 use("da").then(() => {
   get("The page is being loaded..."); // Will return "Siden indlæses..."
+});
+```
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#lit-directives)
+
+## ➤ `lit` Directives
+
+### Re-render a value when the language changes with the `langChanged` directive
+
+Use the `langChanged` directive to re-render a value when the language changes.
+
+```typescript
+import { langChanged, translateConfig } from "lit-translate";
+import { html, LitElement, TemplateResult } from "lit";
+import { customElement } from "lit/decorators.js";
+
+@customElement("my-component")
+export class MyComponent extends LitElement {
+  protected render(): TemplateResult {
+    return html`
+      <img src="${langChanged(() => `img-${translateConfig.lang || "en"}.png`)}" />
+    `;
+  }
+}
+```
+
+### Create your own `lit` directives that re-renders a value when the language changes
+
+Extend the `LangChangedDirectiveBase` base class to create your own directives that re-renders a value when the language changes. Below is an example of a directive that localizes assets paths based on the selected language.
+
+```typescript
+import { LangChangedDirectiveBase, translateConfig } from "lit-translate";
+import { directive } from "lit/directive.js";
+
+export const localizeAssetPath = directive(class extends LangChangedDirectiveBase {
+  render (fileName: string, config = translateConfig) {
+    return this.renderValue(() => `localized-assets/${config.lang || "en"}/${fileName}`);
+  }
 });
 ```
 
