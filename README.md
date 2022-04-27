@@ -206,7 +206,7 @@ export class MyApp extends LitElement {
 
 ## ➤ Advanced Customisation
 
-If you want you can customise just about anything by overwriting the configuration hooks. Below is an example on what you can customise.
+If you want you can customise just about anything by overwriting the configuration hooks. Below is an example of what you can customise. Try it as a playground [here](https://codepen.io/andreasbm/pen/gOoVGdQ?editors=0010).
 
 ```typescript
 import { registerTranslateConfig, extract, get, use } from "lit-translate";
@@ -261,7 +261,7 @@ registerTranslateConfig({
     const parts = key.split(" -> ");
 
     // Find the string by traversing through the strings matching the chain of keys
-    let string: Strings | string | undefined = config.strings;
+    let string = config.strings;
 
     // Shift through all the parts of the key while matching with the strings.
     // Do not continue if the string is not defined or if we have traversed all the key parts
@@ -279,12 +279,12 @@ registerTranslateConfig({
 
 use("en").then(() => {
   get("app -> description", { placeholder: get("awesome") }); // Will return "This description is awesome"
-})
+});
 ```
 
 ### Format text with `IntlMessageFormat`
 
-[IntlMessageFormat](https://www.npmjs.com/package/intl-messageformat) is a library that formats ICU Message strings with number, date, plural, and select placeholders to create localized messages. This library is a good addition to `lit-translate`. You can add it to the interpolate hook to get the benefits as shown in the following example.
+[IntlMessageFormat](https://www.npmjs.com/package/intl-messageformat) is a library that formats ICU message strings with number, date, plural, and select placeholders to create localized messages using [ICU placeholders](https://unicode-org.github.io/icu/userguide/format_parse/messages/). This library is a good addition to `lit-translate`. You can add it to the interpolate hook to get the benefits as shown in the following example. Try the example as a playground [here](https://codepen.io/andreasbm/pen/rNpXGPW?editors=0010).
 
 ```typescript
 import { registerTranslateConfig, extract } from "lit-translate";
@@ -312,7 +312,7 @@ registerTranslateConfig({
   interpolate: (text, values, config) => {
     const msg = new IntlMessageFormat(text, config.lang);
     return msg.format(extract(values));
-  },
+  }
 });
 
 use("en").then(() => {
@@ -324,7 +324,7 @@ use("en").then(() => {
 
 ### Using the default translations as keys
 
-Inspired by [GNU gettext](https://en.wikipedia.org/wiki/Gettext) you can use the default translation as keys. The benefit of doing this is that you will save typing time and reduce code clutter. You can use [xgettext](https://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html) to extract the translatable strings from your code and then use [po2json](https://github.com/mikeedwards/po2json) to turn your `.po` files into `.json` files. The following code shows an example of how you could implement this.
+Inspired by [GNU gettext](https://en.wikipedia.org/wiki/Gettext) you can use the default translation as keys. The benefit of doing this is that you will save typing time and reduce code clutter. You can use [xgettext](https://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html) to extract the translatable strings from your code and then use [po2json](https://github.com/mikeedwards/po2json) to turn your `.po` files into `.json` files. The following code shows an example of how you could implement this. Try it as a playground [here](https://codepen.io/andreasbm/pen/RwxXjJX?editors=0010).
 
 ```typescript
 import { registerTranslateConfig, use, get } from "lit-translate";
