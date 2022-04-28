@@ -8,7 +8,7 @@ import { get } from "../util";
  * A lit directive that updates the translation as HTML when the language changes.
  */
 export class TranslateUnsafeHTMLDirective extends TranslateDirective {
-    render(key: Key, values?: Values | ValuesCallback, config?: ITranslateConfig) {
+    render<T extends Key>(key: Key, values?: Values | ValuesCallback | null, config?: ITranslateConfig) {
         return this.renderValue(() => unsafeHTML(get(key, values, config)));
     }
 }

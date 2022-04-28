@@ -22,6 +22,7 @@
 [[ load:readme/6-lit.md ]]
 [[ load:readme/wait.md ]]
 [[ load:readme/customise.md ]]
+[[ load:readme/typesafe.md ]]
 [[ load:readme/directives.md ]]
 
 [[ template:license ]]

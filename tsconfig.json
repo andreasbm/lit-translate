@@ -1,3 +1,6 @@
 {
-	"extends": "./node_modules/@appnest/web-config/tsconfig.json"
+	"extends": "./node_modules/@appnest/web-config/tsconfig.json",
+	"compilerOptions": {
+		"resolveJsonModule": true
+	}
 }

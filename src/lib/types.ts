@@ -34,9 +34,10 @@ export interface ITranslateConfig {
 
 export type LangChangedSubscription = (() => void);
 
-/* Extend the global event handlers map with the history related events */
+// Extend the global event handlers map with the history related events
 declare global {
     interface GlobalEventHandlersEventMap {
         "langChanged": CustomEvent<LangChangedEvent>
     }
 }
+
