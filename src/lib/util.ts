@@ -69,7 +69,6 @@ export function get(key: Key,
     const translation = config.translationCache[key]
         ?? (config.translationCache[key] = config.lookup(key, config) || config.empty(key, config));
 
-    console.log({translation});
     // Extract the values
     values = values != null ? extract(values) : null;
 
