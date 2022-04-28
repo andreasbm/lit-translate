@@ -3,10 +3,9 @@ import { customElement, eventOptions, property, state } from "lit/decorators.js"
 import { repeat } from "lit/directives/repeat.js";
 import { registerTranslateConfig, use } from "../../lib";
 import styles from "./demo-page.scss";
-import { typedKeysFactory } from "../../lib/typed-keys";
 
 // Use the typed versions of lit-translate helpers
-const {get, translate, translateUnsafeHTML} = typedKeysFactory<typeof import("../assets/i18n/en.json")>();
+import { get, translate, translateUnsafeHTML } from "../typed-lit-translate";
 
 const languages = [
     "en",
@@ -61,7 +60,7 @@ export class DemoPageComponent extends LitElement {
             <div class="box">
                 <h1>lit-translate</h1>
                 <p>${translate("app.title")}</p>
-                <p>${translate("app.subtitle", () => ({thing: this.thing || get("world")}))}</p>
+                <p>${translate(`app.subtitle`, () => ({thing: this.thing || get("world")}))}</p>
                 <p>${translateUnsafeHTML("app.html")}</p>
                 <select value="${this.lang}" @change="${this.onLanguageSelected}">
                     ${repeat(languages, lang => html`

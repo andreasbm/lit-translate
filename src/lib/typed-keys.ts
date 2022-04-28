@@ -5,7 +5,7 @@ import { translate } from "./directives/translate";
 import { translateUnsafeHTML } from "./directives/translate-unsafe-html";
 
 /**
- * Returns a wrapper around get, translate and translateUnsafeTranslate where Key is typed.
+ * A factory function that wraps get, translate and translateUnsafeHTML to make the keys typesafe.
  */
 export function typedKeysFactory<Keys extends Record<string, unknown>>() {
     return {
