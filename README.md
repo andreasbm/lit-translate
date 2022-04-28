@@ -362,7 +362,7 @@ use("da").then(() => {
 
 <img src="https://raw.githubusercontent.com/andreasbm/lit-translate/master/typesafe.gif" width="450">
 
-If you have a lot of translation keys you can quickly lose the overview of your strings. If you use Typescript you can make the keys of your translation keys typesafe - this will also give you autocompletion when you enter the keys. To do this you have to do the following:
+If you have a lot of translation keys you can quickly lose the overview of your strings. If you use Typescript you can make the keys of your translation keys typesafe - this will also give you autocompletion when you enter the keys. To achieve this you have to do the following:
 
 
 ### 1. Add `resolveJsonModule` to your tsconfig
