@@ -7,7 +7,7 @@ import { LangChangedDirectiveBase } from "./lang-changed-base";
  * A lit directive that updates the translation when the language changes.
  */
 export class TranslateDirective extends LangChangedDirectiveBase {
-    render(key: Key, values?: Values | ValuesCallback, config?: ITranslateConfig): unknown {
+    render<T extends Key>(key: T, values?: Values | ValuesCallback | null, config?: ITranslateConfig): unknown {
         return this.renderValue(() => get(key, values, config));
     }
 }

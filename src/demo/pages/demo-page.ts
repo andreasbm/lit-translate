@@ -1,8 +1,12 @@
 import { html, LitElement, PropertyValues, TemplateResult } from "lit";
 import { customElement, eventOptions, property, state } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
-import { get, langChanged, registerTranslateConfig, translate, translateUnsafeHTML, use } from "../../lib";
+import { registerTranslateConfig, use } from "../../lib";
 import styles from "./demo-page.scss";
+import { typedKeysFactory } from "../../lib/typed-keys";
+
+// Use the typed versions of lit-translate helpers
+const {get, translate, translateUnsafeHTML} = typedKeysFactory<typeof import("../assets/i18n/en.json")>();
 
 const languages = [
     "en",

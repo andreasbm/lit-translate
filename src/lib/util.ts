@@ -61,9 +61,9 @@ export async function use(lang: LanguageIdentifier, config: ITranslateConfig = t
  * @param values (eg. { count: 42 })
  * @param config
  */
-export function get(key: Key,
-                    values?: Values | ValuesCallback | null,
-                    config: ITranslateConfig = translateConfig): Translation {
+export function get<T extends Key>(key: T,
+                                   values?: Values | ValuesCallback | null,
+                                   config: ITranslateConfig = translateConfig): Translation {
 
     // Either use the translation from the cache or get it and add it to the cache
     const translation = config.translationCache[key]
