@@ -387,8 +387,8 @@ Create a file, for example `typed-lit-translate.ts`. Then use the factory functi
 // typed-lit-translate.ts
 import { typedKeysFactory } from "lit-translate";
 
-const {get, translate, translateUnsafeHTML} = typedKeysFactory<typeof import("en.json")>();
-export {get, translate, translateUnsafeHTML};
+const { get, translate, translateUnsafeHTML } = typedKeysFactory<typeof import("en.json")>();
+export { get, translate, translateUnsafeHTML };
 ```
 
 ### 3. Import the typed functions
